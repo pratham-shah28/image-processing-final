@@ -1,0 +1,35 @@
+load "balcony_view.png" m
+vertical-flip m mVF
+horizontal-flip m mHF
+sharpen m mSH
+blur m mBL
+brighten 50 m mBR
+brighten -50 m mDR
+sepia m mSP
+value-component m mVC
+intensity-component m mIC
+luma-component m mLC
+rgb-split m mR mG mB
+rgb-combine mC mR mG mB 
+red-component m mRed
+green-component m mGreen
+blue-component m mBlue
+sepia m mOverridenSepia
+save "res\mVerticalFlip.png" mVF
+save "res\mHorizontalFlip.png" mHF
+save "res\mSharpen.png" mSH
+save "res\mBlur.png" mBL
+save "res\mBrighten.png" mBR
+save "res\mDarken.png" mDR
+save "res\mSepia.png" mSP
+save "res\mValue.png" mVC
+save "res\mIntensity.png" mIC
+save "res\mLuma.png" mLC
+save "res\mRedSplit.png" mR
+save "res\mGreenSplit.png" mG
+save "res\mBlueSplit.png" mB
+save "res\mCombine.png" mC
+save "res\mRedComponent.png" mRed
+save "res\mGreenComponent.png" mGreen
+save "res\mBlueComponent.png" mBlue
+save "res\mOverridenSepia.png" mOverridenSepia
