@@ -109,6 +109,7 @@ public class ControllerTest {
 
     @Override
     public Image compress(double factor) {
+      log.append(factor);
       return null;
     }
 
@@ -167,14 +168,6 @@ public class ControllerTest {
     public Image intensitySplit(double perc) {
       return null;
     }
-
-
-//    @Override
-//    public double[] transform(double[] sequence) {
-//      return new double[0];
-//    }
-
-
 
   }
 
@@ -538,6 +531,24 @@ public class ControllerTest {
     controller.execute();
     StringBuilder expected = new StringBuilder();
     expected.append(50);
+    assertEquals(expected.toString(), mockLog.toString());
+  }
+
+  @Test
+  public void testCallCompressethod() throws IOException {
+    StringBuilder mockLog = new StringBuilder();
+    ViewInterface view = new View();
+    String path = new File(".").getCanonicalPath() + "\\test\\manhattan-small.png";
+    String input = "load " + "\"" + path + "\"" + " " + "a" + "\n"
+            + "compress" + " " + "50" + " " + "a" + " " + "b";
+    InputStream in = null;
+    in = new ByteArrayInputStream(input.getBytes());
+    HashMap<String, Image> images = new HashMap<>();
+    MockImageCreator imageCreator = new MockImageCreator(mockLog);
+    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    controller.execute();
+    StringBuilder expected = new StringBuilder();
+    expected.append(50.0);
     assertEquals(expected.toString(), mockLog.toString());
   }
 
