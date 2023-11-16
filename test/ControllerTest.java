@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Test class to test the controller.
+ * This is a JUnit test class to test the controller.
  */
 public class ControllerTest {
   private class MockModel implements Image {
@@ -113,28 +113,16 @@ public class ControllerTest {
       return null;
     }
 
-    /**
-     * @return
-     */
     @Override
     public Image createHistogram() {
       return null;
     }
 
-    /**
-     * @return
-     */
     @Override
     public Image colorCorrect() {
       return null;
     }
 
-    /**
-     * @param b_p
-     * @param m_p
-     * @param w_p
-     * @return
-     */
     @Override
     public Image adjustLevels(int b_p, int m_p, int w_p) {
       return null;
@@ -301,7 +289,6 @@ public class ControllerTest {
     InputStream in = null;
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
-    StringBuilder mockLog = new StringBuilder();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new Controller(view, in, images, imageCreator);
     controller.execute();
@@ -311,9 +298,9 @@ public class ControllerTest {
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];
     }
-    StringBuilder str = new StringBuilder();
-    str.append("Save: Success");
-    assertEquals(str.toString(), lastLine);
+    StringBuilder expected = new StringBuilder();
+    expected.append("Save: Success");
+    assertEquals(expected.toString(), lastLine);
 
   }
 
@@ -334,7 +321,7 @@ public class ControllerTest {
   }
 
   @Test
-  public void operationBeforeLoad() throws IOException {
+  public void operationBeforeLoad() {
 
     ViewInterface view = new View();
     String input = "red-component mumbai mumbai-red";
@@ -398,7 +385,6 @@ public class ControllerTest {
     InputStream in = null;
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
-    StringBuilder mockLog = new StringBuilder();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new Controller(view, in, images, imageCreator);
     controller.execute();
@@ -428,7 +414,6 @@ public class ControllerTest {
     InputStream in = null;
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
-    StringBuilder mockLog = new StringBuilder();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new Controller(view, in, images, imageCreator);
     controller.execute();
@@ -600,7 +585,7 @@ public class ControllerTest {
   }
 
   @Test
-  public void testInvalidCommand() throws IOException {
+  public void testInvalidCommand() {
     ViewInterface view = new View();
     String input = "notACommand " + "\"" + "\"" + " mumbai";
     InputStream in = null;

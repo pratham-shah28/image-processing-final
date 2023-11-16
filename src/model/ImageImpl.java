@@ -4,19 +4,17 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.SortedMap;
 import java.util.TreeSet;
 
 import static java.lang.Math.sqrt;
 
 /**
- * This class represents an Image object and its representations implementing Image interface.
+ * This class represents an Image with its properties and operations.
+ * An image has a width, height and is represented as 3 channels i.e. red, green and blue.
+ * This class implements the Image interface.
  */
 public class ImageImpl implements Image {
 
@@ -27,7 +25,8 @@ public class ImageImpl implements Image {
   private final int height;
 
   /**
-   * A constructor for the ImageImpl class.
+   * Constructs an Image by initializing its width, height
+   * and storing the respective channels data as matrices.
    *
    * @param redChannel   Matrix for the red channel of the image.
    * @param greenChannel Matrix for the green channel of the image.
@@ -45,8 +44,7 @@ public class ImageImpl implements Image {
   public Image value() {
     TriFunction<Integer, Integer, Integer, int[]> valueOperation = (red, green, blue) -> {
       int max = Math.max(red, Math.max(green, blue));
-      int[] result = {max, max, max};
-      return result;
+      return new int[]{max, max, max};
     };
     return applyOperation(valueOperation);
   }
@@ -55,8 +53,7 @@ public class ImageImpl implements Image {
   public Image valueSplit(double perc) {
     TriFunction<Integer, Integer, Integer, int[]> valueOperation = (red, green, blue) -> {
       int max = Math.max(red, Math.max(green, blue));
-      int[] result = {max, max, max};
-      return result;
+      return new int[]{max, max, max};
     };
     return applyOperationSplit(valueOperation, perc);
   }
@@ -66,8 +63,7 @@ public class ImageImpl implements Image {
     TriFunction<Integer, Integer, Integer, int[]> lumaOperation = (red, green, blue) -> {
       int luma = (int) ((0.2126 * red) + (0.7152 * green) + (0.0722 * blue));
       luma = clip(luma);
-      int[] result = {luma, luma, luma};
-      return result;
+      return new int[]{luma, luma, luma};
     };
     return applyOperation(lumaOperation);
   }
@@ -77,8 +73,7 @@ public class ImageImpl implements Image {
     TriFunction<Integer, Integer, Integer, int[]> lumaOperation = (red, green, blue) -> {
       int luma = (int) ((0.2126 * red) + (0.7152 * green) + (0.0722 * blue));
       luma = clip(luma);
-      int[] result = {luma, luma, luma};
-      return result;
+      return new int[]{luma, luma, luma};
     };
     return applyOperationSplit(lumaOperation, perc);
   }
@@ -87,8 +82,7 @@ public class ImageImpl implements Image {
   public Image intensity() {
     TriFunction<Integer, Integer, Integer, int[]> intensityOperation = (red, green, blue) -> {
       int avg = Math.round((red + green + blue) / 3);
-      int[] result = {avg, avg, avg};
-      return result;
+      return new int[]{avg, avg, avg};
     };
     return applyOperation(intensityOperation);
   }
@@ -97,8 +91,7 @@ public class ImageImpl implements Image {
   public Image intensitySplit(double perc) {
     TriFunction<Integer, Integer, Integer, int[]> intensityOperation = (red, green, blue) -> {
       int avg = Math.round((red + green + blue) / 3);
-      int[] result = {avg, avg, avg};
-      return result;
+      return new int[]{avg, avg, avg};
     };
     return applyOperationSplit(intensityOperation, perc);
   }
@@ -157,8 +150,7 @@ public class ImageImpl implements Image {
       sepia_red = clip(sepia_red);
       sepia_green = clip(sepia_green);
       sepia_blue = clip(sepia_blue);
-      int[] result = {sepia_red, sepia_green, sepia_blue};
-      return result;
+      return new int[]{sepia_red, sepia_green, sepia_blue};
     };
     return applyOperationSplit(sepiaOperation, perc);
   }
@@ -173,14 +165,13 @@ public class ImageImpl implements Image {
       red = clip(red);
       green = clip(green);
       blue = clip(blue);
-      int[] result = {red, green, blue};
-      return result;
+      return new int[]{red, green, blue};
     };
     return applyOperation(brightenOperation);
   }
 
   @Override
-  public Image combine(Image redImage, Image greenImage, Image blueImage) throws Exception {
+  public Image combine(Image redImage, Image greenImage, Image blueImage) {
     if ((redImage.getWidth() == greenImage.getWidth()
             && redImage.getWidth() == blueImage.getWidth())
             && (redImage.getHeight() == greenImage.getHeight()
@@ -278,7 +269,6 @@ public class ImageImpl implements Image {
   }
 
 
-
   private Image kernelOperation(Image img, double[][] kernel) {
     int[][] newRedPixelMatrix = new int[img.getWidth()][img.getHeight()];
     int[][] newGreenPixelMatrix = new int[img.getWidth()][img.getHeight()];
@@ -323,15 +313,14 @@ public class ImageImpl implements Image {
     int[][] newBluePixelMatrix = new int[img.getWidth()][img.getHeight()];
     int width = img.getWidth();
     int height = img.getHeight();
-    int heightSplit = (int) Math.round(img.getHeight()*perc / 100);
+    int heightSplit = (int) Math.round(img.getHeight() * perc / 100);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
         if (y > heightSplit) {
-          newRedPixelMatrix[x][y] = this.getRedPixelMatrixElement(x,y);
-          newGreenPixelMatrix[x][y] = this.getGreenPixelMatrixElement(x,y);
-          newBluePixelMatrix[x][y] = this.getBluePixelMatrixElement(x,y);
-        }
-        else if (y == heightSplit) {
+          newRedPixelMatrix[x][y] = this.getRedPixelMatrixElement(x, y);
+          newGreenPixelMatrix[x][y] = this.getGreenPixelMatrixElement(x, y);
+          newBluePixelMatrix[x][y] = this.getBluePixelMatrixElement(x, y);
+        } else if (y == heightSplit) {
           if (x % 2 == 0) {
             newRedPixelMatrix[x][y] = 255;
             newGreenPixelMatrix[x][y] = 0;
@@ -341,8 +330,7 @@ public class ImageImpl implements Image {
             newGreenPixelMatrix[x][y] = this.getGreenPixelMatrixElement(x, y);
             newBluePixelMatrix[x][y] = this.getBluePixelMatrixElement(x, y);
           }
-        }
-        else {
+        } else {
           double valueRed = 0;
           double valueGreen = 0;
           double valueBlue = 0;
@@ -369,13 +357,6 @@ public class ImageImpl implements Image {
           newGreenPixelMatrix[x][y] = (int) valueGreen;
           newBluePixelMatrix[x][y] = (int) valueBlue;
         }
-      }
-    }
-
-
-    for (int x = 0; x < width; x++) {
-      for (int y = heightSplit; y < height; y++) {
-
       }
     }
     return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
@@ -412,12 +393,11 @@ public class ImageImpl implements Image {
   }
 
 
-
   private double[] transform(double[] sequence) {
     double[] avg = new double[sequence.length / 2];
     double[] diff = new double[sequence.length / 2];
     double[] result = new double[avg.length + diff.length];
-    
+
     for (int i = 0; i < sequence.length; i += 2) {
       double av = (sequence[i] + sequence[i + 1]) / sqrt(2);
       double di = (sequence[i] - sequence[i + 1]) / sqrt(2);
@@ -450,9 +430,8 @@ public class ImageImpl implements Image {
   }
 
 
-
   /**
-   * Interface for the Trifunction method.
+   * This is an interface for the Tri-function method.
    *
    * @param <T> Generic type argument.
    * @param <U> Generic type argument.
@@ -485,12 +464,13 @@ public class ImageImpl implements Image {
     return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
   }
 
-  private Image applyOperationSplit(TriFunction<Integer, Integer, Integer, int[]> operation, double perc) {
+  private Image applyOperationSplit(TriFunction<Integer, Integer, Integer,
+          int[]> operation, double perc) {
     int[][] newRedPixelMatrix = new int[this.width][this.height];
     int[][] newGreenPixelMatrix = new int[this.width][this.height];
     int[][] newBluePixelMatrix = new int[this.width][this.height];
 
-    int height = (int) Math.round((this.height * perc)/ 100);
+    int height = (int) Math.round((this.height * perc) / 100);
 
     for (int x = 0; x < this.width; x++) {
       for (int y = 0; y < this.height; y++) {
@@ -502,20 +482,17 @@ public class ImageImpl implements Image {
           newRedPixelMatrix[x][y] = result[0];
           newGreenPixelMatrix[x][y] = result[1];
           newBluePixelMatrix[x][y] = result[2];
-        }
-        else if (y == height) {
+        } else if (y == height) {
           if (x % 2 == 0) {
             newRedPixelMatrix[x][y] = 255;
             newGreenPixelMatrix[x][y] = 0;
             newBluePixelMatrix[x][y] = 0;
-          }
-          else {
+          } else {
             newRedPixelMatrix[x][y] = red;
             newGreenPixelMatrix[x][y] = green;
             newBluePixelMatrix[x][y] = blue;
           }
-        }
-        else {
+        } else {
           newRedPixelMatrix[x][y] = red;
           newGreenPixelMatrix[x][y] = green;
           newBluePixelMatrix[x][y] = blue;
@@ -550,14 +527,14 @@ public class ImageImpl implements Image {
     return width;
   }
 
-  private double[][] haar(int[][] sequence, double factor) {
+  private double[][] haar(int[][] sequence) {
     double[][] paddedSequence = padMatrix(sequence);
     int len = paddedSequence.length;
     while (len > 1) {
       for (int i = 0; i < len; i++) {
         double[] tempArray = Arrays.copyOf(paddedSequence[i], len);
         tempArray = transform(tempArray);
-        System.arraycopy(tempArray,0, paddedSequence[i],0, len);
+        System.arraycopy(tempArray, 0, paddedSequence[i], 0, len);
 
       }
       for (int j = 0; j < len; j++) {
@@ -593,28 +570,11 @@ public class ImageImpl implements Image {
       for (int i = 0; i < len; i++) {
         double[] tempArray = Arrays.copyOf(paddedSequence[i], len);
         tempArray = inverse(tempArray);
-        System.arraycopy(tempArray,0, paddedSequence[i],0, len);
+        System.arraycopy(tempArray, 0, paddedSequence[i], 0, len);
       }
       len = len * 2;
     }
     return paddedSequence;
-  }
-
-  private int[][] compressMatrix(int[][] pixelMatrix, double factor) {
-    double[][] transformed = haar(pixelMatrix, factor);
-    System.out.println("transformed matrix: \n");
-    System.out.println(Arrays.deepToString(transformed));
-    double[][] inversedTransformed = invharr(transformed);
-
-    System.out.println("inverse matrix: \n");
-    System.out.println(Arrays.deepToString(inversedTransformed));
-
-    for (int i = 0; i < pixelMatrix.length; i++) {
-      for (int j = 0; j < pixelMatrix[0].length; j++) {
-        pixelMatrix[i][j] = clip(inversedTransformed[i][j]);
-      }
-    }
-    return pixelMatrix;
   }
 
   @Override
@@ -624,10 +584,11 @@ public class ImageImpl implements Image {
     double[][] transformedGreenPixelMatrix = new double[this.getWidth()][this.getHeight()];
     double[][] transformedBluePixelMatrix = new double[this.getWidth()][this.getHeight()];
 
-    transformedRedPixelMatrix = haar(this.redChannel, factor);
-    transformedGreenPixelMatrix = haar(this.greenChannel, factor);
-    transformedBluePixelMatrix = haar(this.blueChannel, factor);
-    Map<String, double[][]> matrices = applyThreshold3(transformedRedPixelMatrix,transformedGreenPixelMatrix,transformedBluePixelMatrix, factor);
+    transformedRedPixelMatrix = haar(this.redChannel);
+    transformedGreenPixelMatrix = haar(this.greenChannel);
+    transformedBluePixelMatrix = haar(this.blueChannel);
+    Map<String, double[][]> matrices = applyThreshold3(transformedRedPixelMatrix,
+            transformedGreenPixelMatrix, transformedBluePixelMatrix, factor);
     transformedRedPixelMatrix = invharr(matrices.get("red"));
     transformedGreenPixelMatrix = invharr(matrices.get("green"));
     transformedBluePixelMatrix = invharr(matrices.get("blue"));
@@ -647,13 +608,13 @@ public class ImageImpl implements Image {
     return new ImageImpl(redPixelMatrix, greenPixelMatrix, bluePixelMatrix);
   }
 
-  
 
-  private Map<String, double[][]> applyThreshold3(double[][] transformedRed, double[][] transformedGreen, double[][] transformedBlue, double factor) {
+  private Map<String, double[][]> applyThreshold3(double[][] transformedRed,
+                                                  double[][] transformedGreen,
+                                                  double[][] transformedBlue, double factor) {
 
     Map<Double, Double> uniqueValues = new HashMap<>();
     Map<String, double[][]> matrices = new HashMap<>();
-    //System.out.println("og sequence: " + Arrays.deepToString(sequence));
     for (int i = 0; i < transformedRed.length; i++) {
       for (int j = 0; j < transformedRed[0].length; j++) {
         if (!(uniqueValues.containsKey(Math.abs(transformedRed[i][j])))) {
@@ -668,18 +629,12 @@ public class ImageImpl implements Image {
       }
     }
     int n = (int) Math.round((factor * uniqueValues.size()) / 100);
-    System.out.println("n: " + n);
-    System.out.println("unique values size: " + uniqueValues.size());
     int count = 0;
-
-//    Set<Double> values = new TreeSet<>(uniqueValues.keySet());
 
     List<Double> values = new ArrayList<>(new TreeSet<>(uniqueValues.keySet()));
 
     if (n != 0) {
-      System.out.println(values.size());
-      double threshold = values.get(n-1);
-      System.out.println("threshold: " + threshold);
+      double threshold = values.get(n - 1);
       for (int i = 0; i < transformedRed.length; i++) {
         for (int j = 0; j < transformedRed[0].length; j++) {
           if (Math.abs(transformedRed[i][j]) <= threshold) {
@@ -696,55 +651,25 @@ public class ImageImpl implements Image {
           }
         }
       }
-      System.out.println("count: " + count);
+      matrices.put("red", transformedRed);
+      matrices.put("green", transformedGreen);
+      matrices.put("blue", transformedBlue);
+      return matrices;
+    } else {
       matrices.put("red", transformedRed);
       matrices.put("green", transformedGreen);
       matrices.put("blue", transformedBlue);
       return matrices;
     }
-
-
-    else {
-      matrices.put("red", transformedRed);
-      matrices.put("green", transformedGreen);
-      matrices.put("blue", transformedBlue);
-      return matrices;
-    }
-
-//    int[][] indices = new int[sequence.length * sequence[0].length][2];
-//
-//    // Initialize the indices array with row and column indices
-//    int index = 0;
-//    for (int i = 0; i < sequence.length; i++) {
-//      for (int j = 0; j < sequence[0].length; j++) {
-//        indices[index][0] = i;
-//        indices[index][1] = j;
-//        index++;
-//      }
-//    }
-//    // Sort the indices array based on the corresponding values in the original matrix
-//    Arrays.sort(indices, (a, b) -> Double.compare(Math.abs(sequence[a[0]][a[1]]), Math.abs(sequence[b[0]][b[1]])));
-//
-//    // Set the n smallest values in the original matrix to zero using the sorted indices
-//    int i = 0;
-//    while (n > 0 && i < indices.length) {
-//      int row = indices[i][0];
-//      int col = indices[i][1];
-//      if (sequence[row][col] != 0) {
-//        sequence[row][col] = 0;
-//        n = n - 1;
-//      }
-//      i = i + 1;
-//    }
   }
 
-  private HashMap<String, int[]> getFrequency(){
+  private HashMap<String, int[]> getFrequency() {
     int[] redFrequency = new int[256];
     int[] greenFrequency = new int[256];
     int[] blueFrequency = new int[256];
     HashMap<String, int[]> rgbFrequency = new HashMap<>();
 
-    for(int i = 0; i < 256; i++){
+    for (int i = 0; i < 256; i++) {
       redFrequency[i] = 0;
       greenFrequency[i] = 0;
       blueFrequency[i] = 0;
@@ -768,7 +693,8 @@ public class ImageImpl implements Image {
     return rgbFrequency;
   }
 
-  private void plotLine(Graphics2D g2d, int[] frequencies, int width, int height, Color lineColor, int maxFrequency) {
+  private void plotLine(Graphics2D g2d, int[] frequencies, int width, int height,
+                        Color lineColor, int maxFrequency) {
     g2d.setColor(lineColor);
     g2d.setStroke(new BasicStroke(1));
 
@@ -781,7 +707,7 @@ public class ImageImpl implements Image {
     }
   }
 
-  private void drawGrid(Graphics2D g2d, int gridSize, int width, int height){
+  private void drawGrid(Graphics2D g2d, int gridSize, int width, int height) {
     g2d.setColor(Color.lightGray);
     g2d.setStroke(new BasicStroke());
 
@@ -796,7 +722,7 @@ public class ImageImpl implements Image {
   }
 
   @Override
-  public Image createHistogram(){
+  public Image createHistogram() {
     HashMap<String, int[]> rgbFrequency = getFrequency();
     int width = 256;
     int height = 256;
@@ -826,7 +752,6 @@ public class ImageImpl implements Image {
     }
 
     //draw grid
-
     int gridSize = 13;
     drawGrid(g2d, gridSize, width, height);
 
@@ -857,7 +782,7 @@ public class ImageImpl implements Image {
     return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
   }
 
-  private int findPeak(int[] channel){
+  private int findPeak(int[] channel) {
     int maxFrequency = Integer.MIN_VALUE;
     int maxIndex = 0;
     for (int i = 10; i < channel.length - 10; i++) {
@@ -870,7 +795,7 @@ public class ImageImpl implements Image {
   }
 
   @Override
-  public Image colorCorrect(){
+  public Image colorCorrect() {
     HashMap<String, int[]> rgbFrequency = getFrequency();
     int redPeakIndex = findPeak(rgbFrequency.get("red"));
     int greenPeakIndex = findPeak(rgbFrequency.get("green"));
@@ -882,11 +807,11 @@ public class ImageImpl implements Image {
     int[][] newGreenPixelMatrix = new int[this.width][this.height];
     int[][] newBluePixelMatrix = new int[this.width][this.height];
 
-    for(int i = 0; i < this.width; i++){
-      for(int j = 0; j < this.height; j++){
-        newRedPixelMatrix[i][j] = this.getRedPixelMatrixElement(i,j);
-        newGreenPixelMatrix[i][j] = this.getGreenPixelMatrixElement(i,j);
-        newBluePixelMatrix[i][j] = this.getBluePixelMatrixElement(i,j);
+    for (int i = 0; i < this.width; i++) {
+      for (int j = 0; j < this.height; j++) {
+        newRedPixelMatrix[i][j] = this.getRedPixelMatrixElement(i, j);
+        newGreenPixelMatrix[i][j] = this.getGreenPixelMatrixElement(i, j);
+        newBluePixelMatrix[i][j] = this.getBluePixelMatrixElement(i, j);
       }
     }
 
@@ -897,48 +822,45 @@ public class ImageImpl implements Image {
     return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
   }
 
-  private void shiftChannel(int[][] pixelMatrix, int peakIndex, int avgPeakIndex){
+  private void shiftChannel(int[][] pixelMatrix, int peakIndex, int avgPeakIndex) {
     int difference = avgPeakIndex - peakIndex;
-    for(int i = 0; i < pixelMatrix.length; i++){
-      for(int j = 0; j < pixelMatrix[0].length; j++){
+    for (int i = 0; i < pixelMatrix.length; i++) {
+      for (int j = 0; j < pixelMatrix[0].length; j++) {
         pixelMatrix[i][j] = pixelMatrix[i][j] + difference;
         pixelMatrix[i][j] = clip(pixelMatrix[i][j]);
       }
     }
   }
 
-  /**
-   * @param b_p
-   * @param m_p
-   * @param w_p
-   * @return
-   */
   @Override
   public Image adjustLevels(int b_p, int m_p, int w_p) {
-    double A = (Math.pow(b_p,2)*(m_p - w_p)) - (b_p*(Math.pow(m_p,2) - Math.pow(w_p,2))) + (w_p*Math.pow(m_p,2)) - (m_p*Math.pow(w_p,2));
-    double Aa = ((-1 * b_p)*(128-255)) + (128 * w_p) - (255 * m_p);
-    double Ab = (Math.pow(b_p,2) * (128 -255)) + (255 * Math.pow(m_p,2)) - (128 * Math.pow(w_p,2));
-    double Ac = (Math.pow(b_p,2) * ((255*m_p) - (128 * w_p))) - (b_p * ((255 * Math.pow(m_p,2)) - (128 * Math.pow(w_p,2))));
-    double a = Aa/A;
-    double b = Ab/A;
-    double c = Ac/A;
+    double A = (Math.pow(b_p, 2) * (m_p - w_p)) - (b_p * (Math.pow(m_p, 2) -
+            Math.pow(w_p, 2))) + (w_p * Math.pow(m_p, 2)) - (m_p * Math.pow(w_p, 2));
+    double Aa = ((-1 * b_p) * (128 - 255)) + (128 * w_p) - (255 * m_p);
+    double Ab = (Math.pow(b_p, 2) * (128 - 255)) + (255 * Math.pow(m_p, 2)) -
+            (128 * Math.pow(w_p, 2));
+    double Ac = (Math.pow(b_p, 2) * ((255 * m_p) - (128 * w_p))) -
+            (b_p * ((255 * Math.pow(m_p, 2)) - (128 * Math.pow(w_p, 2))));
+    double a = Aa / A;
+    double b = Ab / A;
+    double c = Ac / A;
 
     int[][] newRedPixelMatrix = new int[this.width][this.height];
     int[][] newGreenPixelMatrix = new int[this.width][this.height];
     int[][] newBluePixelMatrix = new int[this.width][this.height];
 
-    for(int i = 0; i < this.width; i++){
-      for(int j = 0; j < this.height; j++){
-        newRedPixelMatrix[i][j] = computeAdjustedValues(getRedPixelMatrixElement(i,j), a, b, c);
-        newGreenPixelMatrix[i][j] = computeAdjustedValues(getGreenPixelMatrixElement(i,j), a, b, c);
-        newBluePixelMatrix[i][j] = computeAdjustedValues(getBluePixelMatrixElement(i,j), a, b, c);
+    for (int i = 0; i < this.width; i++) {
+      for (int j = 0; j < this.height; j++) {
+        newRedPixelMatrix[i][j] = computeAdjustedValues(getRedPixelMatrixElement(i, j), a, b, c);
+        newGreenPixelMatrix[i][j] = computeAdjustedValues(getGreenPixelMatrixElement(i, j), a, b, c);
+        newBluePixelMatrix[i][j] = computeAdjustedValues(getBluePixelMatrixElement(i, j), a, b, c);
       }
     }
     return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
   }
 
-  private int computeAdjustedValues(int currPixelValue, double a, double b, double c){
-    int newValue = (int) ((a*(Math.pow(currPixelValue,2))) + (b * currPixelValue) + c);
+  private int computeAdjustedValues(int currPixelValue, double a, double b, double c) {
+    int newValue = (int) ((a * (Math.pow(currPixelValue, 2))) + (b * currPixelValue) + c);
     newValue = clip(newValue);
     return newValue;
   }

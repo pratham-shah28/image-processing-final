@@ -1,13 +1,6 @@
 import org.junit.Test;
 
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-
-import javax.imageio.ImageIO;
-
 import model.Image;
 import model.ImageCreator;
 import model.ImageCreatorImpl;
@@ -15,7 +8,7 @@ import model.ImageCreatorImpl;
 import static org.junit.Assert.assertEquals;
 
 /**
- * A test class to test the Image.
+ * This is a JUnit test class to test the ImageImpl class.
  */
 public class ModelTest {
 
@@ -1290,9 +1283,9 @@ public class ModelTest {
 
     for (int x = 0; x < red.length; x++) {
       for (int y = 0; y < red[0].length; y++) {
-        assertEquals(redExpected[x][y],output.getRedPixelMatrixElement(x,y));
-        assertEquals(greenExpected[x][y], output.getGreenPixelMatrixElement(x,y));
-        assertEquals(blueExpected[x][y], output.getBluePixelMatrixElement(x,y));
+        assertEquals(redExpected[x][y], output.getRedPixelMatrixElement(x, y));
+        assertEquals(greenExpected[x][y], output.getGreenPixelMatrixElement(x, y));
+        assertEquals(blueExpected[x][y], output.getBluePixelMatrixElement(x, y));
       }
     }
   }
@@ -1355,9 +1348,9 @@ public class ModelTest {
 
     for (int x = 0; x < red.length; x++) {
       for (int y = 0; y < red[0].length; y++) {
-        assertEquals(redExpected[x][y] , output.getRedPixelMatrixElement(x,y));
-        assertEquals(greenExpected[x][y] , output.getGreenPixelMatrixElement(x,y));
-        assertEquals(blueExpected[x][y] , output.getBluePixelMatrixElement(x,y));
+        assertEquals(redExpected[x][y], output.getRedPixelMatrixElement(x, y));
+        assertEquals(greenExpected[x][y], output.getGreenPixelMatrixElement(x, y));
+        assertEquals(blueExpected[x][y], output.getBluePixelMatrixElement(x, y));
       }
     }
   }

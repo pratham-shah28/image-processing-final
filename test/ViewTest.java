@@ -38,29 +38,39 @@ public class ViewTest {
     expected.append(System.getProperty("line.separator"));
     expected.append(System.getProperty("line.separator"));
     String[] commandList = new String[]{"load image-path image-name",
-      "brighten factor image-name dest-image-name",
-      "vertical-flip image-name dest-image-name",
-      "horizontal-flip image-name dest-image-name",
-      "rgb-split image-name dest-image-name-red dest-image-name-green dest-image-name-blue",
-      "rgb-combine dest-image-name red-image green-image blue-image",
-      "blur image-name dest-image-name",
-      "sharpen image-name dest-image-name",
-      "value-component image-name dest-image-name",
-      "intensity-component image-name dest-image-name",
-      "luma-component image-name dest-image-name",
-      "red-component image-name dest-image-name",
-      "green-component image-name dest-image-name",
-      "blue-component image-name dest-image-name",
-      "sepia image-name dest-image-name",
-      "run script-file",
-      "save image-path image-name"
+            "brighten factor image-name dest-image-name",
+            "vertical-flip image-name dest-image-name",
+            "horizontal-flip image-name dest-image-name",
+            "rgb-split image-name dest-image-name-red dest-image-name-green dest-image-name-blue",
+            "rgb-combine dest-image-name red-image green-image blue-image",
+            "blur image-name dest-image-name",
+            "sharpen image-name dest-image-name",
+            "value-component image-name dest-image-name",
+            "intensity-component image-name dest-image-name",
+            "luma-component image-name dest-image-name",
+            "red-component image-name dest-image-name",
+            "green-component image-name dest-image-name",
+            "blue-component image-name dest-image-name",
+            "sepia image-name dest-image-name",
+            "histogram image-name dest-image-name",
+            "color-correct image-name dest-image-name",
+            "levels-adjust b m w image-name dest-image-name",
+            "compress percentage image-name dest-image-name",
+            "blur image-name dest-image split p",
+            "sharpen image-name dest-image split p",
+            "sepia image-name dest-image split p",
+            "sharpen image-name dest-image split p",
+            "luma-component image-name dest-image split p",
+            "intensity-component image-name dest-image split p",
+            "value-component image-name dest-image split p",
+            "run script-file",
+            "save image-path image-name"
     };
     for (String s : commandList) {
       expected.append(s);
       expected.append(System.getProperty("line.separator"));
     }
     expected.append("-------------------------------------------------------------------------");
-    expected.append(System.getProperty("line.separator"));
     expected.append(System.getProperty("line.separator"));
     view.showCommandList();
     assertEquals(expected.toString(), out.toString());

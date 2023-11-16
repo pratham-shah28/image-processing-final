@@ -26,7 +26,10 @@ import view.ViewInterface;
 import model.Image;
 
 /**
- * A controller class which coordinates between the model and view, while catering to user.
+ * This is the controller class that coordinates between the model and view, while catering to user.
+ * This class handles IO operations i.e. it takes input from user
+ * and delegates work to the model or view.
+ * This class implements the ControllerInterface.
  */
 public class Controller implements ControllerInterface {
   private ViewInterface view;
@@ -36,7 +39,7 @@ public class Controller implements ControllerInterface {
   private ImageCreator imageCreator;
 
   /**
-   * A constructor for Controller class.
+   * Constructs the controller using the given view, model, input stream and image hashmap.
    *
    * @param view   View object.
    * @param in     InputStream object.
@@ -169,13 +172,14 @@ public class Controller implements ControllerInterface {
       } catch (Exception e) {
         view.showCommandList();
       }
-   } else {
+    } else {
       view.showOutput("Invalid Command. Press 'help' to list the supported commands.");
     }
 
     switch (currCommand) {
       case "load":
         try {
+          assert path != null;
           int lastDotIndex = path.lastIndexOf('.');
           String format = path.substring(lastDotIndex + 1);
           if (format.equals("ppm")) {
@@ -207,13 +211,11 @@ public class Controller implements ControllerInterface {
             if (factor != 0) {
               images.put(outputName, images.get(imageName).compress(factor));
               view.showOutput("Compress: Success");
-            }
-            else {
+            } else {
               images.put(outputName, images.get(imageName));
               view.showOutput("Compress: Success");
             }
-          }
-          else {
+          } else {
             view.showOutput("Compression factor has to be from 0 to 100");
           }
         } catch (Exception e) {
@@ -276,9 +278,8 @@ public class Controller implements ControllerInterface {
           if (commandParts.size() == 3) {
             images.put(outputName, images.get(imageName).blur());
             view.showOutput("Blur: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
+          } else {
+            double perc = Double.parseDouble(commandParts.get(3));
             images.put(outputName, images.get(imageName).blurSplit(perc));
             view.showOutput("Blur: Success");
           }
@@ -294,9 +295,8 @@ public class Controller implements ControllerInterface {
           if (commandParts.size() == 3) {
             images.put(outputName, images.get(imageName).sharpen());
             view.showOutput("Sharpen: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
+          } else {
+            double perc = Double.parseDouble(commandParts.get(3));
             images.put(outputName, images.get(imageName).sharpenSplit(perc));
             view.showOutput("Sharpen: Success");
           }
@@ -312,9 +312,8 @@ public class Controller implements ControllerInterface {
           if (commandParts.size() == 3) {
             images.put(outputName, images.get(imageName).value());
             view.showOutput("Value Component: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
+          } else {
+            double perc = Double.parseDouble(commandParts.get(3));
             images.put(outputName, images.get(imageName).valueSplit(perc));
             view.showOutput("Value Component: Success");
           }
@@ -330,9 +329,8 @@ public class Controller implements ControllerInterface {
           if (commandParts.size() == 3) {
             images.put(outputName, images.get(imageName).intensity());
             view.showOutput("Intensity Component: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
+          } else {
+            double perc = Double.parseDouble(commandParts.get(3));
             images.put(outputName, images.get(imageName).intensitySplit(perc));
             view.showOutput("Intensity Component: Success");
           }
@@ -348,9 +346,8 @@ public class Controller implements ControllerInterface {
           if (commandParts.size() == 3) {
             images.put(outputName, images.get(imageName).luma());
             view.showOutput("Luma Component: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
+          } else {
+            double perc = Double.parseDouble(commandParts.get(3));
             images.put(outputName, images.get(imageName).lumaSplit(perc));
             view.showOutput("Luma Component: Success");
           }
@@ -399,9 +396,8 @@ public class Controller implements ControllerInterface {
           if (commandParts.size() == 3) {
             images.put(outputName, images.get(imageName).sepia());
             view.showOutput("Sepia: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
+          } else {
+            double perc = Double.parseDouble(commandParts.get(3));
             images.put(outputName, images.get(imageName).sepiaSplit(perc));
             view.showOutput("Sepia: Success");
           }
@@ -439,10 +435,13 @@ public class Controller implements ControllerInterface {
 
       case "levels-adjust":
         try {
-          if(b < 0 || m < 0 || w < 0 || b > 255 || m > 255 || w > 255){
+          if (b < 0 || m < 0 || w < 0 || b > 255 || m > 255 || w > 255) {
             throw new IllegalArgumentException("b, m, w values should be in the range 0 - 255");
           }
-          images.put(outputName, images.get(imageName).adjustLevels(b,m,w));
+          if (b < m && b < w && m < w) {
+            throw new IllegalArgumentException("b, m, w values should be in ascending order");
+          }
+          images.put(outputName, images.get(imageName).adjustLevels(b, m, w));
           view.showOutput("Levels Adjust: Success");
         } catch (Exception e) {
           view.showOutput("Levels Adjust failed: " + e);
@@ -454,6 +453,7 @@ public class Controller implements ControllerInterface {
 
       case "run":
         try {
+          assert path != null;
           int lastDotIndex = path.lastIndexOf('.');
           String format = path.substring(lastDotIndex + 1);
           if (format.equals("txt")) {

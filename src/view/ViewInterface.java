@@ -1,16 +1,34 @@
 package view;
 
 /**
- * Interface for text based view class.
+ * This interface provides a blueprint for the view class. A view is responsible to show output to
+ * the user.
  */
 public interface ViewInterface {
-  public void showOutput(String message);
+  /**
+   * This method displays the 'message' string to the user via command line interface.
+   *
+   * @param message the message to be displayed.
+   */
+  void showOutput(String message);
 
-  public void welcomeMessage();
+  /**
+   * This method displays the welcome message after the application starts.
+   */
+  void welcomeMessage();
 
-  public void enterCommandPrompt();
+  /**
+   * This method displays a message that prompts the user to enter a command.
+   */
+  void enterCommandPrompt();
 
-  public void imageDoesNotExists();
+  /**
+   * This method when called displays the error message stating image doesn't exist.
+   */
+  void imageDoesNotExists();
 
-  public void showCommandList();
+  /**
+   * This method displays the list of valid commands supported by the application.
+   */
+  void showCommandList();
 }

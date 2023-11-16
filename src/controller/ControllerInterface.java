@@ -1,12 +1,14 @@
 package controller;
 
 /**
- * Interface for a controller of the architecture.
+ * This is an interface for the controller class. Controller is responsible managing IO operations
+ * and delegating work between model and view.
  */
 public interface ControllerInterface {
 
   /**
-   * Method to tell the controller to start executing.
+   * This is the entry point of our application. This method is called from the main class.
+   * This method runs and listens for next user commands until the user enters 'exit'.
    */
   void execute();
 }
