@@ -550,6 +550,7 @@ public class ControllerTest {
     controller.execute();
     StringBuilder expected = new StringBuilder();
     expected.append(50.0);
+    // testing something;
     assertEquals(expected.toString(), mockLog.toString());
   }
 
