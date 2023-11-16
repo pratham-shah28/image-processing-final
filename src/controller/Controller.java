@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,7 +30,7 @@ import model.Image;
  */
 public class Controller implements ControllerInterface {
   private ViewInterface view;
-  private HashMap<String, Image> images;
+  private Map<String, Image> images;
   private HashSet<String> supportedFormats;
   private InputStream in;
 
@@ -45,7 +46,7 @@ public class Controller implements ControllerInterface {
   public Controller(ViewInterface view, InputStream in, HashMap<String, Image> images,
                     ImageCreator imageCreator) {
     if (view == null || in == null || images == null || imageCreator == null) {
-      throw new IllegalArgumentException("Controller cannot be created. Check arguements");
+      throw new IllegalArgumentException("Controller cannot be created. Check arguments");
     }
     this.view = view;
     this.in = in;
@@ -108,6 +109,7 @@ public class Controller implements ControllerInterface {
     String greenImageName = null;
     String blueImageName = null;
     double factor = 0;
+    int b = 0, m = 0, w = 0;
 
     if (currCommand.equals("run")) {
       try {
@@ -149,14 +151,26 @@ public class Controller implements ControllerInterface {
             || currCommand.equals("blue-component")
             || currCommand.equals("intensity-component")
             || currCommand.equals("luma-component")
-            || currCommand.equals("value-component")) {
+            || currCommand.equals("value-component")
+            || currCommand.equals("histogram")
+            || currCommand.equals("color-correct")) {
       try {
         imageName = commandParts.get(1);
         outputName = commandParts.get(2);
       } catch (Exception e) {
         view.showCommandList();
       }
-    } else {
+    } else if (currCommand.equals("levels-adjust")) {
+      try {
+        b = Integer.parseInt(commandParts.get(1));
+        m = Integer.parseInt(commandParts.get(2));
+        w = Integer.parseInt(commandParts.get(3));
+        imageName = commandParts.get(4);
+        outputName = commandParts.get(5);
+      } catch (Exception e) {
+        view.showCommandList();
+      }
+   } else {
       view.showOutput("Invalid Command. Press 'help' to list the supported commands.");
     }
 
@@ -401,6 +415,45 @@ public class Controller implements ControllerInterface {
         }
         break;
 
+      case "histogram":
+        try {
+          images.put(outputName, images.get(imageName).createHistogram());
+          view.showOutput("Histogram: Success");
+        } catch (Exception e) {
+          view.showOutput("Histogram: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+
+      case "color-correct":
+        try {
+          images.put(outputName, images.get(imageName).colorCorrect());
+          view.showOutput("Color correction: Success");
+        } catch (Exception e) {
+          view.showOutput("Color correction failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+
+      case "levels-adjust":
+        try {
+          if(b < 0 || m < 0 || w < 0 || b > 255 || m > 255 || w > 255){
+            throw new IllegalArgumentException("b, m, w values should be in the range 0 - 255");
+          }
+          images.put(outputName, images.get(imageName).adjustLevels(b,m,w));
+          view.showOutput("Levels Adjust: Success");
+        } catch (Exception e) {
+          view.showOutput("Levels Adjust failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+
       case "run":
         try {
           int lastDotIndex = path.lastIndexOf('.');
@@ -413,7 +466,6 @@ public class Controller implements ControllerInterface {
             }
             view.showOutput("Run: Success");
           } else {
-            System.out.println(format + "ass");
             throw new IllegalArgumentException("Please input text file only.");
           }
           break;

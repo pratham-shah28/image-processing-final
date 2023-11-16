@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -734,6 +736,193 @@ public class ImageImpl implements Image {
 //      }
 //      i = i + 1;
 //    }
+  }
+
+  private HashMap<String, int[]> getFrequency(){
+    int[] redFrequency = new int[256];
+    int[] greenFrequency = new int[256];
+    int[] blueFrequency = new int[256];
+    HashMap<String, int[]> rgbFrequency = new HashMap<>();
+
+    for(int i = 0; i < 256; i++){
+      redFrequency[i] = 0;
+      greenFrequency[i] = 0;
+      blueFrequency[i] = 0;
+    }
+
+    for (int x = 0; x < this.width; x++) {
+      for (int y = 0; y < this.height; y++) {
+        int red = this.getRedPixelMatrixElement(x, y);
+        int green = this.getGreenPixelMatrixElement(x, y);
+        int blue = this.getBluePixelMatrixElement(x, y);
+        redFrequency[red]++;
+        greenFrequency[green]++;
+        blueFrequency[blue]++;
+      }
+    }
+
+    rgbFrequency.put("red", redFrequency);
+    rgbFrequency.put("green", greenFrequency);
+    rgbFrequency.put("blue", blueFrequency);
+
+    return rgbFrequency;
+  }
+
+  private static void plotLine(Graphics2D g2d, int[] frequencies, int width, int height, Color lineColor, int maxFrequency) {
+    g2d.setColor(lineColor);
+    g2d.setStroke(new BasicStroke(1));
+
+    for (int i = 0; i < frequencies.length - 1; i++) {
+      int x1 = i * (width - 1) / (frequencies.length - 1);
+      int y1 = height - frequencies[i] * height / maxFrequency;
+      int x2 = (i + 1) * (width - 1) / (frequencies.length - 1);
+      int y2 = height - frequencies[i + 1] * height / maxFrequency;
+      g2d.drawLine(x1, y1, x2, y2);
+    }
+  }
+
+  @Override
+  public Image createHistogram(){
+    HashMap<String, int[]> rgbFrequency = getFrequency();
+    int width = 256;
+    int height = 256;
+
+    BufferedImage graphImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    Graphics2D g2d = graphImage.createGraphics();
+
+    g2d.setBackground(Color.WHITE);
+    g2d.clearRect(0, 0, width, height);
+
+    // Find max frequency for normalization
+    int maxFrequency = Integer.MIN_VALUE;
+    for (int frequency : rgbFrequency.get("red")) {
+      if (frequency > maxFrequency) {
+        maxFrequency = frequency;
+      }
+    }
+    for (int frequency : rgbFrequency.get("green")) {
+      if (frequency > maxFrequency) {
+        maxFrequency = frequency;
+      }
+    }
+    for (int frequency : rgbFrequency.get("blue")) {
+      if (frequency > maxFrequency) {
+        maxFrequency = frequency;
+      }
+    }
+
+    // Plot the line graph for Red Channel (in red)
+    plotLine(g2d, rgbFrequency.get("red"), width, height, Color.RED, maxFrequency);
+
+    // Plot the line graph for Green Channel (in green)
+    plotLine(g2d, rgbFrequency.get("green"), width, height, Color.GREEN, maxFrequency);
+
+    // Plot the line graph for Blue Channel (in blue)
+    plotLine(g2d, rgbFrequency.get("blue"), width, height, Color.BLUE, maxFrequency);
+
+    // Dispose of Graphics2D
+    g2d.dispose();
+
+    int[][] newRedPixelMatrix = new int[height][width];
+    int[][] newGreenPixelMatrix = new int[height][width];
+    int[][] newBluePixelMatrix = new int[height][width];
+
+    for (int x = 0; x < height; x++) {
+      for (int y = 0; y < width; y++) {
+        int pixel = graphImage.getRGB(y, x);
+        newRedPixelMatrix[x][y] = (pixel & 0xff0000) >> 16;
+        newGreenPixelMatrix[x][y] = (pixel & 0xff00) >> 8;
+        newBluePixelMatrix[x][y] = pixel & 0xff;
+      }
+    }
+
+    return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
+  }
+
+  private int findPeak(int[] channel){
+    int maxFrequency = Integer.MIN_VALUE;
+    int maxIndex = 0;
+    for (int i = 10; i < channel.length - 10; i++) {
+      if (channel[i] > maxFrequency) {
+        maxIndex = i;
+        maxFrequency = channel[i];
+      }
+    }
+    return maxIndex;
+  }
+
+  @Override
+  public Image colorCorrect(){
+    HashMap<String, int[]> rgbFrequency = getFrequency();
+    int redPeakIndex = findPeak(rgbFrequency.get("red"));
+    int greenPeakIndex = findPeak(rgbFrequency.get("green"));
+    int bluePeakIndex = findPeak(rgbFrequency.get("blue"));
+
+    int avgPeakPosition = (redPeakIndex + greenPeakIndex + bluePeakIndex) / 3;
+
+    int[][] newRedPixelMatrix = new int[this.width][this.height];
+    int[][] newGreenPixelMatrix = new int[this.width][this.height];
+    int[][] newBluePixelMatrix = new int[this.width][this.height];
+
+    for(int i = 0; i < this.width; i++){
+      for(int j = 0; j < this.height; j++){
+        newRedPixelMatrix[i][j] = this.getRedPixelMatrixElement(i,j);
+        newGreenPixelMatrix[i][j] = this.getGreenPixelMatrixElement(i,j);
+        newBluePixelMatrix[i][j] = this.getBluePixelMatrixElement(i,j);
+      }
+    }
+
+    shiftChannel(newRedPixelMatrix, redPeakIndex, avgPeakPosition);
+    shiftChannel(newGreenPixelMatrix, greenPeakIndex, avgPeakPosition);
+    shiftChannel(newBluePixelMatrix, bluePeakIndex, avgPeakPosition);
+
+    return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
+  }
+
+  private void shiftChannel(int[][] pixelMatrix, int peakIndex, int avgPeakIndex){
+    int difference = avgPeakIndex - peakIndex;
+    for(int i = 0; i < pixelMatrix.length; i++){
+      for(int j = 0; j < pixelMatrix[0].length; j++){
+        pixelMatrix[i][j] = pixelMatrix[i][j] + difference;
+        pixelMatrix[i][j] = clip(pixelMatrix[i][j]);
+      }
+    }
+  }
+
+  /**
+   * @param b_p
+   * @param m_p
+   * @param w_p
+   * @return
+   */
+  @Override
+  public Image adjustLevels(int b_p, int m_p, int w_p) {
+    double A = (Math.pow(b_p,2)*(m_p - w_p)) - (b_p*(Math.pow(m_p,2) - Math.pow(w_p,2))) + (w_p*Math.pow(m_p,2)) - (m_p*Math.pow(w_p,2));
+    double Aa = ((-1 * b_p)*(128-255)) + (128 * w_p) - (255 * m_p);
+    double Ab = (Math.pow(b_p,2) * (128 -255)) + (255 * Math.pow(m_p,2)) - (128 * Math.pow(w_p,2));
+    double Ac = (Math.pow(b_p,2) * ((255*m_p) - (128 * w_p))) - (b_p * ((255 * Math.pow(m_p,2)) - (128 * Math.pow(w_p,2))));
+    double a = Aa/A;
+    double b = Ab/A;
+    double c = Ac/A;
+
+    int[][] newRedPixelMatrix = new int[this.width][this.height];
+    int[][] newGreenPixelMatrix = new int[this.width][this.height];
+    int[][] newBluePixelMatrix = new int[this.width][this.height];
+
+    for(int i = 0; i < this.width; i++){
+      for(int j = 0; j < this.height; j++){
+        newRedPixelMatrix[i][j] = computeAdjustedValues(getRedPixelMatrixElement(i,j), a, b, c);
+        newGreenPixelMatrix[i][j] = computeAdjustedValues(getGreenPixelMatrixElement(i,j), a, b, c);
+        newBluePixelMatrix[i][j] = computeAdjustedValues(getBluePixelMatrixElement(i,j), a, b, c);
+      }
+    }
+    return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
+  }
+
+  private int computeAdjustedValues(int currPixelValue, double a, double b, double c){
+    int newValue = (int) ((a*(Math.pow(currPixelValue,2))) + (b * currPixelValue) + c);
+    newValue = clip(newValue);
+    return newValue;
   }
 
 }

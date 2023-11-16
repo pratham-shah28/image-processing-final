@@ -113,6 +113,33 @@ public class ControllerTest {
       return null;
     }
 
+    /**
+     * @return
+     */
+    @Override
+    public Image createHistogram() {
+      return null;
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public Image colorCorrect() {
+      return null;
+    }
+
+    /**
+     * @param b_p
+     * @param m_p
+     * @param w_p
+     * @return
+     */
+    @Override
+    public Image adjustLevels(int b_p, int m_p, int w_p) {
+      return null;
+    }
+
     @Override
     public int getRedPixelMatrixElement(int x, int y) {
       return 0;

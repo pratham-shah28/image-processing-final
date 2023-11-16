@@ -105,6 +105,28 @@ public interface Image {
   Image compress(double factor);
 
   /**
+   *
+   * @return
+   */
+  Image createHistogram();
+
+  /**
+   *
+   * @return
+   */
+  Image colorCorrect();
+
+  /**
+   *
+   * @param b_p
+   * @param m_p
+   * @param w_p
+   * @return
+   */
+  Image adjustLevels(int b_p, int m_p, int w_p);
+
+
+  /**
    * Method to get the pixel at x,y position from the red channel.
    *
    * @param x i-th position
