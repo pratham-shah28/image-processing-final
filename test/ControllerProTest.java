@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import controller.Controller;
 import controller.ControllerInterface;
+import controller.ControllerPro;
 import model.Image;
 import model.ImageCreator;
 import model.ImageCreatorImpl;
@@ -22,9 +23,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Test class to test the controller.
+ * Test class to test the controller for the pro version.
  */
-public class ControllerTest {
+public class ControllerProTest {
   private class MockModel implements Image {
     private StringBuilder log;
     private int[][] red;
@@ -128,7 +129,6 @@ public class ControllerTest {
       return null;
     }
 
-
     @Override
     public int getRedPixelMatrixElement(int x, int y) {
       return 0;
@@ -156,12 +156,10 @@ public class ControllerTest {
 
     @Override
     public Image applySplit(Image originalImage, double perc) {
+      log.append(perc);
       return null;
     }
-
-
   }
-
   private class MockImageCreator implements ImageCreator {
 
     private StringBuilder mockLog;
@@ -216,7 +214,7 @@ public class ControllerTest {
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     assertTrue(images.containsKey("m"));
     assertTrue(images.containsKey("mVF"));
@@ -248,7 +246,7 @@ public class ControllerTest {
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     assertTrue(images.containsKey("m"));
   }
@@ -266,7 +264,7 @@ public class ControllerTest {
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     String outputString = out.toString();
     String[] lines = outputString.split(System.lineSeparator());
@@ -291,7 +289,7 @@ public class ControllerTest {
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     assertTrue(images.containsKey("mumbai"));
   }
@@ -306,7 +304,7 @@ public class ControllerTest {
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     String outputString = out.toString();
 
@@ -333,7 +331,7 @@ public class ControllerTest {
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
 
     String outputString = out.toString();
@@ -363,7 +361,7 @@ public class ControllerTest {
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
 
     String outputString = out.toString();
@@ -393,7 +391,7 @@ public class ControllerTest {
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     String outputString = out.toString();
 
@@ -419,7 +417,7 @@ public class ControllerTest {
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
 
     String outputString = out.toString();
@@ -447,7 +445,7 @@ public class ControllerTest {
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
 
     String outputString = out.toString();
@@ -476,7 +474,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     StringBuilder expected = new StringBuilder();
     expected.append(images.get("a"));
@@ -498,7 +496,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     StringBuilder expected = new StringBuilder();
     expected.append(images.get("a"));
@@ -518,7 +516,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     StringBuilder expected = new StringBuilder();
     expected.append(50);
@@ -526,21 +524,21 @@ public class ControllerTest {
   }
 
   @Test
-  public void testCallSplitSharpen() throws IOException {
+  public void testApplySplit() throws IOException {
     StringBuilder mockLog = new StringBuilder();
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
-    String input = "load " + "\"" + path + "\"" + " " + "a" + "\n"
-            + "sharpen" + " " + "a" + " " + "b" + " " + "50";
+    String input = "load " + "\"" + path + "\"" + " " + "a" + "\n";
+//            + "sharpen" + " " + "a" + " " + "b" + " " + "split" + " " + "50";
     InputStream in = null;
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     StringBuilder expected = new StringBuilder();
     expected.append(50.0);
-    // testing something;
+    System.out.println(images.get("a").applySplit(images.get("a"),50));
     assertEquals(expected.toString(), mockLog.toString());
   }
 
@@ -555,7 +553,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     StringBuilder expected = new StringBuilder();
     expected.append(50.0);
@@ -570,7 +568,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     String outputString = out.toString();
     String[] lines = outputString.split(System.lineSeparator());
@@ -591,7 +589,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = null;
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
   }
 
   @Test
@@ -606,7 +604,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
 
     String outputString = out.toString();
@@ -632,7 +630,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     assertTrue(images.containsKey("mumbai"));
   }
@@ -649,7 +647,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
 
     String outputString = out.toString();
@@ -675,7 +673,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     assertTrue(images.containsKey("mumbai"));
   }
@@ -692,7 +690,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
 
     String outputString = out.toString();
@@ -719,7 +717,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     assertTrue(images.containsKey("mumbai"));
   }
@@ -737,7 +735,7 @@ public class ControllerTest {
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller
-            = new Controller(view, in, images, imageCreator);
+            = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
 
     String outputString = out.toString();
@@ -762,7 +760,7 @@ public class ControllerTest {
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
     String outputString = out.toString();
 
@@ -776,4 +774,5 @@ public class ControllerTest {
     str.append("Invalid PPM file: plain RAW file should begin with P3");
     assertEquals(str.toString(), lastLine);
   }
+
 }

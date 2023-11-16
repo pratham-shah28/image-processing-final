@@ -10,4 +10,5 @@ public class ImageCreatorImpl implements ImageCreator {
                                int[][] bluePixelMatrix) {
     return new ImageImpl(redPixelMatrix, greenPixelMatrix, bluePixelMatrix);
   }
+
 }

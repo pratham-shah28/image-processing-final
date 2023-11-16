@@ -167,17 +167,8 @@ public interface Image {
    */
   int getWidth();
 
+  Image applySplit(Image originalImage, double perc);
 
-  Image sepiaSplit(double perc);
 
-  Image sharpenSplit(double perc);
-
-  Image blurSplit(double perc);
-
-  Image valueSplit(double perc);
-
-  Image lumaSplit(double perc);
-
-  Image intensitySplit(double perc);
 
 }

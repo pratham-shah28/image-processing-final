@@ -1,5 +1,6 @@
 import controller.Controller;
 import controller.ControllerInterface;
+import controller.ControllerPro;
 import model.ImageCreator;
 import model.ImageCreatorImpl;
 import view.View;
@@ -25,7 +26,7 @@ public class MainApp {
       InputStream in = System.in;
       ViewInterface view = new View();
       ImageCreator imageCreator = new ImageCreatorImpl();
-      ControllerInterface controller = new Controller(view, in, new HashMap<>(), imageCreator);
+      ControllerInterface controller = new ControllerPro(view, in, new HashMap<>(), imageCreator);
       controller.execute();
     }
     else {
@@ -36,8 +37,8 @@ public class MainApp {
       in = new ByteArrayInputStream(input.getBytes());
       ViewInterface view = new View();
       ImageCreator imageCreator = new ImageCreatorImpl();
-      ControllerInterface controller = new Controller(view, in, new HashMap<>(), imageCreator);
-      controller.execute();
+      ControllerInterface controllerPro = new ControllerPro(view, in, new HashMap<>(), imageCreator);
+      controllerPro.execute();
     }
   }
 }

@@ -29,11 +29,24 @@ import model.Image;
  * A controller class which coordinates between the model and view, while catering to user.
  */
 public class Controller implements ControllerInterface {
-  private ViewInterface view;
+  protected ViewInterface view;
   private Map<String, Image> images;
   private HashSet<String> supportedFormats;
-  private InputStream in;
+  protected InputStream in;
   private ImageCreator imageCreator;
+
+  String path;
+  String imageName;
+  String outputName;
+  String redImageName;
+  String greenImageName;
+  String blueImageName;
+  double factor;
+  int b;
+  int m;
+  int w;
+
+  List<String> commandParts;
 
   /**
    * A constructor for Controller class.
@@ -55,6 +68,14 @@ public class Controller implements ControllerInterface {
     supportedFormats.add("png");
     supportedFormats.add("ppm");
     this.imageCreator = imageCreator;
+    String path = null;
+    String imageName = null;
+    String outputName = null;
+    String redImageName = null;
+    String greenImageName = null;
+    String blueImageName = null;
+    double factor = 0;
+    int b = 0, m = 0, w = 0;
   }
 
 
@@ -69,11 +90,27 @@ public class Controller implements ControllerInterface {
         view.showOutput("fin.");
         break;
       }
-      runCommand(input);
+      List<String> commandParts = getCommandComponents(input);
+      String currCommand = commandParts.get(0);
+      if (currCommand.equals("help")) {
+        view.showCommandList();
+        return;
+      }
+//    String path = null;
+//    String imageName = null;
+//    String outputName = null;
+//    String redImageName = null;
+//    String greenImageName = null;
+//    String blueImageName = null;
+//    double factor = 0;
+//    int b = 0, m = 0, w = 0;
+
+      parseCommand(currCommand, commandParts);
+      runCommand(currCommand);
     }
   }
 
-  private List<String> getCommandComponents(String input) {
+  protected List<String> getCommandComponents(String input) {
     List<String> commandParts = new ArrayList<>();
     try {
       Pattern pattern = Pattern.compile("\"([^\"]*)\"|([^\\s]+)");
@@ -93,23 +130,226 @@ public class Controller implements ControllerInterface {
     return commandParts;
   }
 
-  private void runCommand(String input) {
+  protected void runCommand(String currCommand) {
+    switch (currCommand) {
+      case "load":
+        try {
+          int lastDotIndex = path.lastIndexOf('.');
+          String format = path.substring(lastDotIndex + 1);
+          if (format.equals("ppm")) {
+            loadImagePPM(path, imageName);
 
-    List<String> commandParts = getCommandComponents(input);
-    String currCommand = commandParts.get(0);
-    if (currCommand.equals("help")) {
-      view.showCommandList();
-      return;
+          } else {
+            this.loadImage(path, imageName);
+          }
+        } catch (Exception e) {
+          view.showOutput("Load: Failed: " + e);
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "brighten":
+        try {
+          images.put(outputName, images.get(imageName).brighten((int) factor));
+          view.showOutput("Brighten: Success");
+        } catch (Exception e) {
+          view.showOutput("Brighten: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+
+      case "vertical-flip":
+        try {
+          images.put(outputName, images.get(imageName).flipVertical());
+          view.showOutput("Vertical Flip: Success");
+        } catch (Exception e) {
+          view.showOutput("Vertical FLip: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "horizontal-flip":
+        try {
+          images.put(outputName, images.get(imageName).flipHorizontal());
+          view.showOutput("Horizontal Flip: Success");
+        } catch (Exception e) {
+          view.showOutput("Horizontal Flip: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "rgb-split":
+        try {
+          images.put(redImageName, images.get(imageName).redComponent());
+          images.put(greenImageName, images.get(imageName).greenComponent());
+          images.put(blueImageName, images.get(imageName).blueComponent());
+          view.showOutput("RGB split: Success");
+        } catch (Exception e) {
+          view.showOutput("RGB Split: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "rgb-combine":
+        try {
+          images.put(imageName, images.get(redImageName).combine(images.get(redImageName),
+                  images.get(greenImageName),
+                  images.get(blueImageName)));
+          view.showOutput("RGB combine: Success");
+        } catch (Exception e) {
+          view.showOutput("RGB Combine: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "blur":
+        try {
+
+          images.put(outputName, images.get(imageName).blur());
+          view.showOutput("Blur: Success");
+        } catch (Exception e) {
+          view.showOutput("Blur: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "sharpen":
+        try {
+          images.put(outputName, images.get(imageName).sharpen());
+          view.showOutput("Sharpen: Success");
+        } catch (Exception e) {
+          view.showOutput("Sharpen: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "value-component":
+        try {
+          images.put(outputName, images.get(imageName).value());
+          view.showOutput("Value Component: Success");
+        } catch (Exception e) {
+          view.showOutput("Value Component: Failed: " + e);
+          view.showCommandList();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "intensity-component":
+        try {
+          images.put(outputName, images.get(imageName).intensity());
+          view.showOutput("Intensity Component: Success");
+        } catch (Exception e) {
+          view.showOutput("Intensity Component: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "luma-component":
+        try {
+
+          images.put(outputName, images.get(imageName).luma());
+          view.showOutput("Luma Component: Success");
+
+        } catch (Exception e) {
+          view.showOutput("Luma Component: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "red-component":
+        try {
+          images.put(outputName, images.get(imageName).redComponent());
+          view.showOutput("Red Component: Success");
+        } catch (Exception e) {
+          view.showOutput("Red Component: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "green-component":
+        try {
+          images.put(outputName, images.get(imageName).greenComponent());
+          view.showOutput("Green Component: Success");
+        } catch (Exception e) {
+          view.showOutput("Green Component: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "blue-component":
+        try {
+          images.put(outputName, images.get(imageName).blueComponent());
+          view.showOutput("Blue Component: Success");
+        } catch (Exception e) {
+          view.showOutput("Blue Component: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "sepia":
+        try {
+
+          images.put(outputName, images.get(imageName).sepia());
+          view.showOutput("Sepia: Success");
+
+        } catch (Exception e) {
+          view.showOutput("Sepia: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+
+      case "run":
+        try {
+          int lastDotIndex = path.lastIndexOf('.');
+          String format = path.substring(lastDotIndex + 1);
+          if (format.equals("txt")) {
+            BufferedReader reader = new BufferedReader(new FileReader(path));
+            String line;
+            while ((line = reader.readLine()) != null) {
+              runCommand(line);
+            }
+            view.showOutput("Run: Success");
+          } else {
+            throw new IllegalArgumentException("Please input text file only.");
+          }
+          break;
+        } catch (Exception e) {
+          view.showOutput("Run: Failed: " + e);
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      case "save":
+        try {
+          saveImage(path, imageName);
+        } catch (Exception e) {
+          view.showOutput("Save: Failed: " + e);
+          view.imageDoesNotExists();
+        } finally {
+          view.enterCommandPrompt();
+        }
+        break;
+      default:
+        view.enterCommandPrompt();
     }
-    String path = null;
-    String imageName = null;
-    String outputName = null;
-    String redImageName = null;
-    String greenImageName = null;
-    String blueImageName = null;
-    double factor = 0;
-    int b = 0, m = 0, w = 0;
+  }
 
+  protected void parseCommand(String currCommand, List<String> commandParts) {
     if (currCommand.equals("run")) {
       try {
         path = commandParts.get(1);
@@ -169,322 +409,8 @@ public class Controller implements ControllerInterface {
       } catch (Exception e) {
         view.showCommandList();
       }
-   } else {
+    } else {
       view.showOutput("Invalid Command. Press 'help' to list the supported commands.");
-    }
-
-    switch (currCommand) {
-      case "load":
-        try {
-          int lastDotIndex = path.lastIndexOf('.');
-          String format = path.substring(lastDotIndex + 1);
-          if (format.equals("ppm")) {
-            loadImagePPM(path, imageName);
-
-          } else {
-            this.loadImage(path, imageName);
-          }
-        } catch (Exception e) {
-          view.showOutput("Load: Failed: " + e);
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "brighten":
-        try {
-          images.put(outputName, images.get(imageName).brighten((int) factor));
-          view.showOutput("Brighten: Success");
-        } catch (Exception e) {
-          view.showOutput("Brighten: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "compress":
-        try {
-          if (factor >= 0 && factor <= 100) {
-            if (factor != 0) {
-              images.put(outputName, images.get(imageName).compress(factor));
-              view.showOutput("Compress: Success");
-            }
-            else {
-              images.put(outputName, images.get(imageName));
-              view.showOutput("Compress: Success");
-            }
-          }
-          else {
-            view.showOutput("Compression factor has to be from 0 to 100");
-          }
-        } catch (Exception e) {
-          view.showOutput("Compress: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "vertical-flip":
-        try {
-          images.put(outputName, images.get(imageName).flipVertical());
-          view.showOutput("Vertical Flip: Success");
-        } catch (Exception e) {
-          view.showOutput("Vertical FLip: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "horizontal-flip":
-        try {
-          images.put(outputName, images.get(imageName).flipHorizontal());
-          view.showOutput("Horizontal Flip: Success");
-        } catch (Exception e) {
-          view.showOutput("Horizontal Flip: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "rgb-split":
-        try {
-          images.put(redImageName, images.get(imageName).redComponent());
-          images.put(greenImageName, images.get(imageName).greenComponent());
-          images.put(blueImageName, images.get(imageName).blueComponent());
-          view.showOutput("RGB split: Success");
-        } catch (Exception e) {
-          view.showOutput("RGB Split: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "rgb-combine":
-        try {
-          images.put(imageName, images.get(redImageName).combine(images.get(redImageName),
-                  images.get(greenImageName),
-                  images.get(blueImageName)));
-          view.showOutput("RGB combine: Success");
-        } catch (Exception e) {
-          view.showOutput("RGB Combine: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "blur":
-        try {
-          if (commandParts.size() == 3) {
-            images.put(outputName, images.get(imageName).blur());
-            view.showOutput("Blur: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
-            images.put(outputName, images.get(imageName).blurSplit(perc));
-            view.showOutput("Blur: Success");
-          }
-        } catch (Exception e) {
-          view.showOutput("Blur: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "sharpen":
-        try {
-          if (commandParts.size() == 3) {
-            images.put(outputName, images.get(imageName).sharpen());
-            view.showOutput("Sharpen: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
-            images.put(outputName, images.get(imageName).sharpenSplit(perc));
-            view.showOutput("Sharpen: Success");
-          }
-        } catch (Exception e) {
-          view.showOutput("Sharpen: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "value-component":
-        try {
-          if (commandParts.size() == 3) {
-            images.put(outputName, images.get(imageName).value());
-            view.showOutput("Value Component: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
-            images.put(outputName, images.get(imageName).valueSplit(perc));
-            view.showOutput("Value Component: Success");
-          }
-        } catch (Exception e) {
-          view.showOutput("Value Component: Failed: " + e);
-          view.showCommandList();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "intensity-component":
-        try {
-          if (commandParts.size() == 3) {
-            images.put(outputName, images.get(imageName).intensity());
-            view.showOutput("Intensity Component: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
-            images.put(outputName, images.get(imageName).intensitySplit(perc));
-            view.showOutput("Intensity Component: Success");
-          }
-        } catch (Exception e) {
-          view.showOutput("Intensity Component: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "luma-component":
-        try {
-          if (commandParts.size() == 3) {
-            images.put(outputName, images.get(imageName).luma());
-            view.showOutput("Luma Component: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
-            images.put(outputName, images.get(imageName).lumaSplit(perc));
-            view.showOutput("Luma Component: Success");
-          }
-        } catch (Exception e) {
-          view.showOutput("Luma Component: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "red-component":
-        try {
-          images.put(outputName, images.get(imageName).redComponent());
-          view.showOutput("Red Component: Success");
-        } catch (Exception e) {
-          view.showOutput("Red Component: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "green-component":
-        try {
-          images.put(outputName, images.get(imageName).greenComponent());
-          view.showOutput("Green Component: Success");
-        } catch (Exception e) {
-          view.showOutput("Green Component: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "blue-component":
-        try {
-          images.put(outputName, images.get(imageName).blueComponent());
-          view.showOutput("Blue Component: Success");
-        } catch (Exception e) {
-          view.showOutput("Blue Component: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "sepia":
-        try {
-          if (commandParts.size() == 3) {
-            images.put(outputName, images.get(imageName).sepia());
-            view.showOutput("Sepia: Success");
-          }
-          else {
-            Double perc = Double.parseDouble(commandParts.get(3));
-            images.put(outputName, images.get(imageName).sepiaSplit(perc));
-            view.showOutput("Sepia: Success");
-          }
-        } catch (Exception e) {
-          view.showOutput("Sepia: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-
-      case "histogram":
-        try {
-          images.put(outputName, images.get(imageName).createHistogram());
-          view.showOutput("Histogram: Success");
-        } catch (Exception e) {
-          view.showOutput("Histogram: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-
-      case "color-correct":
-        try {
-          images.put(outputName, images.get(imageName).colorCorrect());
-          view.showOutput("Color correction: Success");
-        } catch (Exception e) {
-          view.showOutput("Color correction failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-
-      case "levels-adjust":
-        try {
-          if(b < 0 || m < 0 || w < 0 || b > 255 || m > 255 || w > 255){
-            throw new IllegalArgumentException("b, m, w values should be in the range 0 - 255");
-          }
-          images.put(outputName, images.get(imageName).adjustLevels(b,m,w));
-          view.showOutput("Levels Adjust: Success");
-        } catch (Exception e) {
-          view.showOutput("Levels Adjust failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-
-      case "run":
-        try {
-          int lastDotIndex = path.lastIndexOf('.');
-          String format = path.substring(lastDotIndex + 1);
-          if (format.equals("txt")) {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
-            String line;
-            while ((line = reader.readLine()) != null) {
-              runCommand(line);
-            }
-            view.showOutput("Run: Success");
-          } else {
-            throw new IllegalArgumentException("Please input text file only.");
-          }
-          break;
-        } catch (Exception e) {
-          view.showOutput("Run: Failed: " + e);
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      case "save":
-        try {
-          saveImage(path, imageName);
-        } catch (Exception e) {
-          view.showOutput("Save: Failed: " + e);
-          view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
-        }
-        break;
-      default:
-        view.enterCommandPrompt();
     }
   }
 
