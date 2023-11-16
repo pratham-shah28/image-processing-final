@@ -33,7 +33,6 @@ public class Controller implements ControllerInterface {
   private Map<String, Image> images;
   private HashSet<String> supportedFormats;
   private InputStream in;
-
   private ImageCreator imageCreator;
 
   /**
@@ -184,7 +183,6 @@ public class Controller implements ControllerInterface {
 
           } else {
             this.loadImage(path, imageName);
-            view.showOutput("Load: Success");
           }
         } catch (Exception e) {
           view.showOutput("Load: Failed: " + e);
@@ -557,10 +555,15 @@ public class Controller implements ControllerInterface {
   }
 
   private void loadImage(String path, String name) throws IOException {
-    File imageFile = new File(path);
-    BufferedImage image = ImageIO.read(imageFile);
-    Image img = processLoadImage(image);
-    images.put(name, img);
+    if (name != null) {
+      File imageFile = new File(path);
+      BufferedImage image = ImageIO.read(imageFile);
+      Image img = processLoadImage(image);
+      images.put(name, img);
+      view.showOutput("Load: Success");
+    } else {
+      view.showOutput("Please provide a name for your image.");
+    }
   }
 
   private Image processLoadImage(BufferedImage image) {

@@ -768,7 +768,7 @@ public class ImageImpl implements Image {
     return rgbFrequency;
   }
 
-  private static void plotLine(Graphics2D g2d, int[] frequencies, int width, int height, Color lineColor, int maxFrequency) {
+  private void plotLine(Graphics2D g2d, int[] frequencies, int width, int height, Color lineColor, int maxFrequency) {
     g2d.setColor(lineColor);
     g2d.setStroke(new BasicStroke(1));
 
@@ -778,6 +778,20 @@ public class ImageImpl implements Image {
       int x2 = (i + 1) * (width - 1) / (frequencies.length - 1);
       int y2 = height - frequencies[i + 1] * height / maxFrequency;
       g2d.drawLine(x1, y1, x2, y2);
+    }
+  }
+
+  private void drawGrid(Graphics2D g2d, int gridSize, int width, int height){
+    g2d.setColor(Color.lightGray);
+    g2d.setStroke(new BasicStroke());
+
+    for (int x = 0; x < width; x += gridSize) {
+      g2d.drawLine(x, 0, x, height);
+    }
+
+    // Draw horizontal lines
+    for (int y = 0; y < height; y += gridSize) {
+      g2d.drawLine(0, y, width, y);
     }
   }
 
@@ -811,6 +825,11 @@ public class ImageImpl implements Image {
       }
     }
 
+    //draw grid
+
+    int gridSize = 13;
+    drawGrid(g2d, gridSize, width, height);
+
     // Plot the line graph for Red Channel (in red)
     plotLine(g2d, rgbFrequency.get("red"), width, height, Color.RED, maxFrequency);
 
@@ -820,7 +839,7 @@ public class ImageImpl implements Image {
     // Plot the line graph for Blue Channel (in blue)
     plotLine(g2d, rgbFrequency.get("blue"), width, height, Color.BLUE, maxFrequency);
 
-    // Dispose of Graphics2D
+    // Dispose Graphics2D
     g2d.dispose();
 
     int[][] newRedPixelMatrix = new int[height][width];
@@ -835,7 +854,6 @@ public class ImageImpl implements Image {
         newBluePixelMatrix[x][y] = pixel & 0xff;
       }
     }
-
     return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
   }
 
