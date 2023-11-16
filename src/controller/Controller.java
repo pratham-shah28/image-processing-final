@@ -191,8 +191,19 @@ public class Controller implements ControllerInterface {
         break;
       case "compress":
         try {
-          images.put(outputName, images.get(imageName).compress(factor));
-          view.showOutput("Compress: Success");
+          if (factor >= 0 && factor <= 100) {
+            if (factor != 0) {
+              images.put(outputName, images.get(imageName).compress(factor));
+              view.showOutput("Compress: Success");
+            }
+            else {
+              images.put(outputName, images.get(imageName));
+              view.showOutput("Compress: Success");
+            }
+          }
+          else {
+            view.showOutput("Compression factor has to be from 0 to 100");
+          }
         } catch (Exception e) {
           view.showOutput("Compress: Failed: " + e);
           view.imageDoesNotExists();

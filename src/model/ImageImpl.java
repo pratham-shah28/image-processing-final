@@ -617,7 +617,7 @@ public class ImageImpl implements Image {
 
   @Override
   public Image compress(double factor) {
-    System.out.println("Compressing----");
+
     double[][] transformedRedPixelMatrix = new double[this.getWidth()][this.getHeight()];
     double[][] transformedGreenPixelMatrix = new double[this.getWidth()][this.getHeight()];
     double[][] transformedBluePixelMatrix = new double[this.getWidth()][this.getHeight()];
@@ -637,19 +637,18 @@ public class ImageImpl implements Image {
 
     for (int i = 0; i < redPixelMatrix.length; i++) {
       for (int j = 0; j < redPixelMatrix[0].length; j++) {
-        redPixelMatrix[i][j] = clip(transformedRedPixelMatrix[i][j]);
-        greenPixelMatrix[i][j] = clip(transformedGreenPixelMatrix[i][j]);
-        bluePixelMatrix[i][j] = clip(transformedBluePixelMatrix[i][j]);
+        redPixelMatrix[i][j] = clip(Math.round(transformedRedPixelMatrix[i][j]));
+        greenPixelMatrix[i][j] = clip(Math.round(transformedGreenPixelMatrix[i][j]));
+        bluePixelMatrix[i][j] = clip(Math.round(transformedBluePixelMatrix[i][j]));
       }
     }
-
     return new ImageImpl(redPixelMatrix, greenPixelMatrix, bluePixelMatrix);
   }
 
   
 
   private Map<String, double[][]> applyThreshold3(double[][] transformedRed, double[][] transformedGreen, double[][] transformedBlue, double factor) {
-    int count = 0;
+
     Map<Double, Double> uniqueValues = new HashMap<>();
     Map<String, double[][]> matrices = new HashMap<>();
     //System.out.println("og sequence: " + Arrays.deepToString(sequence));
@@ -667,27 +666,35 @@ public class ImageImpl implements Image {
       }
     }
     int n = (int) Math.round((factor * uniqueValues.size()) / 100);
+    System.out.println("n: " + n);
+    System.out.println("unique values size: " + uniqueValues.size());
+    int count = 0;
 
 //    Set<Double> values = new TreeSet<>(uniqueValues.keySet());
 
     List<Double> values = new ArrayList<>(new TreeSet<>(uniqueValues.keySet()));
 
     if (n != 0) {
-      double threshold = values.get(n);
+      System.out.println(values.size());
+      double threshold = values.get(n-1);
       System.out.println("threshold: " + threshold);
       for (int i = 0; i < transformedRed.length; i++) {
         for (int j = 0; j < transformedRed[0].length; j++) {
-          if (Math.abs(transformedRed[i][j]) < threshold) {
+          if (Math.abs(transformedRed[i][j]) <= threshold) {
             transformedRed[i][j] = 0;
+            count += 1;
           }
-          if (Math.abs(transformedGreen[i][j]) < threshold) {
+          if (Math.abs(transformedGreen[i][j]) <= threshold) {
             transformedGreen[i][j] = 0;
+            count += 1;
           }
-          if (Math.abs(transformedBlue[i][j]) < threshold) {
+          if (Math.abs(transformedBlue[i][j]) <= threshold) {
             transformedBlue[i][j] = 0;
+            count += 1;
           }
         }
       }
+      System.out.println("count: " + count);
       matrices.put("red", transformedRed);
       matrices.put("green", transformedGreen);
       matrices.put("blue", transformedBlue);

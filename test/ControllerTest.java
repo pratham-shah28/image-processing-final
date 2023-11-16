@@ -137,15 +137,6 @@ public class ControllerTest {
       return 0;
     }
 
-    @Override
-    public double[] transform(double[] sequence, double factor) {
-      return new double[0];
-    }
-
-    @Override
-    public double[] inverse(double[] sequence) {
-      return new double[0];
-    }
 
     @Override
     public Image sepiaSplit(double perc) {

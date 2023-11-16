@@ -1233,7 +1233,7 @@ public class ModelTest {
   }
 
   @Test
-  public void testCompress() {
+  public void testCompressSixty() {
     int[][] red = new int[][]{
             {255, 255, 0},
             {17, 255, 255},
@@ -1259,229 +1259,158 @@ public class ModelTest {
     };
 
     int[][] redExpected = new int[][]{
-            {255, 255, 0},
-            {21, 255, 246},
-            {8, 248, 30},
-            {8, 248, 30},
-            {10, 249, 25}
+            {165, 165, 0},
+            {165, 165, 229},
+            {44, 255, 38},
+            {44, 255, 38},
+            {87, 87, 19}
     };
 
     int[][] greenExpected = new int[][]{
-            {0, 238, 3},
-            {244, 237, 255},
-            {26, 23, 255},
-            {24, 255, 22},
-            {11, 11, 255}
+            {0, 195, 131},
+            {195, 195, 131},
+            {66, 66, 138},
+            {196, 196, 138},
+            {17, 17, 208}
     };
 
     int[][] blueExpected = new int[][]{
-            {9, 250, 255},
-            {12, 253, 14},
-            {255, 9, 252},
-            {17, 255, 252},
-            {255, 5, 251}
+            {0, 236, 182},
+            {0, 236, 182},
+            {238, 0, 243},
+            {0, 238, 243},
+            {128, 128, 255}
     };
 
 
     ImageCreator imgCreator = new ImageCreatorImpl();
     Image inputImage = imgCreator.createModelImpl(red, green, blue);
-
-    Image output = inputImage.compress(30);
-
-    for (int x = 0; x < red.length; x++) {
-      for (int y = 0; y < red[0].length; y++) {
-        assertEquals(redExpected[x][y], output.getRedPixelMatrixElement(x, y));
-        assertEquals(greenExpected[x][y], output.getGreenPixelMatrixElement(x, y));
-        assertEquals(blueExpected[x][y], output.getBluePixelMatrixElement(x, y));
-      }
-    }
-  }
-
-  @Test
-  public void testCompressZero() {
-    int[][] red = new int[][]{
-            {255, 255, 0},
-            {17, 255, 255},
-            {11, 255, 19},
-            {17, 255, 29},
-            {17, 255, 29}
-    };
-
-    int[][] green = new int[][]{
-            {0, 255, 1},
-            {255, 255, 255},
-            {11, 1, 255},
-            {17, 255, 29},
-            {11, 1, 255}
-    };
-
-    int[][] blue = new int[][]{
-            {11, 255, 255},
-            {17, 255, 11},
-            {255, 1, 255},
-            {17, 255, 255},
-            {255, 1, 255}
-    };
-//    int[][] red = new int[][]{
-//            {255, 255, 255},
-//            {17, 255, 255},
-//            {11, 255, 19},
-//            {17, 255, 29}
-//    };
-//
-//    int[][] green = new int[][]{
-//            {11, 255, 1},
-//            {255, 255, 255},
-//            {11, 1, 255},
-//            {17, 255, 29}
-//    };
-//
-//    int[][] blue = new int[][]{
-//            {11, 255, 255},
-//            {17, 255, 11},
-//            {255, 1, 255},
-//            {17, 255, 255}
-//    };
-
-
-    int[][] redExpected = new int[][]{
-            {255, 255, 0},
-            {21, 255, 246},
-            {8, 248, 30},
-            {8, 248, 30},
-            {10, 249, 25}
-    };
-
-    int[][] greenExpected = new int[][]{
-            {0, 238, 3},
-            {244, 237, 255},
-            {26, 23, 255},
-            {24, 255, 22},
-            {11, 11, 255}
-    };
-
-    int[][] blueExpected = new int[][]{
-            {9, 250, 255},
-            {12, 253, 14},
-            {255, 9, 252},
-            {17, 255, 252},
-            {255, 5, 251}
-    };
-
-
-    ImageCreator imgCreator = new ImageCreatorImpl();
-    Image inputImage = imgCreator.createModelImpl(red, green, blue);
-    int width = inputImage.getWidth();
-    int height = inputImage.getHeight();
-
-    int[][] pixelMatrix = new int[width][height];
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        pixelMatrix[x][y] = (inputImage.getRedPixelMatrixElement(x, y) << 16)
-                | (inputImage.getGreenPixelMatrixElement(x, y) << 8)
-                | inputImage.getBluePixelMatrixElement(x, y);
-      }
-    }
-    BufferedImage imageSave = new BufferedImage(pixelMatrix[0].length, pixelMatrix.length, 5);
-    for (int x = 0; x < pixelMatrix.length; x++) {
-      for (int y = 0; y < pixelMatrix[0].length; y++) {
-        imageSave.setRGB(y, x, pixelMatrix[x][y]);
-      }
-    }
 
     Image output = inputImage.compress(60);
 
     for (int x = 0; x < red.length; x++) {
       for (int y = 0; y < red[0].length; y++) {
-        redExpected[x][y] = imageSave.getRGB(y,x);
-//        greenExpected[x][y] = ;
-//        blueExpected[x][y] ;
+        assertEquals(redExpected[x][y],output.getRedPixelMatrixElement(x,y));
+        assertEquals(greenExpected[x][y], output.getGreenPixelMatrixElement(x,y));
+        assertEquals(blueExpected[x][y], output.getBluePixelMatrixElement(x,y));
       }
     }
-    System.out.println(Arrays.deepToString(redExpected));
-//    System.out.println(Arrays.deepToString(greenExpected));
-//    System.out.println(Arrays.deepToString(blueExpected));
   }
 
   @Test
-  public void testCompressZeroRi() {
+  public void testCompress100() {
     int[][] red = new int[][]{
-            {50, 50, 50},
-            {50, 50, 50},
-            {50, 50, 50},
+            {255, 255, 0},
+            {17, 255, 255},
+            {11, 255, 19},
+            {17, 255, 29},
+            {17, 255, 29}
     };
 
     int[][] green = new int[][]{
-            {100, 100, 100},
-            {100, 100, 100},
-            {100, 100, 100},
+            {0, 255, 1},
+            {255, 255, 255},
+            {11, 1, 255},
+            {17, 255, 29},
+            {11, 1, 255}
     };
 
     int[][] blue = new int[][]{
-            {200, 200, 200},
-            {200, 200, 200},
-            {200, 200, 200},
+            {11, 255, 255},
+            {17, 255, 11},
+            {255, 1, 255},
+            {17, 255, 255},
+            {255, 1, 255}
     };
-//    int[][] red = new int[][]{
-//            {255, 255, 255},
-//            {17, 255, 255},
-//            {11, 255, 19},
-//            {17, 255, 29}
-//    };
-//
-//    int[][] green = new int[][]{
-//            {11, 255, 1},
-//            {255, 255, 255},
-//            {11, 1, 255},
-//            {17, 255, 29}
-//    };
-//
-//    int[][] blue = new int[][]{
-//            {11, 255, 255},
-//            {17, 255, 11},
-//            {255, 1, 255},
-//            {17, 255, 255}
-//    };
-
 
     int[][] redExpected = new int[][]{
-            {255, 255, 0},
-            {21, 255, 246},
-            {8, 248, 30},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0}
     };
 
     int[][] greenExpected = new int[][]{
-            {0, 238, 3},
-            {244, 237, 255},
-            {26, 23, 255},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0}
     };
 
     int[][] blueExpected = new int[][]{
-            {9, 250, 255},
-            {12, 253, 14},
-            {255, 9, 252},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0}
     };
 
 
     ImageCreator imgCreator = new ImageCreatorImpl();
     Image inputImage = imgCreator.createModelImpl(red, green, blue);
-    int width = inputImage.getWidth();
-    int height = inputImage.getHeight();
-//
-//    int[][] pixelMatrix = new int[width][height];
-//    for (int x = 0; x < width; x++) {
-//      for (int y = 0; y < height; y++) {
-//        pixelMatrix[x][y] = (inputImage.getRedPixelMatrixElement(x, y) << 16)
-//                | (inputImage.getGreenPixelMatrixElement(x, y) << 8)
-//                | inputImage.getBluePixelMatrixElement(x, y);
-//      }
-//    }
-//    BufferedImage imageSave = new BufferedImage(pixelMatrix[0].length, pixelMatrix.length, 5);
-//    for (int x = 0; x < pixelMatrix.length; x++) {
-//      for (int y = 0; y < pixelMatrix[0].length; y++) {
-//        imageSave.setRGB(y, x, pixelMatrix[x][y]);
-//      }
-//    }
+
+    Image output = inputImage.compress(100);
+
+    for (int x = 0; x < red.length; x++) {
+      for (int y = 0; y < red[0].length; y++) {
+        assertEquals(redExpected[x][y] , output.getRedPixelMatrixElement(x,y));
+        assertEquals(greenExpected[x][y] , output.getGreenPixelMatrixElement(x,y));
+        assertEquals(blueExpected[x][y] , output.getBluePixelMatrixElement(x,y));
+      }
+    }
+  }
+
+
+  @Test
+  public void testCompressZeroRi() {
+
+    int[][] red = new int[][]{
+            {255, 255, 255},
+            {17, 255, 255},
+            {11, 255, 19},
+            {17, 255, 29}
+    };
+
+    int[][] green = new int[][]{
+            {11, 255, 1},
+            {255, 255, 255},
+            {11, 1, 255},
+            {17, 255, 29}
+    };
+
+    int[][] blue = new int[][]{
+            {11, 255, 255},
+            {17, 255, 11},
+            {255, 1, 255},
+            {17, 255, 255}
+    };
+
+    int[][] redExpected = new int[][]{
+            {255, 255, 255},
+            {17, 255, 255},
+            {11, 255, 19},
+            {17, 255, 29}
+    };
+
+    int[][] greenExpected = new int[][]{
+            {11, 255, 1},
+            {255, 255, 255},
+            {11, 1, 255},
+            {17, 255, 29}
+    };
+
+    int[][] blueExpected = new int[][]{
+            {11, 255, 255},
+            {17, 255, 11},
+            {255, 1, 255},
+            {17, 255, 255}
+    };
+
+
+    ImageCreator imgCreator = new ImageCreatorImpl();
+    Image inputImage = imgCreator.createModelImpl(red, green, blue);
 
     Image output = inputImage.compress(0);
 
@@ -1492,8 +1421,5 @@ public class ModelTest {
         assertEquals(blueExpected[x][y], output.getBluePixelMatrixElement(x, y));
       }
     }
-//    System.out.println(Arrays.deepToString(redExpected));
-//    System.out.println(Arrays.deepToString(greenExpected));
-//    System.out.println(Arrays.deepToString(blueExpected));
   }
 }
