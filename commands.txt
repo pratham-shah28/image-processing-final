@@ -2,7 +2,11 @@ load "balcony_view.png" m
 vertical-flip m mVF
 horizontal-flip m mHF
 sharpen m mSH
+sharpen m mSH50 split 50
+sharpen m mSH100 split 100
 blur m mBL
+blur m mBL50 split 50
+blur m mBL100 split 100
 brighten 50 m mBR
 brighten -50 m mDR
 sepia m mSP
@@ -18,7 +22,11 @@ sepia m mOverridenSepia
 save "res\mVerticalFlip.png" mVF
 save "res\mHorizontalFlip.png" mHF
 save "res\mSharpen.png" mSH
+save "res\mSharpen50.png" mSH50
+save "res\mSharpen100.png" mSH100
 save "res\mBlur.png" mBL
+save "res\mBlur50.png" mBL50
+save "res\mBlur100.png" mBL100
 save "res\mBrighten.png" mBR
 save "res\mDarken.png" mDR
 save "res\mSepia.png" mSP

@@ -100,8 +100,7 @@ public class ControllerPro extends Controller implements ControllerInterface {
             Double perc = Double.parseDouble(commandParts.get(4));
             images.put(outputName, newImage.applySplit(images.get(imageName), perc));
             view.showOutput("Color correct: Success");
-          }
-          else {
+          } else {
             view.showCommandList();
           }
         } catch (Exception e) {
@@ -117,7 +116,7 @@ public class ControllerPro extends Controller implements ControllerInterface {
           if (b < 0 || m < 0 || w < 0 || b > 255 || m > 255 || w > 255) {
             throw new IllegalArgumentException("b, m, w values should be in the range 0 - 255");
           }
-          Image newImage = images.get(imageName).adjustLevels(b,m,w);
+          Image newImage = images.get(imageName).adjustLevels(b, m, w);
           if (commandParts.size() == 3) {
             images.put(outputName, newImage);
             view.showOutput("Level adjust: Success");
@@ -125,8 +124,7 @@ public class ControllerPro extends Controller implements ControllerInterface {
             Double perc = Double.parseDouble(commandParts.get(4));
             images.put(outputName, newImage.applySplit(images.get(imageName), perc));
             view.showOutput("Level adjust: Success");
-          }
-          else {
+          } else {
             view.showCommandList();
           }
         } catch (Exception e) {
@@ -140,21 +138,17 @@ public class ControllerPro extends Controller implements ControllerInterface {
         try {
           if (commandParts.size() == 3) {
             runCommand(currCommand);
-            System.out.println(commandParts.size());
           } else if (commandParts.get(3).equals("split")) {
             double perc = Double.parseDouble(commandParts.get(4));
             Image newImage = images.get(imageName).sharpen();
             images.put(outputName, newImage.applySplit(images.get(imageName), perc));
             view.showOutput("Sharpen: Success");
-          }
-          else {
+          } else {
             view.showCommandList();
           }
         } catch (Exception e) {
           view.showOutput("Sharpen: Failed: " + e);
           view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
         }
         break;
       case "blur":
@@ -166,15 +160,12 @@ public class ControllerPro extends Controller implements ControllerInterface {
             Image newImage = images.get(imageName).blur();
             images.put(outputName, newImage.applySplit(images.get(imageName), perc));
             view.showOutput("Blur: Success");
-          }
-          else {
+          } else {
             view.showCommandList();
           }
         } catch (Exception e) {
           view.showOutput("Blur: Failed: " + e);
           view.imageDoesNotExists();
-        } finally {
-          view.enterCommandPrompt();
         }
         break;
 
@@ -187,8 +178,7 @@ public class ControllerPro extends Controller implements ControllerInterface {
             Image newImage = images.get(imageName).luma();
             images.put(outputName, newImage.applySplit(images.get(imageName), perc));
             view.showOutput("Luma Component: Success");
-          }
-          else {
+          } else {
             view.showCommandList();
           }
         } catch (Exception e) {
@@ -217,6 +207,7 @@ public class ControllerPro extends Controller implements ControllerInterface {
         break;
 
       case "run":
+
         try {
           int lastDotIndex = path.lastIndexOf('.');
           String format = path.substring(lastDotIndex + 1);
@@ -224,7 +215,15 @@ public class ControllerPro extends Controller implements ControllerInterface {
             BufferedReader reader = new BufferedReader(new FileReader(path));
             String line;
             while ((line = reader.readLine()) != null) {
-              runCommandPro(line);
+              commandParts = getCommandComponents(line);
+              currCommand = commandParts.get(0);
+              if (currCommand.equals("help")) {
+                view.showCommandList();
+                return;
+              }
+              //System.out.println(line);
+              parseCommand(currCommand, commandParts);
+              runCommandPro(currCommand);
             }
             view.showOutput("Run: Success");
           } else {

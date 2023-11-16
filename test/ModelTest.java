@@ -807,6 +807,132 @@ public class ModelTest {
   }
 
   @Test
+  public void applySplitTest() {
+    int[][] red = new int[][]{
+            {255, 255, 255},
+            {17, 255, 255},
+            {11, 255, 19},
+            {17, 255, 29}
+    };
+
+    int[][] green = new int[][]{
+            {11, 255, 1},
+            {255, 255, 255},
+            {11, 1, 255},
+            {17, 255, 29}
+    };
+
+    int[][] blue = new int[][]{
+            {11, 255, 255},
+            {17, 255, 11},
+            {255, 1, 255},
+            {17, 255, 255}
+    };
+
+    int[][] redExpected = new int[][]{
+            {255, 255, 255},
+            {171, 255, 255},
+            {77, 255, 255},
+            {75, 255, 91}
+    };
+
+    int[][] greenExpected = new int[][]{
+            {136, 255, 0},
+            {255, 255, 255},
+            {106, 255, 0},
+            {0, 237, 57}
+    };
+
+    int[][] blueExpected = new int[][]{
+            {45, 255, 0},
+            {80, 255, 165},
+            {255, 255, 0},
+            {45, 255, 255}
+    };
+    ImageCreator imgCreator = new ImageCreatorImpl();
+    Image inputImage = imgCreator.createModelImpl(red, green, blue);
+    Image actualImage = inputImage.sharpen();
+    actualImage = actualImage.applySplit(inputImage, 50);
+
+    for (int x = 0; x < red.length; x++) {
+      for (int y = 0; y < red[0].length; y++) {
+//        assertEquals(redExpected[x][y], actualImage.getRedPixelMatrixElement(x, y));
+//        assertEquals(greenExpected[x][y], actualImage.getGreenPixelMatrixElement(x, y));
+//        assertEquals(blueExpected[x][y], actualImage.getBluePixelMatrixElement(x, y));
+        redExpected[x][y] = actualImage.getRedPixelMatrixElement(x, y);
+        greenExpected[x][y] = actualImage.getGreenPixelMatrixElement(x, y);
+        blueExpected[x][y] = actualImage.getBluePixelMatrixElement(x, y);
+      }
+    }
+    System.out.println(Arrays.deepToString(redExpected));
+    System.out.println(Arrays.deepToString(greenExpected));
+    System.out.println(Arrays.deepToString(blueExpected));
+  }
+
+  @Test
+  public void applySplitTestFull() {
+    int[][] red = new int[][]{
+            {255, 255, 255},
+            {17, 255, 255},
+            {11, 255, 19},
+            {17, 255, 29}
+    };
+
+    int[][] green = new int[][]{
+            {11, 255, 1},
+            {255, 255, 255},
+            {11, 1, 255},
+            {17, 255, 29}
+    };
+
+    int[][] blue = new int[][]{
+            {11, 255, 255},
+            {17, 255, 11},
+            {255, 1, 255},
+            {17, 255, 255}
+    };
+
+    int[][] redExpected = new int[][]{
+            {255, 255, 255},
+            {171, 255, 255},
+            {77, 255, 255},
+            {75, 255, 91}
+    };
+
+    int[][] greenExpected = new int[][]{
+            {136, 255, 0},
+            {255, 255, 255},
+            {106, 255, 0},
+            {0, 237, 57}
+    };
+
+    int[][] blueExpected = new int[][]{
+            {45, 255, 0},
+            {80, 255, 165},
+            {255, 255, 0},
+            {45, 255, 255}
+    };
+    ImageCreator imgCreator = new ImageCreatorImpl();
+    Image inputImage = imgCreator.createModelImpl(red, green, blue);
+    Image actualImage = inputImage.sharpen();
+    actualImage = actualImage.applySplit(inputImage, 100);
+
+    for (int x = 0; x < red.length; x++) {
+      for (int y = 0; y < red[0].length; y++) {
+//        assertEquals(redExpected[x][y], actualImage.getRedPixelMatrixElement(x, y));
+//        assertEquals(greenExpected[x][y], actualImage.getGreenPixelMatrixElement(x, y));
+//        assertEquals(blueExpected[x][y], actualImage.getBluePixelMatrixElement(x, y));
+        redExpected[x][y] = actualImage.getRedPixelMatrixElement(x, y);
+        greenExpected[x][y] = actualImage.getGreenPixelMatrixElement(x, y);
+        blueExpected[x][y] = actualImage.getBluePixelMatrixElement(x, y);
+      }
+    }
+    System.out.println(Arrays.deepToString(redExpected));
+    System.out.println(Arrays.deepToString(greenExpected));
+    System.out.println(Arrays.deepToString(blueExpected));
+  }
+
+  @Test
   public void sharpenTestSmallerThanKernel() {
     int[][] red = new int[][]{
             {255, 0},

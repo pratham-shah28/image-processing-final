@@ -127,6 +127,7 @@ public class Controller implements ControllerInterface {
   }
 
   protected void runCommand(String currCommand) {
+    // System.out.println("ahiya ao" + currCommand);
     switch (currCommand) {
       case "load":
         try {
@@ -355,6 +356,8 @@ public class Controller implements ControllerInterface {
     } else if (currCommand.equals("brighten") || currCommand.equals("compress")) {
       try {
         factor = Double.parseDouble(commandParts.get(1));
+        System.out.println(factor);
+        System.out.println("here");
         imageName = commandParts.get(2);
         outputName = commandParts.get(3);
       } catch (Exception e) {
