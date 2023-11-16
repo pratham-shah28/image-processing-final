@@ -92,7 +92,6 @@ public class ControllerPro extends Controller implements ControllerInterface {
       case "color-correct":
         try {
           Image newImage = images.get(imageName).colorCorrect();
-          System.out.println(commandParts.size());
           if (commandParts.size() == 3) {
             images.put(outputName, newImage);
             view.showOutput("Color correct: Success");
