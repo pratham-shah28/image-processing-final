@@ -1416,9 +1416,9 @@ public class ModelTest {
 
     for (int x = 0; x < red.length; x++) {
       for (int y = 0; y < red[0].length; y++) {
-        assertEquals(redExpected[x][y],output.getRedPixelMatrixElement(x,y));
-        assertEquals(greenExpected[x][y], output.getGreenPixelMatrixElement(x,y));
-        assertEquals(blueExpected[x][y], output.getBluePixelMatrixElement(x,y));
+        assertEquals(redExpected[x][y], output.getRedPixelMatrixElement(x, y));
+        assertEquals(greenExpected[x][y], output.getGreenPixelMatrixElement(x, y));
+        assertEquals(blueExpected[x][y], output.getBluePixelMatrixElement(x, y));
       }
     }
   }
@@ -1481,9 +1481,9 @@ public class ModelTest {
 
     for (int x = 0; x < red.length; x++) {
       for (int y = 0; y < red[0].length; y++) {
-        assertEquals(redExpected[x][y] , output.getRedPixelMatrixElement(x,y));
-        assertEquals(greenExpected[x][y] , output.getGreenPixelMatrixElement(x,y));
-        assertEquals(blueExpected[x][y] , output.getBluePixelMatrixElement(x,y));
+        assertEquals(redExpected[x][y], output.getRedPixelMatrixElement(x, y));
+        assertEquals(greenExpected[x][y], output.getGreenPixelMatrixElement(x, y));
+        assertEquals(blueExpected[x][y], output.getBluePixelMatrixElement(x, y));
       }
     }
   }
@@ -1545,6 +1545,124 @@ public class ModelTest {
         assertEquals(redExpected[x][y], output.getRedPixelMatrixElement(x, y));
         assertEquals(greenExpected[x][y], output.getGreenPixelMatrixElement(x, y));
         assertEquals(blueExpected[x][y], output.getBluePixelMatrixElement(x, y));
+      }
+    }
+  }
+
+  @Test
+  public void colorCorrectTest() {
+    int[][] red = new int[][]{
+            {255, 255, 255},
+            {17, 255, 255},
+            {11, 255, 19},
+            {17, 255, 29}
+    };
+
+    int[][] green = new int[][]{
+            {11, 255, 1},
+            {255, 255, 255},
+            {11, 1, 255},
+            {17, 255, 29}
+    };
+
+    int[][] blue = new int[][]{
+            {11, 255, 255},
+            {17, 255, 11},
+            {255, 1, 255},
+            {17, 255, 255}
+    };
+
+    int[][] redExpected = new int[][]{
+            {251, 251, 251},
+            {13, 251, 251},
+            {7, 251, 15},
+            {13, 251, 25}
+    };
+
+    int[][] greenExpected = new int[][]{
+            {13, 255, 3},
+            {255, 255, 255},
+            {13, 3, 255},
+            {19, 255, 31},
+    };
+
+    int[][] blueExpected = new int[][]{
+            {13, 255, 255},
+            {19, 255, 13},
+            {255, 3, 255},
+            {19, 255, 255},
+    };
+    ImageCreator imgCreator = new ImageCreatorImpl();
+    Image inputImage = imgCreator.createModelImpl(red, green, blue);
+    Image actualImage = inputImage.colorCorrect();
+
+    for (int x = 0; x < red.length; x++) {
+      for (int y = 0; y < red[0].length; y++) {
+        assertEquals(redExpected[x][y], actualImage.getRedPixelMatrixElement(x, y));
+        assertEquals(greenExpected[x][y], actualImage.getGreenPixelMatrixElement(x, y));
+        assertEquals(blueExpected[x][y], actualImage.getBluePixelMatrixElement(x, y));
+//        redExpected[x][y] = actualImage.getRedPixelMatrixElement(x, y);
+//        greenExpected[x][y] = actualImage.getGreenPixelMatrixElement(x, y);
+//        blueExpected[x][y] = actualImage.getBluePixelMatrixElement(x, y);
+      }
+    }
+//    System.out.println(Arrays.deepToString(redExpected));
+//    System.out.println(Arrays.deepToString(greenExpected));
+//    System.out.println(Arrays.deepToString(blueExpected));
+  }
+
+  @Test
+  public void levelAdjustmentTest() {
+    int[][] red = new int[][]{
+            {255, 255, 255},
+            {17, 255, 255},
+            {11, 255, 19},
+            {17, 255, 29}
+    };
+
+    int[][] green = new int[][]{
+            {11, 255, 1},
+            {255, 255, 255},
+            {11, 1, 255},
+            {17, 255, 29}
+    };
+
+    int[][] blue = new int[][]{
+            {11, 255, 255},
+            {17, 255, 11},
+            {255, 1, 255},
+            {17, 255, 255}
+    };
+
+    int[][] redExpected = new int[][]{
+            {255, 255, 255},
+            {4, 255, 255},
+            {0, 255, 5},
+            {4, 255, 12},
+    };
+
+    int[][] greenExpected = new int[][]{
+            {0, 255, 0},
+            {255, 255, 255},
+            {0, 0, 255},
+            {4, 255, 12},
+    };
+
+    int[][] blueExpected = new int[][]{
+            {0, 255, 255},
+            {4, 255, 0},
+            {255, 0, 255},
+            {4, 255, 255},
+    };
+    ImageCreator imgCreator = new ImageCreatorImpl();
+    Image inputImage = imgCreator.createModelImpl(red, green, blue);
+    Image actualImage = inputImage.adjustLevels(10, 150, 240);
+
+    for (int x = 0; x < red.length; x++) {
+      for (int y = 0; y < red[0].length; y++) {
+        assertEquals(redExpected[x][y], actualImage.getRedPixelMatrixElement(x, y));
+        assertEquals(greenExpected[x][y], actualImage.getGreenPixelMatrixElement(x, y));
+        assertEquals(blueExpected[x][y], actualImage.getBluePixelMatrixElement(x, y));
       }
     }
   }
