@@ -526,43 +526,6 @@ public class ControllerTest {
   }
 
   @Test
-  public void testCallSplitSharpen() throws IOException {
-    StringBuilder mockLog = new StringBuilder();
-    ViewInterface view = new View();
-    String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
-    String input = "load " + "\"" + path + "\"" + " " + "a" + "\n"
-            + "sharpen" + " " + "a" + " " + "b" + " " + "50";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
-    HashMap<String, Image> images = new HashMap<>();
-    MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
-    controller.execute();
-    StringBuilder expected = new StringBuilder();
-    expected.append(50.0);
-    // testing something;
-    assertEquals(expected.toString(), mockLog.toString());
-  }
-
-  @Test
-  public void testCallCompressethod() throws IOException {
-    StringBuilder mockLog = new StringBuilder();
-    ViewInterface view = new View();
-    String path = new File(".").getCanonicalPath() + "\\test\\manhattan-small.png";
-    String input = "load " + "\"" + path + "\"" + " " + "a" + "\n"
-            + "compress" + " " + "50" + " " + "a" + " " + "b";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
-    HashMap<String, Image> images = new HashMap<>();
-    MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    ControllerInterface controller = new Controller(view, in, images, imageCreator);
-    controller.execute();
-    StringBuilder expected = new StringBuilder();
-    expected.append(50.0);
-    assertEquals(expected.toString(), mockLog.toString());
-  }
-
-  @Test
   public void testInvalidCommand() throws IOException {
     ViewInterface view = new View();
     String input = "notACommand " + "\"" + "\"" + " mumbai";

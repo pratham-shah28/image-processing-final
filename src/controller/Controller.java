@@ -25,8 +25,12 @@ import model.ImageCreator;
 import view.ViewInterface;
 import model.Image;
 
+
 /**
- * A controller class which coordinates between the model and view, while catering to user.
+ * This is the controller class that coordinates between the model and view, while catering to user.
+ * This class handles IO operations i.e. it takes input from user
+ * and delegates work to the model or view.
+ * This class implements the ControllerInterface.
  */
 public class Controller implements ControllerInterface {
   protected ViewInterface view;
@@ -49,7 +53,7 @@ public class Controller implements ControllerInterface {
   List<String> commandParts;
 
   /**
-   * A constructor for Controller class.
+   * Constructs the controller using the given view, model, input stream and image hashmap.
    *
    * @param view   View object.
    * @param in     InputStream object.
@@ -68,16 +72,17 @@ public class Controller implements ControllerInterface {
     supportedFormats.add("png");
     supportedFormats.add("ppm");
     this.imageCreator = imageCreator;
-    String path = null;
-    String imageName = null;
-    String outputName = null;
-    String redImageName = null;
-    String greenImageName = null;
-    String blueImageName = null;
-    double factor = 0;
-    int b = 0, m = 0, w = 0;
+    path = null;
+    imageName = null;
+    outputName = null;
+    redImageName = null;
+    greenImageName = null;
+    blueImageName = null;
+    factor = 0;
+    b = 0;
+    m = 0;
+    w = 0;
   }
-
 
   @Override
   public void execute() {
@@ -96,15 +101,6 @@ public class Controller implements ControllerInterface {
         view.showCommandList();
         return;
       }
-//    String path = null;
-//    String imageName = null;
-//    String outputName = null;
-//    String redImageName = null;
-//    String greenImageName = null;
-//    String blueImageName = null;
-//    double factor = 0;
-//    int b = 0, m = 0, w = 0;
-
       parseCommand(currCommand, commandParts);
       runCommand(currCommand);
     }
