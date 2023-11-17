@@ -16,7 +16,7 @@ import view.ViewInterface;
  * compression, histogram, color correction, level adjustment.
  * It retains support for all operations performed by original Controller.
  */
-public class ControllerPro extends Controller implements ControllerInterface {
+public class ControllerPro extends Controller {
 
   private Map<String, Image> images;
 
