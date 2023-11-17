@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Test class to test the controller.
+ * This is a JUnit test class to test the controller.
  */
 public class ControllerTest {
   private class MockModel implements Image {

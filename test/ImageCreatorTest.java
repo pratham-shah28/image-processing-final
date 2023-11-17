@@ -6,7 +6,7 @@ import model.ImageImpl;
 import static org.junit.Assert.assertEquals;
 
 /**
- * A test class for ImageCreator class.
+ * This is a JUnit test class for ImageCreator class.
  */
 public class ImageCreatorTest {
 
