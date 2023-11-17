@@ -19,6 +19,21 @@ red-component m mRed
 green-component m mGreen
 blue-component m mBlue
 sepia m mOverridenSepia
+compress 50 m mCompress50
+compress 0 m mCompress0
+compress 100 m mCompress100
+levels-adjust 10 150 240 m mLevelAdjust1
+levels-adjust 50 180 200 m mLevelAdjust2
+levels-adjust 50 180 200 m mLevelAdjust3 split 60
+color-correct m mColorCorrect
+color-correct m mColorCorrectSplit split 30
+histogram mCompress50 histogramCompress50
+histogram mCompress0 histogramCompress0
+histogram mCompress100 histogramCompress100
+histogram mLevelAdjust1 histogramLevelAdjust1
+histogram mLevelAdjust2 histogramLevelAdjust2
+histogram mColorCorrect histogramColorCorrect
+histogram mColorCorrectSplit histogramColorCorrectSplit
 save "res\mVerticalFlip.png" mVF
 save "res\mHorizontalFlip.png" mHF
 save "res\mSharpen.png" mSH
@@ -41,3 +56,17 @@ save "res\mRedComponent.png" mRed
 save "res\mGreenComponent.png" mGreen
 save "res\mBlueComponent.png" mBlue
 save "res\mOverridenSepia.png" mOverridenSepia
+save "res\mCompress0.png" mCompress0
+save "res\mCompress50.png" mCompress50
+save "res\mCompress100.png" mCompress100
+save "res\mLevelAdjust1.png" mLevelAdjust1
+save "res\mLevelAdjust2.png" mLevelAdjust2
+save "res\histogramCompress50.png" histogramCompress50
+save "res\histogramCompress0.png" histogramCompress0
+save "res\histogramCompress100.png" histogramCompress100
+save "res\histogramLevelAdjust1.png" histogramLevelAdjust1
+save "res\histogramLevelAdjust2.png" histogramLevelAdjust2
+save "res\histogramColorCorrect.png" histogramColorCorrect
+save "res\histogramColorCorrectSplit.png" histogramColorCorrectSplit
+save "res\mColorCorrect.png" mColorCorrect
+save "res\mColorCorrectSplit.png" mColorCorrectSplit

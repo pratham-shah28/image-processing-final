@@ -120,15 +120,15 @@ public class ControllerPro extends Controller {
           if (b < 0 || m < 0 || w < 0 || b > 255 || m > 255 || w > 255) {
             throw new IllegalArgumentException("b, m, w values should be in the range 0 - 255");
           }
-          if (b < m && b < w && m < w) {
+          if (!(b < m && b < w && m < w)) {
             throw new IllegalArgumentException("b, m, w values should be in ascending order");
           }
           Image newImage = images.get(imageName).adjustLevels(b, m, w);
-          if (commandParts.size() == 3) {
+          if (commandParts.size() == 6) {
             images.put(outputName, newImage);
             view.showOutput("Level adjust: Success");
-          } else if (commandParts.get(3).equals("split")) {
-            double perc = Double.parseDouble(commandParts.get(4));
+          } else if (commandParts.get(6).equals("split")) {
+            double perc = Double.parseDouble(commandParts.get(7));
             images.put(outputName, newImage.applySplit(images.get(imageName), perc));
             view.showOutput("Level adjust: Success");
           } else {
@@ -213,7 +213,6 @@ public class ControllerPro extends Controller {
         break;
 
       case "run":
-
         try {
           int lastDotIndex = path.lastIndexOf('.');
           String format = path.substring(lastDotIndex + 1);
