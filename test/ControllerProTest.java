@@ -774,4 +774,28 @@ public class ControllerProTest {
     assertEquals(str.toString(), lastLine);
   }
 
+  @Test
+  public void testInputToLevelsAdjust() throws IOException {
+    ViewInterface view = new View();
+    String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
+    String input = "load " + "\"" + path + "\"" + " mumbai" +
+            "\nlevels-adjust 12 546 0 mumbai mCC";
+    InputStream in = null;
+    in = new ByteArrayInputStream(input.getBytes());
+    HashMap<String, Image> images = new HashMap<>();
+    ImageCreator imageCreator = new ImageCreatorImpl();
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
+    controller.execute();
+    String outputString = out.toString();
+    String[] lines = outputString.split(System.lineSeparator());
+    String lastLine = "";
+    if (lines.length > 0) {
+      lastLine = lines[lines.length - 2];
+    }
+    StringBuilder str = new StringBuilder();
+    str.append("Levels adjust failed: java.lang.IllegalArgumentException: b, m, w " +
+            "values should be in the range 0 - 255");
+    assertEquals(str.toString(), lastLine);
+  }
+
 }
