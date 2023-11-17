@@ -213,8 +213,8 @@ public class ImageImpl implements Image {
   public Image sharpen() {
     double[][] kernel =
             {{-0.125, -0.125, -0.125, -0.125, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
-                    {-0.125, 0.25, 1, 0.25, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
-                    {-0.125, -0.125, -0.125, -0.125, -0.125}};
+             {-0.125, 0.25, 1, 0.25, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
+             {-0.125, -0.125, -0.125, -0.125, -0.125}};
     return kernelOperation(this, kernel);
   }
 
@@ -724,7 +724,7 @@ public class ImageImpl implements Image {
 
   @Override
   public Image adjustLevels(int bP, int mP, int wP) {
-    double A = (Math.pow(bP, 2)
+    double a1 = (Math.pow(bP, 2)
             * (mP - wP))
             - (bP * (Math.pow(mP, 2)
             - Math.pow(wP, 2)))
@@ -735,9 +735,9 @@ public class ImageImpl implements Image {
             - (128 * Math.pow(wP, 2));
     double aC = (Math.pow(bP, 2) * ((255 * mP) - (128 * wP)))
             - (bP * ((255 * Math.pow(mP, 2)) - (128 * Math.pow(wP, 2))));
-    double a = aA / A;
-    double b = aB / A;
-    double c = aC / A;
+    double a = aA / a1;
+    double b = aB / a1;
+    double c = aC / a1;
 
     int[][] newRedPixelMatrix = new int[this.width][this.height];
     int[][] newGreenPixelMatrix = new int[this.width][this.height];

@@ -1638,14 +1638,8 @@ public class ModelTest {
         assertEquals(redExpected[x][y], actualImage.getRedPixelMatrixElement(x, y));
         assertEquals(greenExpected[x][y], actualImage.getGreenPixelMatrixElement(x, y));
         assertEquals(blueExpected[x][y], actualImage.getBluePixelMatrixElement(x, y));
-//        redExpected[x][y] = actualImage.getRedPixelMatrixElement(x, y);
-//        greenExpected[x][y] = actualImage.getGreenPixelMatrixElement(x, y);
-//        blueExpected[x][y] = actualImage.getBluePixelMatrixElement(x, y);
       }
     }
-//    System.out.println(Arrays.deepToString(redExpected));
-//    System.out.println(Arrays.deepToString(greenExpected));
-//    System.out.println(Arrays.deepToString(blueExpected));
   }
 
   @Test
