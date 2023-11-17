@@ -1,4 +1,3 @@
-import controller.Controller;
 import controller.ControllerInterface;
 import controller.ControllerPro;
 import model.ImageCreator;
@@ -8,7 +7,6 @@ import view.ViewInterface;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -19,7 +17,7 @@ public class MainApp {
   /**
    * Main method to run this class.
    *
-   * @param     args String arguments.
+   * @param args String arguments.
    */
   public static void main(String[] args) {
     if (args.length == 0) {
@@ -28,8 +26,7 @@ public class MainApp {
       ImageCreator imageCreator = new ImageCreatorImpl();
       ControllerInterface controller = new ControllerPro(view, in, new HashMap<>(), imageCreator);
       controller.execute();
-    }
-    else {
+    } else {
       String input = String.format("run" + " " + "\"%s\"" + "\nexit", args[0]);
       System.out.println("input: " + input);
       InputStream in = null;
@@ -37,7 +34,8 @@ public class MainApp {
       in = new ByteArrayInputStream(input.getBytes());
       ViewInterface view = new View();
       ImageCreator imageCreator = new ImageCreatorImpl();
-      ControllerInterface controllerPro = new ControllerPro(view, in, new HashMap<>(), imageCreator);
+      ControllerInterface controllerPro =
+              new ControllerPro(view, in, new HashMap<>(), imageCreator);
       controllerPro.execute();
     }
   }

@@ -151,12 +151,12 @@ public interface Image {
    * This method adjusts the bright, mid and dark regions of an image
    * according to the given b_p, m_p and w_p values.
    *
-   * @param b_p the black value.
-   * @param m_p the mid value.
-   * @param w_p the white value.
+   * @param bP the black value.
+   * @param mP the mid value.
+   * @param wP the white value.
    * @return level adjusted version of original image as an Image object.
    */
-  Image adjustLevels(int b_p, int m_p, int w_p);
+  Image adjustLevels(int bP, int mP, int wP);
 
   /**
    * This method gets the pixel value at x,y position from the red channel.

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -12,20 +11,26 @@ import model.Image;
 import model.ImageCreator;
 import view.ViewInterface;
 
+/**
+ * This class is an extended version of original Controller for additional functionalities such as
+ * compression, histogram, color correction, level adjustment.
+ * It retains support for all operations performed by original Controller.
+ */
 public class ControllerPro extends Controller implements ControllerInterface {
 
   private Map<String, Image> images;
 
 
   /**
-   * A constructor for Controller class.
+   * A constructor for ControllerPro class.
    *
    * @param view         View object.
    * @param in           InputStream object.
    * @param images       Hashmap of images.
    * @param imageCreator Factory for creating Image object.
    */
-  public ControllerPro(ViewInterface view, InputStream in, HashMap<String, Image> images, ImageCreator imageCreator) {
+  public ControllerPro(ViewInterface view, InputStream in, HashMap<String, Image> images,
+                       ImageCreator imageCreator) {
     super(view, in, images, imageCreator);
     this.images = images;
 
@@ -96,7 +101,7 @@ public class ControllerPro extends Controller implements ControllerInterface {
             images.put(outputName, newImage);
             view.showOutput("Color correct: Success");
           } else if (commandParts.get(3).equals("split")) {
-            Double perc = Double.parseDouble(commandParts.get(4));
+            double perc = Double.parseDouble(commandParts.get(4));
             images.put(outputName, newImage.applySplit(images.get(imageName), perc));
             view.showOutput("Color correct: Success");
           } else {
@@ -115,12 +120,15 @@ public class ControllerPro extends Controller implements ControllerInterface {
           if (b < 0 || m < 0 || w < 0 || b > 255 || m > 255 || w > 255) {
             throw new IllegalArgumentException("b, m, w values should be in the range 0 - 255");
           }
+          if (b < m && b < w && m < w) {
+            throw new IllegalArgumentException("b, m, w values should be in ascending order");
+          }
           Image newImage = images.get(imageName).adjustLevels(b, m, w);
           if (commandParts.size() == 3) {
             images.put(outputName, newImage);
             view.showOutput("Level adjust: Success");
           } else if (commandParts.get(3).equals("split")) {
-            Double perc = Double.parseDouble(commandParts.get(4));
+            double perc = Double.parseDouble(commandParts.get(4));
             images.put(outputName, newImage.applySplit(images.get(imageName), perc));
             view.showOutput("Level adjust: Success");
           } else {
@@ -128,7 +136,6 @@ public class ControllerPro extends Controller implements ControllerInterface {
           }
         } catch (Exception e) {
           view.showOutput("Levels adjust failed: " + e);
-          view.imageDoesNotExists();
         } finally {
           view.enterCommandPrompt();
         }
@@ -155,7 +162,7 @@ public class ControllerPro extends Controller implements ControllerInterface {
           if (commandParts.size() == 3) {
             runCommand(currCommand);
           } else if (commandParts.get(3).equals("split")) {
-            Double perc = Double.parseDouble(commandParts.get(4));
+            double perc = Double.parseDouble(commandParts.get(4));
             Image newImage = images.get(imageName).blur();
             images.put(outputName, newImage.applySplit(images.get(imageName), perc));
             view.showOutput("Blur: Success");
@@ -173,7 +180,7 @@ public class ControllerPro extends Controller implements ControllerInterface {
           if (commandParts.size() == 3) {
             runCommand(currCommand);
           } else if (commandParts.get(3).equals("split")) {
-            Double perc = Double.parseDouble(commandParts.get(4));
+            double perc = Double.parseDouble(commandParts.get(4));
             Image newImage = images.get(imageName).luma();
             images.put(outputName, newImage.applySplit(images.get(imageName), perc));
             view.showOutput("Luma Component: Success");
@@ -192,7 +199,7 @@ public class ControllerPro extends Controller implements ControllerInterface {
           if (commandParts.size() == 3) {
             runCommand(currCommand);
           } else {
-            Double perc = Double.parseDouble(commandParts.get(3));
+            double perc = Double.parseDouble(commandParts.get(3));
             Image newImage = images.get(imageName).sepia();
             images.put(outputName, newImage.applySplit(images.get(imageName), perc));
             view.showOutput("Sepia: Success");

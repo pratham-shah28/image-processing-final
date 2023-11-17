@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
 
-import controller.Controller;
 import controller.ControllerInterface;
 import controller.ControllerPro;
 import model.Image;
@@ -125,7 +124,7 @@ public class ControllerProTest {
     }
 
     @Override
-    public Image adjustLevels(int b_p, int m_p, int w_p) {
+    public Image adjustLevels(int bP, int mP, int wP) {
       return null;
     }
 
@@ -160,6 +159,7 @@ public class ControllerProTest {
       return null;
     }
   }
+
   private class MockImageCreator implements ImageCreator {
 
     private StringBuilder mockLog;
@@ -529,7 +529,6 @@ public class ControllerProTest {
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "load " + "\"" + path + "\"" + " " + "a" + "\n";
-//            + "sharpen" + " " + "a" + " " + "b" + " " + "split" + " " + "50";
     InputStream in = null;
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
@@ -538,7 +537,7 @@ public class ControllerProTest {
     controller.execute();
     StringBuilder expected = new StringBuilder();
     expected.append(50.0);
-    System.out.println(images.get("a").applySplit(images.get("a"),50));
+    System.out.println(images.get("a").applySplit(images.get("a"), 50));
     assertEquals(expected.toString(), mockLog.toString());
   }
 

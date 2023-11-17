@@ -1,6 +1,7 @@
 package model;
-
-import java.awt.*;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.BasicStroke;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -209,9 +210,9 @@ public class ImageImpl implements Image {
   @Override
   public Image sharpen() {
     double[][] kernel =
-            {{-0.125, -0.125, -0.125, -0.125, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
-                    {-0.125, 0.25, 1, 0.25, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
-                    {-0.125, -0.125, -0.125, -0.125, -0.125}};
+    {{-0.125, -0.125, -0.125, -0.125, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
+     {-0.125, 0.25, 1, 0.25, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
+     {-0.125, -0.125, -0.125, -0.125, -0.125}};
     return kernelOperation(this, kernel);
   }
 
@@ -368,7 +369,9 @@ public class ImageImpl implements Image {
       avg[i] = av;
       diff[i] = di;
     }
-    int i = 0, j = 0, k = 0;
+    int i = 0;
+    int j = 0;
+    int k = 0;
     while (i < avg.length && j < diff.length) {
       result[k++] = avg[i++];
       result[k++] = diff[j++];
@@ -566,8 +569,6 @@ public class ImageImpl implements Image {
     }
     int n = (int) Math.round((factor * uniqueValues.size()) / 100);
     int count = 0;
-
-//    Set<Double> values = new TreeSet<>(uniqueValues.keySet());
 
     List<Double> values = new ArrayList<>(new TreeSet<>(uniqueValues.keySet()));
 
@@ -771,25 +772,19 @@ public class ImageImpl implements Image {
     }
   }
 
-  /**
-   * @param b_p
-   * @param m_p
-   * @param w_p
-   * @return
-   */
   @Override
-  public Image adjustLevels(int b_p, int m_p, int w_p) {
-    double A = (Math.pow(b_p, 2)
-            * (m_p - w_p))
-            - (b_p * (Math.pow(m_p, 2)
-            - Math.pow(w_p, 2)))
-            + (w_p * Math.pow(m_p, 2))
-            - (m_p * Math.pow(w_p, 2));
-    double Aa = ((-1 * b_p) * (128 - 255)) + (128 * w_p) - (255 * m_p);
-    double Ab = (Math.pow(b_p, 2) * (128 - 255)) + (255 * Math.pow(m_p, 2))
-            - (128 * Math.pow(w_p, 2));
-    double Ac = (Math.pow(b_p, 2) * ((255 * m_p) - (128 * w_p)))
-            - (b_p * ((255 * Math.pow(m_p, 2)) - (128 * Math.pow(w_p, 2))));
+  public Image adjustLevels(int bP, int mP, int wP) {
+    double A = (Math.pow(bP, 2)
+            * (mP - wP))
+            - (bP * (Math.pow(mP, 2)
+            - Math.pow(wP, 2)))
+            + (wP * Math.pow(mP, 2))
+            - (mP * Math.pow(wP, 2));
+    double Aa = ((-1 * bP) * (128 - 255)) + (128 * wP) - (255 * mP);
+    double Ab = (Math.pow(bP, 2) * (128 - 255)) + (255 * Math.pow(mP, 2))
+            - (128 * Math.pow(wP, 2));
+    double Ac = (Math.pow(bP, 2) * ((255 * mP) - (128 * wP)))
+            - (bP * ((255 * Math.pow(mP, 2)) - (128 * Math.pow(wP, 2))));
     double a = Aa / A;
     double b = Ab / A;
     double c = Ac / A;

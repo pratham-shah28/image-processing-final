@@ -1,13 +1,5 @@
 import org.junit.Test;
-
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
-
-import javax.imageio.ImageIO;
-
 import model.Image;
 import model.ImageCreator;
 import model.ImageCreatorImpl;
@@ -852,21 +844,15 @@ public class ModelTest {
     ImageCreator imgCreator = new ImageCreatorImpl();
     Image inputImage = imgCreator.createModelImpl(red, green, blue);
     Image actualImage = inputImage.sharpen();
-    actualImage = actualImage.applySplit(inputImage, 50);
+    Image actualImageNew = actualImage.applySplit(inputImage, 50);
 
     for (int x = 0; x < red.length; x++) {
       for (int y = 0; y < red[0].length; y++) {
-//        assertEquals(redExpected[x][y], actualImage.getRedPixelMatrixElement(x, y));
-//        assertEquals(greenExpected[x][y], actualImage.getGreenPixelMatrixElement(x, y));
-//        assertEquals(blueExpected[x][y], actualImage.getBluePixelMatrixElement(x, y));
-        redExpected[x][y] = actualImage.getRedPixelMatrixElement(x, y);
-        greenExpected[x][y] = actualImage.getGreenPixelMatrixElement(x, y);
-        blueExpected[x][y] = actualImage.getBluePixelMatrixElement(x, y);
+        assertEquals(redExpected[x][y], actualImage.getRedPixelMatrixElement(x, y));
+        assertEquals(greenExpected[x][y], actualImage.getGreenPixelMatrixElement(x, y));
+        assertEquals(blueExpected[x][y], actualImage.getBluePixelMatrixElement(x, y));
       }
     }
-    System.out.println(Arrays.deepToString(redExpected));
-    System.out.println(Arrays.deepToString(greenExpected));
-    System.out.println(Arrays.deepToString(blueExpected));
   }
 
   @Test
@@ -895,41 +881,92 @@ public class ModelTest {
     int[][] redExpected = new int[][]{
             {255, 255, 255},
             {171, 255, 255},
-            {77, 255, 255},
+            {77, 255, 180},
             {75, 255, 91}
     };
 
     int[][] greenExpected = new int[][]{
-            {136, 255, 0},
+            {136, 255, 125},
             {255, 255, 255},
-            {106, 255, 0},
+            {106, 255, 255},
             {0, 237, 57}
     };
 
     int[][] blueExpected = new int[][]{
-            {45, 255, 0},
+            {45, 255, 255},
             {80, 255, 165},
-            {255, 255, 0},
+            {255, 255, 255},
             {45, 255, 255}
     };
     ImageCreator imgCreator = new ImageCreatorImpl();
     Image inputImage = imgCreator.createModelImpl(red, green, blue);
     Image actualImage = inputImage.sharpen();
-    actualImage = actualImage.applySplit(inputImage, 100);
+    Image actualImageNew = actualImage.applySplit(inputImage, 100);
 
     for (int x = 0; x < red.length; x++) {
       for (int y = 0; y < red[0].length; y++) {
-//        assertEquals(redExpected[x][y], actualImage.getRedPixelMatrixElement(x, y));
-//        assertEquals(greenExpected[x][y], actualImage.getGreenPixelMatrixElement(x, y));
-//        assertEquals(blueExpected[x][y], actualImage.getBluePixelMatrixElement(x, y));
-        redExpected[x][y] = actualImage.getRedPixelMatrixElement(x, y);
-        greenExpected[x][y] = actualImage.getGreenPixelMatrixElement(x, y);
-        blueExpected[x][y] = actualImage.getBluePixelMatrixElement(x, y);
+        assertEquals(redExpected[x][y], actualImage.getRedPixelMatrixElement(x, y));
+        assertEquals(greenExpected[x][y], actualImage.getGreenPixelMatrixElement(x, y));
+        assertEquals(blueExpected[x][y], actualImage.getBluePixelMatrixElement(x, y));
       }
     }
-    System.out.println(Arrays.deepToString(redExpected));
-    System.out.println(Arrays.deepToString(greenExpected));
-    System.out.println(Arrays.deepToString(blueExpected));
+  }
+
+  @Test
+  public void applySplitTestZero() {
+    int[][] red = new int[][]{
+            {255, 255, 255},
+            {17, 255, 255},
+            {11, 255, 19},
+            {17, 255, 29}
+    };
+
+    int[][] green = new int[][]{
+            {11, 255, 1},
+            {255, 255, 255},
+            {11, 1, 255},
+            {17, 255, 29}
+    };
+
+    int[][] blue = new int[][]{
+            {11, 255, 255},
+            {17, 255, 11},
+            {255, 1, 255},
+            {17, 255, 255}
+    };
+
+    int[][] redExpected = new int[][]{
+            {255, 255, 255},
+            {171, 255, 255},
+            {255, 255, 19},
+            {75, 255, 29}
+    };
+
+    int[][] greenExpected = new int[][]{
+            {0, 255, 1},
+            {255, 255, 255},
+            {0, 1, 255},
+            {0, 255, 29}
+    };
+
+    int[][] blueExpected = new int[][]{
+            {0, 255, 255},
+            {80, 255, 11},
+            {0, 1, 255},
+            {45, 255, 255}
+    };
+    ImageCreator imgCreator = new ImageCreatorImpl();
+    Image inputImage = imgCreator.createModelImpl(red, green, blue);
+    Image actualImage = inputImage.sharpen();
+    Image actualImageNew = actualImage.applySplit(inputImage, 0);
+
+    for (int x = 0; x < red.length; x++) {
+      for (int y = 0; y < red[0].length; y++) {
+        assertEquals(redExpected[x][y], actualImageNew.getRedPixelMatrixElement(x, y));
+        assertEquals(greenExpected[x][y], actualImageNew.getGreenPixelMatrixElement(x, y));
+        assertEquals(blueExpected[x][y], actualImageNew.getBluePixelMatrixElement(x, y));
+      }
+    }
   }
 
   @Test

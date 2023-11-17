@@ -124,7 +124,7 @@ public class ControllerTest {
     }
 
     @Override
-    public Image adjustLevels(int b_p, int m_p, int w_p) {
+    public Image adjustLevels(int bP, int mP, int wP) {
       return null;
     }
 
