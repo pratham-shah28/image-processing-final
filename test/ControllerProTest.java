@@ -190,7 +190,6 @@ public class ControllerProTest {
 
   @Test
   public void testImageObjectCreationAfterOperation() throws IOException {
-
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "load " + "\"" + path + "\"" + " m\n" +
@@ -208,7 +207,11 @@ public class ControllerProTest {
             "rgb-combine mC mR mG mB \n" +
             "red-component m mRed\n" +
             "green-component m mGreen\n" +
-            "blue-component m mBlue";
+            "blue-component m mBlue\n" +
+            "compress 50 m mCompress\n" +
+            "color-correct m mColorCorrect\n" +
+            "histogram m mHistogram\n" +
+            "levels-adjust 50 60 70 m mLevelsAdjust\n";
     InputStream in = null;
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
@@ -232,6 +235,10 @@ public class ControllerProTest {
     assertTrue(images.containsKey("mRed"));
     assertTrue(images.containsKey("mGreen"));
     assertTrue(images.containsKey("mBlue"));
+    assertTrue(images.containsKey("mCompress"));
+    assertTrue(images.containsKey("mColorCorrect"));
+    assertTrue(images.containsKey("mHistogram"));
+    assertTrue(images.containsKey("mLevelsAdjust"));
   }
 
   @Test
@@ -560,6 +567,24 @@ public class ControllerProTest {
   }
 
   @Test
+  public void testCallCompressethodNegative() throws IOException {
+    StringBuilder mockLog = new StringBuilder();
+    ViewInterface view = new View();
+    String path = new File(".").getCanonicalPath() + "\\test\\manhattan-small.png";
+    String input = "load " + "\"" + path + "\"" + " " + "a" + "\n"
+            + "compress" + " " + "50" + " " + "a" + " " + "b";
+    InputStream in = null;
+    in = new ByteArrayInputStream(input.getBytes());
+    HashMap<String, Image> images = new HashMap<>();
+    MockImageCreator imageCreator = new MockImageCreator(mockLog);
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
+    controller.execute();
+    StringBuilder expected = new StringBuilder();
+    expected.append(50.0);
+    assertEquals(expected.toString(), mockLog.toString());
+  }
+
+  @Test
   public void testInvalidCommand() throws IOException {
     ViewInterface view = new View();
     String input = "notACommand " + "\"" + "\"" + " mumbai";
@@ -803,7 +828,7 @@ public class ControllerProTest {
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "load " + "\"" + path + "\"" + " mumbai" +
-            "\nlevels-adjust 12 546 0 mumbai mCC";
+            "\nlevels-adjust 120 100 0 mumbai mCC";
     InputStream in = null;
     in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
@@ -817,8 +842,31 @@ public class ControllerProTest {
       lastLine = lines[lines.length - 2];
     }
     StringBuilder str = new StringBuilder();
-    str.append("Levels adjust failed: java.lang.IllegalArgumentException: b, m, w " +
-            "values should be in the range 0 - 255");
+    str.append("Levels adjust failed: java.lang.IllegalArgumentException: " +
+            "b, m, w values should be in ascending order");
+    assertEquals(str.toString(), lastLine);
+  }
+
+  @Test
+  public void testInvalidCompress() throws IOException {
+    ViewInterface view = new View();
+    String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
+    String input = "load " + "\"" + path + "\"" + " mumbai" +
+            "\ncompress -50 mumbai mumbai";
+    InputStream in = null;
+    in = new ByteArrayInputStream(input.getBytes());
+    HashMap<String, Image> images = new HashMap<>();
+    ImageCreator imageCreator = new ImageCreatorImpl();
+    ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
+    controller.execute();
+    String outputString = out.toString();
+    String[] lines = outputString.split(System.lineSeparator());
+    String lastLine = "";
+    if (lines.length > 0) {
+      lastLine = lines[lines.length - 2];
+    }
+    StringBuilder str = new StringBuilder();
+    str.append("Compression factor has to be from 0 to 100");
     assertEquals(str.toString(), lastLine);
   }
 
