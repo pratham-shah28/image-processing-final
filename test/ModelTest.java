@@ -1,5 +1,5 @@
 import org.junit.Test;
-import java.util.Arrays;
+
 import model.Image;
 import model.ImageCreator;
 import model.ImageCreatorImpl;

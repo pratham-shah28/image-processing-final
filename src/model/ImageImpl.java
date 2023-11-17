@@ -1,8 +1,10 @@
 package model;
+
 import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.BasicStroke;
 import java.awt.image.BufferedImage;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -210,9 +212,9 @@ public class ImageImpl implements Image {
   @Override
   public Image sharpen() {
     double[][] kernel =
-    {{-0.125, -0.125, -0.125, -0.125, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
-     {-0.125, 0.25, 1, 0.25, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
-     {-0.125, -0.125, -0.125, -0.125, -0.125}};
+            {{-0.125, -0.125, -0.125, -0.125, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
+                    {-0.125, 0.25, 1, 0.25, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
+                    {-0.125, -0.125, -0.125, -0.125, -0.125}};
     return kernelOperation(this, kernel);
   }
 
@@ -250,61 +252,6 @@ public class ImageImpl implements Image {
         newRedPixelMatrix[x][y] = (int) valueRed;
         newGreenPixelMatrix[x][y] = (int) valueGreen;
         newBluePixelMatrix[x][y] = (int) valueBlue;
-      }
-    }
-    return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
-  }
-
-  private Image kernelOperationSplit(Image img, double[][] kernel, double perc) {
-    int[][] newRedPixelMatrix = new int[img.getWidth()][img.getHeight()];
-    int[][] newGreenPixelMatrix = new int[img.getWidth()][img.getHeight()];
-    int[][] newBluePixelMatrix = new int[img.getWidth()][img.getHeight()];
-    int width = img.getWidth();
-    int height = img.getHeight();
-    int heightSplit = (int) Math.round(img.getHeight() * perc / 100);
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        if (y > heightSplit) {
-          newRedPixelMatrix[x][y] = this.getRedPixelMatrixElement(x, y);
-          newGreenPixelMatrix[x][y] = this.getGreenPixelMatrixElement(x, y);
-          newBluePixelMatrix[x][y] = this.getBluePixelMatrixElement(x, y);
-        } else if (y == heightSplit) {
-          if (x % 2 == 0) {
-            newRedPixelMatrix[x][y] = 255;
-            newGreenPixelMatrix[x][y] = 0;
-            newBluePixelMatrix[x][y] = 0;
-          } else {
-            newRedPixelMatrix[x][y] = this.getRedPixelMatrixElement(x, y);
-            newGreenPixelMatrix[x][y] = this.getGreenPixelMatrixElement(x, y);
-            newBluePixelMatrix[x][y] = this.getBluePixelMatrixElement(x, y);
-          }
-        } else {
-          double valueRed = 0;
-          double valueGreen = 0;
-          double valueBlue = 0;
-          int kernelCenter = kernel.length / 2;
-
-          for (int i = 0; i < kernel.length; i++) {
-            for (int j = 0; j < kernel.length; j++) {
-              int image_x = x - kernelCenter + i;
-              int image_y = y - kernelCenter + j;
-
-              if (image_x >= 0 && image_x < width && image_y >= 0 && image_y < height) {
-                valueRed += img.getRedPixelMatrixElement(image_x, image_y) * kernel[i][j];
-                valueGreen += img.getGreenPixelMatrixElement(image_x, image_y) * kernel[i][j];
-                valueBlue += img.getBluePixelMatrixElement(image_x, image_y) * kernel[i][j];
-              }
-            }
-          }
-
-          valueRed = clip(valueRed);
-          valueGreen = clip(valueGreen);
-          valueBlue = clip(valueBlue);
-
-          newRedPixelMatrix[x][y] = (int) valueRed;
-          newGreenPixelMatrix[x][y] = (int) valueGreen;
-          newBluePixelMatrix[x][y] = (int) valueBlue;
-        }
       }
     }
     return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
@@ -550,7 +497,10 @@ public class ImageImpl implements Image {
   }
 
 
-  private Map<String, double[][]> applyThreshold3(double[][] transformedRed, double[][] transformedGreen, double[][] transformedBlue, double factor) {
+  private Map<String, double[][]> applyThreshold3(double[][] transformedRed,
+                                                  double[][] transformedGreen,
+                                                  double[][] transformedBlue,
+                                                  double factor) {
 
     Map<Double, Double> uniqueValues = new HashMap<>();
     Map<String, double[][]> matrices = new HashMap<>();
@@ -780,14 +730,14 @@ public class ImageImpl implements Image {
             - Math.pow(wP, 2)))
             + (wP * Math.pow(mP, 2))
             - (mP * Math.pow(wP, 2));
-    double Aa = ((-1 * bP) * (128 - 255)) + (128 * wP) - (255 * mP);
-    double Ab = (Math.pow(bP, 2) * (128 - 255)) + (255 * Math.pow(mP, 2))
+    double aA = ((-1 * bP) * (128 - 255)) + (128 * wP) - (255 * mP);
+    double aB = (Math.pow(bP, 2) * (128 - 255)) + (255 * Math.pow(mP, 2))
             - (128 * Math.pow(wP, 2));
-    double Ac = (Math.pow(bP, 2) * ((255 * mP) - (128 * wP)))
+    double aC = (Math.pow(bP, 2) * ((255 * mP) - (128 * wP)))
             - (bP * ((255 * Math.pow(mP, 2)) - (128 * Math.pow(wP, 2))));
-    double a = Aa / A;
-    double b = Ab / A;
-    double c = Ac / A;
+    double a = aA / A;
+    double b = aB / A;
+    double c = aC / A;
 
     int[][] newRedPixelMatrix = new int[this.width][this.height];
     int[][] newGreenPixelMatrix = new int[this.width][this.height];
