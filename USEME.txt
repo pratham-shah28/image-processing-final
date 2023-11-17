@@ -1,0 +1,114 @@
+#List of Supported Commands
+
+Conditions:
+1. Image should be loaded before trying to apply any operations on it.
+
+
+Commands:
+1. Load an image.
+syntax: "load image-path image-name"
+example: load "D:\NEU Khoury Classwork\Fall 2023\CS5010\Assignments\image.png" img
+
+2. Brighten an image.
+syntax: "brighten factor image-name dest-image-name"
+example: brighten 10 img img-brightened
+
+3. Flip an image vertically.
+syntax: "vertical-flip image-name dest-image-name"
+example: vertical-flip img img-vflip
+
+4. Flip an image horizontally.
+syntax: "horizontal-flip image-name dest-image-name"
+example: horizontal-flip img img-hflip
+
+5. Split an image into red, green and blue channel images.
+syntax: "rgb-split image-name dest-image-name-red dest-image-name-green dest-image-name-blue"
+example: rgb-split img img-red img-green img-blue
+
+6. Combine three images representing red, green, blue channel into one image.
+syntax: "rgb-combine dest-image-name red-image green-image blue-image"
+example: rgb-combine img-combined img-red img-green img-blue
+
+7. Blur an image.
+syntax: "blur image-name dest-image-name"
+example: blur img img-blurred
+
+8. Sharpen an image.
+syntax: "sharpen image-name dest-image-name"
+example: sharpen img img-sharpened
+
+9. Visualize the value component of the image.
+syntax: "value-component image-name dest-image-name"
+example: value-component img img-value
+
+10. Visualize the intensity component of the image.
+syntax: "intensity-component image-name dest-image-name"
+example: intensity-component img img-intensity
+
+11. Visualize the luma component of the image.
+syntax: "luma-component image-name dest-image-name"
+example: luma-component img img-luma
+
+12. Visualize the red channel of an image.
+syntax: "red-component image-name dest-image-name"
+example: red-component img img-red
+
+13. Visualize the green channel of an image.
+syntax: "green-component image-name dest-image-name"
+example: green-component img img-green
+
+14. Visualize the blue channel of an image.
+syntax: "blue-component image-name dest-image-name"
+example: blue-component img img-blue
+
+15. Apply sepia tone to the image.
+syntax: "sepia image-name dest-image-name"
+example: sepia img img-sepia
+
+16. Genreate histogram for an image.
+syntax: "histogram image-name dest-image-name"
+example: histogram img img-h
+
+17. Color correct an image by calculating the histogram for each component and aligning the histogram peaks of individual channels.
+syntax: "color-correct image-name dest-image-name"
+example: color-correct img img-cc
+
+18. Level Adjust an image by specifying the black, mid and white values (b,m,w). These values should be ascending in that order, and should be within 0 and 255 for this command to work correctly.
+syntax: "levels-adjust b m w image-name dest-image-name"
+example: levels-adjust 10 150 240 img img-la
+
+19. Compress an image by specifying compression factor as percentage.
+syntax: "compress percentage image-name dest-image-name"
+example: compress 50 img img-compressed
+
+20. Preview blur by using the following command. This command returns an split image. Here, p is the percentage width for the split.
+syntax: "blur image-name dest-image split p"
+example: blur img img-blur-s split 50
+
+21. Preview sharpen by using the following command. This command returns an split image. Here, p is the percentage width for the split.
+syntax: "sharpen image-name dest-image split p"
+example: sharpen img img-sharp-split 30
+
+22. Preview sepia by using the following command. This command returns an split image. Here, p is the percentage width for the split.
+syntax: "sepia image-name dest-image split p"
+example: sepia img img-sepia-split split 20
+
+23. Preview luma-component by using the following command. This command returns an split image. Here, p is the percentage width for the split.
+syntax: "luma-component image-name dest-image split p"
+example: luma-component img img-luma-split split 10
+
+24. Preview intensity-component by using the following command. This command returns an split image. Here, p is the percentage width for the split.
+syntax: "intensity-component image-name dest-image split p"
+example: intensity-component img img-intensity-split split 60
+
+25. Preview value-component by using the following command. This command returns an split image. Here, p is the percentage width for the split.
+syntax: "value-component image-name dest-image split p"
+example: value-component img img-value-split split 65
+
+26. Run a script file (text file) containing list of image operation commands.
+syntax: "run script-file"
+example: run "D:\NEU Khoury Classwork\Fall 2023\CS5010\Assignments\commands.txt"
+
+27. Save an image to the local machine.
+syntax: "save image-path image-name"
+example: save "D:\NEU Khoury Classwork\Fall 2023\CS5010\Assignments\new_image.png" img

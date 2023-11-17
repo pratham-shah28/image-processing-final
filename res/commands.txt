@@ -1,0 +1,72 @@
+load "balcony_view.png" m
+vertical-flip m mVF
+horizontal-flip m mHF
+sharpen m mSH
+sharpen m mSH50 split 50
+sharpen m mSH100 split 100
+blur m mBL
+blur m mBL50 split 50
+blur m mBL100 split 100
+brighten 50 m mBR
+brighten -50 m mDR
+sepia m mSP
+value-component m mVC
+intensity-component m mIC
+luma-component m mLC
+rgb-split m mR mG mB
+rgb-combine mC mR mG mB 
+red-component m mRed
+green-component m mGreen
+blue-component m mBlue
+sepia m mOverridenSepia
+compress 50 m mCompress50
+compress 0 m mCompress0
+compress 100 m mCompress100
+levels-adjust 10 150 240 m mLevelAdjust1
+levels-adjust 50 180 200 m mLevelAdjust2
+levels-adjust 50 180 200 m mLevelAdjust3 split 60
+color-correct m mColorCorrect
+color-correct m mColorCorrectSplit split 30
+histogram mCompress50 histogramCompress50
+histogram mCompress0 histogramCompress0
+histogram mCompress100 histogramCompress100
+histogram mLevelAdjust1 histogramLevelAdjust1
+histogram mLevelAdjust2 histogramLevelAdjust2
+histogram mColorCorrect histogramColorCorrect
+histogram mColorCorrectSplit histogramColorCorrectSplit
+save "mVerticalFlip.png" mVF
+save "mHorizontalFlip.png" mHF
+save "mSharpen.png" mSH
+save "mSharpen50.png" mSH50
+save "mSharpen100.png" mSH100
+save "mBlur.png" mBL
+save "mBlur50.png" mBL50
+save "mBlur100.png" mBL100
+save "mBrighten.png" mBR
+save "mDarken.png" mDR
+save "mSepia.png" mSP
+save "mValue.png" mVC
+save "mIntensity.png" mIC
+save "mLuma.png" mLC
+save "mRedSplit.png" mR
+save "mGreenSplit.png" mG
+save "mBlueSplit.png" mB
+save "mCombine.png" mC
+save "mRedComponent.png" mRed
+save "mGreenComponent.png" mGreen
+save "mBlueComponent.png" mBlue
+save "mOverridenSepia.png" mOverridenSepia
+save "mCompress0.png" mCompress0
+save "mCompress50.png" mCompress50
+save "mCompress100.png" mCompress100
+save "mLevelAdjust1.png" mLevelAdjust1
+save "mLevelAdjust2.png" mLevelAdjust2
+save "histogramCompress50.png" histogramCompress50
+save "histogramCompress0.png" histogramCompress0
+save "histogramCompress100.png" histogramCompress100
+save "histogramLevelAdjust1.png" histogramLevelAdjust1
+save "histogramLevelAdjust2.png" histogramLevelAdjust2
+save "histogramColorCorrect.png" histogramColorCorrect
+save "histogramColorCorrectSplit.png" histogramColorCorrectSplit
+save "mColorCorrect.png" mColorCorrect
+save "mColorCorrectSplit.png" mColorCorrectSplit
