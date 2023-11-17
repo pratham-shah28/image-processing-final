@@ -10,14 +10,15 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 /**
- * A class to run the application.
+ * This is the main class that client uses to run the application.
+ * The client can directly run the application or give command line argument to run the script.
  */
 
 public class MainApp {
   /**
-   * Main method to run this class.
+   * This is the main method that runs our app by creating view, model and controller object.
    *
-   * @param args String arguments.
+   * @param args command line arguments as strings.
    */
   public static void main(String[] args) {
     if (args.length == 0) {

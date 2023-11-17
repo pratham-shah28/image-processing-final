@@ -20,6 +20,7 @@ green-component m mGreen
 blue-component m mBlue
 sepia m mOverridenSepia
 compress 50 m mCompress50
+compress 90 m mCompress90
 compress 0 m mCompress0
 compress 100 m mCompress100
 levels-adjust 10 150 240 m mLevelAdjust1
@@ -70,3 +71,4 @@ save "histogramColorCorrect.png" histogramColorCorrect
 save "histogramColorCorrectSplit.png" histogramColorCorrectSplit
 save "mColorCorrect.png" mColorCorrect
 save "mColorCorrectSplit.png" mColorCorrectSplit
+save "mCompress90.png" mCompress90

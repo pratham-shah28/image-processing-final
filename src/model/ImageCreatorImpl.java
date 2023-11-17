@@ -1,7 +1,8 @@
 package model;
 
 /**
- * A class to create an Image object.
+ * This class is responsible for creating new image objects.
+ * This class implements the ImageCreator interface.
  */
 public class ImageCreatorImpl implements ImageCreator {
   @Override
