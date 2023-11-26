@@ -1,11 +1,15 @@
 package controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import javax.swing.*;
 
 import model.Image;
 import model.ImageCreator;
@@ -16,7 +20,7 @@ import view.ViewInterface;
  * compression, histogram, color correction, level adjustment.
  * It retains support for all operations performed by original Controller.
  */
-public class ControllerPro extends Controller {
+public class ControllerPro extends Controller implements ActionListener {
 
   private Map<String, Image> images;
 
@@ -38,6 +42,7 @@ public class ControllerPro extends Controller {
 
   @Override
   public void execute() {
+    this.view.setCommandButtonListener(this);
     view.welcomeMessage();
     view.enterCommandPrompt();
     Scanner scanner = new Scanner(in);
@@ -244,5 +249,12 @@ public class ControllerPro extends Controller {
       default:
         runCommand(currCommand);
     }
+  }
+
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    String command = view.getTurtleCommand();
+    String status;
+    System.out.println(command);
   }
 }

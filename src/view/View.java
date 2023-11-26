@@ -1,16 +1,52 @@
 package view;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
 /**
  * This is the view class which handles what is displayed to the user via command line interface.
  * This class implements the viewInterface.
  */
-public class View implements ViewInterface {
+public class View extends JFrame implements ViewInterface {
   private final String[] commandList;
+  private JPanel buttonPanel;
 
+  private JButton commandButton, quitButton;
+
+  private JTextField input;
   /**
    * Constructs the view class and initialized the set of valid commands.
    */
   public View() {
+
+    super();
+    this.setTitle("Image manipulation");
+    this.setSize(500, 500);
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.setLayout(new BorderLayout());
+
+
+    buttonPanel = new JPanel();
+    buttonPanel.setLayout(new FlowLayout());
+    this.add(buttonPanel, BorderLayout.SOUTH);
+
+    //input textfield
+    input = new JTextField(15);
+    buttonPanel.add(input);
+
+    commandButton = new JButton("Execute");
+    buttonPanel.add(commandButton);
+
+    quitButton = new JButton("Quit");
+    quitButton.addActionListener((ActionEvent e) -> {
+      System.exit(0);
+    });
+    buttonPanel.add(quitButton);
+
+
 
     commandList = new String[]{"load image-path image-name",
       "brighten factor image-name dest-image-name",
@@ -40,6 +76,8 @@ public class View implements ViewInterface {
       "run script-file",
       "save image-path image-name"
     };
+    setVisible(true);
+    this.pack();
   }
 
   @Override
@@ -78,5 +116,18 @@ public class View implements ViewInterface {
     }
     System.out.println("-------------------------------------------------------------------------");
   }
+
+  @Override
+  public void setCommandButtonListener(ActionListener actionEvent) {
+    commandButton.addActionListener(actionEvent);
+  }
+
+  @Override
+  public String getTurtleCommand() {
+    String command = this.input.getText();
+    this.input.setText("");
+    return command;
+  }
+
 
 }
