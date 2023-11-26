@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Test class to test the controller for the pro version.
+ * This is a JUnit test class to test the pro version of the controller.
  */
 public class ControllerProTest {
   private class MockModel implements Image {
@@ -212,8 +212,7 @@ public class ControllerProTest {
             "color-correct m mColorCorrect\n" +
             "histogram m mHistogram\n" +
             "levels-adjust 50 60 70 m mLevelsAdjust\n";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
@@ -248,8 +247,7 @@ public class ControllerProTest {
     String input = "load " + "\"" + path + "\"" + " m\n" +
             "vertical-flip m m\n" +
             "horizontal-flip m m";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
@@ -266,10 +264,8 @@ public class ControllerProTest {
     String input = "load " + "\"" + path + "\"" + " " + "mumbai" +
             "\nred-component mumbai mRed" +
             "\nsave " + "\"" + path2 + "\"" + " " + "mRed";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
-    StringBuilder mockLog = new StringBuilder();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
@@ -291,8 +287,7 @@ public class ControllerProTest {
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "load " + "\"" + path + "\"" + " mumbai";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
@@ -302,12 +297,11 @@ public class ControllerProTest {
   }
 
   @Test
-  public void operationBeforeLoad() throws IOException {
+  public void operationBeforeLoad() {
 
     ViewInterface view = new View();
     String input = "red-component mumbai mumbai-red";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
@@ -333,8 +327,7 @@ public class ControllerProTest {
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai5.jpg";
     String input = "load " + "\"" + path + "\"" + " mumbai";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
@@ -363,10 +356,8 @@ public class ControllerProTest {
     String input = "load " + "\"" + path + "\"" + " mumbai" +
             "\nred-component mumbai mRed" +
             "\nsave " + "\"" + path2 + "\"" + " mRed";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
-    StringBuilder mockLog = new StringBuilder();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
@@ -393,10 +384,8 @@ public class ControllerProTest {
     String input = "load " + "\"" + path + "\"" + " mumbai" +
             "\nred-component mumbai mRed" +
             "\nsave " + "\"" + path2 + "\"" + " " + "mRed";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
-    StringBuilder mockLog = new StringBuilder();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
     controller.execute();
@@ -419,8 +408,7 @@ public class ControllerProTest {
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "run " + "\"" + path + "\"";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
@@ -447,8 +435,7 @@ public class ControllerProTest {
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\commands.txt";
     String input = "run " + "\"" + path + "\"";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     StringBuilder mockLog = new StringBuilder();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
@@ -477,8 +464,7 @@ public class ControllerProTest {
             + "load " + "\"" + path + "\"" + " " + "b" + "\n"
             + "load " + "\"" + path + "\"" + " " + "c" + "\n"
             + "rgb-combine" + " " + "m" + " " + "a" + " " + "b" + " " + "c";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -499,8 +485,7 @@ public class ControllerProTest {
             + "load " + "\"" + path + "\"" + " " + "b" + "\n"
             + "load " + "\"" + path + "\"" + " " + "c" + "\n"
             + "rgb-combine" + " " + "m" + " " + "a" + " " + "b" + " " + "c";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -519,8 +504,7 @@ public class ControllerProTest {
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "load " + "\"" + path + "\"" + " " + "a" + "\n"
             + "brighten" + " " + "50" + " " + "a" + " " + "b";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -536,8 +520,7 @@ public class ControllerProTest {
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "load " + "\"" + path + "\"" + " " + "a" + "\n";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -555,8 +538,7 @@ public class ControllerProTest {
     String path = new File(".").getCanonicalPath() + "\\test\\manhattan-small.png";
     String input = "load " + "\"" + path + "\"" + " " + "a" + "\n"
             + "compress" + " " + "50" + " " + "a" + " " + "b";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -573,8 +555,7 @@ public class ControllerProTest {
     String path = new File(".").getCanonicalPath() + "\\test\\manhattan-small.png";
     String input = "load " + "\"" + path + "\"" + " " + "a" + "\n"
             + "compress" + " " + "50" + " " + "a" + " " + "b";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -585,11 +566,10 @@ public class ControllerProTest {
   }
 
   @Test
-  public void testInvalidCommand() throws IOException {
+  public void testInvalidCommand() {
     ViewInterface view = new View();
     String input = "notACommand " + "\"" + "\"" + " mumbai";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -609,8 +589,7 @@ public class ControllerProTest {
   public void testControllerCreation() {
     ViewInterface view = new View();
     String input = "notACommand " + "\"" + "\"" + " mumbai";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = null;
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -624,8 +603,7 @@ public class ControllerProTest {
     String input = "load " + "\"" + path + "\"" + " mumbai" +
             "\nred-component mumbai mRed" +
             "\nsave " + "\"" + path2 + "\"" + " mRed";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -650,8 +628,7 @@ public class ControllerProTest {
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "load " + "\"" + path + "\"" + " mumbai";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -667,8 +644,7 @@ public class ControllerProTest {
     String input = "load " + "\"" + path + "\"" + " mumbai" +
             "\nred-component mumbai mRed" +
             "\nsave " + "\"" + path2 + "\"" + " mRed";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -693,8 +669,7 @@ public class ControllerProTest {
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.png";
     String input = "load " + "\"" + path + "\"" + " mumbai";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -710,8 +685,7 @@ public class ControllerProTest {
     String input = "load " + "\"" + path + "\"" + " mumbai" +
             "\nred-component mumbai mRed" +
             "\nsave " + "\"" + path2 + "\"" + " mRed";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -737,8 +711,7 @@ public class ControllerProTest {
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\P3.ppm";
     String input = "load " + "\"" + path + "\"" + " mumbai";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -754,8 +727,7 @@ public class ControllerProTest {
     String input = "load " + "\"" + path + "\"" + " mumbai" +
             "\nred-component mumbai mRed" +
             "\nsave " + "\"" + path2 + "\"" + " mRed";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller
@@ -780,8 +752,7 @@ public class ControllerProTest {
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\P2.ppm";
     String input = "load " + "\"" + path + "\"" + " mumbai";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -805,8 +776,7 @@ public class ControllerProTest {
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "load " + "\"" + path + "\"" + " mumbai" +
             "\nlevels-adjust 12 546 0 mumbai mCC";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -829,8 +799,7 @@ public class ControllerProTest {
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "load " + "\"" + path + "\"" + " mumbai" +
             "\nlevels-adjust 120 100 0 mumbai mCC";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);
@@ -853,8 +822,7 @@ public class ControllerProTest {
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "load " + "\"" + path + "\"" + " mumbai" +
             "\ncompress -50 mumbai mumbai";
-    InputStream in = null;
-    in = new ByteArrayInputStream(input.getBytes());
+    InputStream in = new ByteArrayInputStream(input.getBytes());
     HashMap<String, Image> images = new HashMap<>();
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new ControllerPro(view, in, images, imageCreator);

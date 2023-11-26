@@ -35,8 +35,6 @@ public class View implements ViewInterface {
       "sharpen image-name dest-image split p",
       "sepia image-name dest-image split p",
       "luma-component image-name dest-image split p",
-      "intensity-component image-name dest-image split p",
-      "value-component image-name dest-image split p",
       "run script-file",
       "save image-path image-name"
     };
