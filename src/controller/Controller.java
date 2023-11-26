@@ -39,18 +39,18 @@ public class Controller implements ControllerInterface {
   protected InputStream in;
   private ImageCreator imageCreator;
 
-  String path;
-  String imageName;
-  String outputName;
-  String redImageName;
-  String greenImageName;
-  String blueImageName;
-  double factor;
-  int b;
-  int m;
-  int w;
+  protected String path;
+  protected String imageName;
+  protected String outputName;
+  protected String redImageName;
+  protected String greenImageName;
+  protected String blueImageName;
+  protected double factor;
+  protected int b;
+  protected int m;
+  protected int w;
 
-  List<String> commandParts;
+  protected List<String> commandParts;
 
   /**
    * Constructs the controller using the given view, model, input stream and image hashmap.

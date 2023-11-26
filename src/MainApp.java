@@ -29,10 +29,7 @@ public class MainApp {
       controller.execute();
     } else {
       String input = String.format("run" + " " + "\"%s\"" + "\nexit", args[0]);
-      System.out.println("input: " + input);
-      InputStream in = null;
-      System.out.println(input);
-      in = new ByteArrayInputStream(input.getBytes());
+      InputStream in = new ByteArrayInputStream(input.getBytes());
       ViewInterface view = new View();
       ImageCreator imageCreator = new ImageCreatorImpl();
       ControllerInterface controllerPro =
