@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import javax.swing.*;
-
 import model.Image;
 import model.ImageCreator;
 import view.ViewInterface;
@@ -253,8 +251,90 @@ public class ControllerPro extends Controller implements ActionListener {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    String command = view.getTurtleCommand();
-    String status;
-    System.out.println(command);
+    // Determine which button was clicked based on the ActionCommand
+    String command = e.getActionCommand();
+    switch (command) {
+      case "Apply":
+        String selectedOption = (String) view.getComboBox().getSelectedItem();
+        //System.out.println(selectedOption);
+        // Execute code block based on the selected item
+        switch (selectedOption) {
+          case "red-component":
+            System.out.println("red-component");
+            // Add your code here for Option 1
+            break;
+          case "green-component":
+            System.out.println("green-component");
+            // Add your code here for Option 2
+            break;
+          case "blue-component":
+            System.out.println("blue-component");
+            // Add your code here for Option 3
+            break;
+          case "flip-vertical":
+            System.out.println("flip-vertical");
+            // Add your code here for Option 3
+            break;
+          case "flip-horizontal":
+            System.out.println("flip-horizontal");
+            // Add your code here for Option 3
+            break;
+          case "blur":
+            System.out.println("Blur");
+            // Add your code here for Option 3
+            break;
+          case "sharpen":
+            System.out.println("Sharpen");
+            // Add your code here for Option 3
+            break;
+          case "sepia":
+            System.out.println("Sepia");
+            // Add your code here for Option 3
+            break;
+          case "greyscale":
+            System.out.println("greyscale");
+            // Add your code here for Option 3
+            break;
+          case "color-correct":
+            System.out.println("color-correct");
+            // Add your code here for Option 3
+            break;
+          default:
+            System.out.println("Invalid option");
+            break;
+        }
+        // Apply logic
+        break;
+      case "Load":
+        System.out.println("Load button clicked!");
+        // Load logic
+        break;
+      case "Save":
+        System.out.println("Save button clicked!");
+        // save logic
+        break;
+      case "Submit":
+        // save logic
+        String userInput = view.getNumberTextField().getText();
+
+        try {
+          // Parse the input as an integer
+          int enteredNumber = Integer.parseInt(userInput);
+
+          // Check if the entered number is within the valid range
+          if (enteredNumber >= 1 && enteredNumber <= 100) {
+            // Perform an action based on the entered number
+            System.out.println(enteredNumber);
+          } else {
+            // Display an error message for an invalid range
+            view.showDialog("Please enter a number between 1 and 100.");
+          }
+        } catch (NumberFormatException ex) {
+          // Display an error message for non-integer input
+          view.showDialog("Please enter a valid integer.");
+        }
+        break;
+      // Add more cases as needed for other buttons
+    }
   }
 }

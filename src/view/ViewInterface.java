@@ -2,6 +2,9 @@ package view;
 
 import java.awt.event.ActionListener;
 
+
+import javax.swing.*;
+
 /**
  * This interface provides a blueprint for the view class. A view is responsible to show output to
  * the user.
@@ -40,7 +43,7 @@ public interface ViewInterface {
    * process a command. This is so that when the button
    * is pressed, control goes to the action listener
    *
-   * @param actionEvent
+   * @param actionEvent the event that occurred.
    */
   void setCommandButtonListener(ActionListener actionEvent);
 
@@ -49,5 +52,7 @@ public interface ViewInterface {
    *
    * @return
    */
-  String getTurtleCommand();
+  JComboBox<String> getComboBox();
+  JTextField getNumberTextField();
+  void showDialog(String s);
 }
