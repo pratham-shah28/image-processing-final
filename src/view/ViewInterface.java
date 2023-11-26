@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import model.Image;
+
 /**
  * This interface provides a blueprint for the view class. A view is responsible to show output to
  * the user.
@@ -55,5 +57,5 @@ public interface ViewInterface {
 
   JLabel getJlabel();
 
-  void updateImageLabel(String imagePath);
+  void updateImageLabel(Image imagePath, Image histogram);
 }

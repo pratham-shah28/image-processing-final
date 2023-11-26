@@ -286,10 +286,14 @@ public class ControllerPro extends Controller implements ActionListener {
         if (result == JFileChooser.APPROVE_OPTION) {
           File selectedFile = fileChooser.getSelectedFile();
           String imagePath = selectedFile.getAbsolutePath();
-          System.out.println(imagePath);
-          displayImage(view.getJlabel(), imagePath);
-          view.updateImageLabel(imagePath);
-          // setImage(imagePath); // Optionally set the image in the JLabel
+          BufferedImage image = null;
+          try {
+            image = ImageIO.read(selectedFile);
+          } catch (IOException ex) {
+            throw new RuntimeException(ex);
+          }
+          Image img = processLoadImage(image);
+          view.updateImageLabel(img, img.createHistogram());
         }
 
 
