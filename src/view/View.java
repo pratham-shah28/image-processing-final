@@ -3,8 +3,10 @@ package view;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * This is the view class which handles what is displayed to the user via command line interface.
@@ -17,6 +19,9 @@ public class View extends JFrame implements ViewInterface {
   private JButton commandButton, quitButton;
 
   private JTextField input;
+
+  private JLabel imageLabel;
+
   /**
    * Constructs the view class and initialized the set of valid commands.
    */
@@ -45,7 +50,17 @@ public class View extends JFrame implements ViewInterface {
       System.exit(0);
     });
     buttonPanel.add(quitButton);
-
+    JButton openButton = new JButton("Open Image");
+    openButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String imagePath = openImage();
+        if (imagePath != null) {
+          System.out.println("Selected Image Path: " + imagePath);
+        }
+      }
+    });
+    add(openButton, BorderLayout.SOUTH);
 
 
     commandList = new String[]{"load image-path image-name",
@@ -127,5 +142,22 @@ public class View extends JFrame implements ViewInterface {
     return command;
   }
 
+  private String openImage() {
+    JFileChooser fileChooser = new JFileChooser();
+
+    // Set file filter to allow only png, jpg, and ppm files
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "png", "jpg", "ppm");
+    fileChooser.setFileFilter(filter);
+
+    int result = fileChooser.showOpenDialog(this);
+
+    if (result == JFileChooser.APPROVE_OPTION) {
+      File selectedFile = fileChooser.getSelectedFile();
+      return selectedFile.getAbsolutePath();
+    }
+
+    // Return null if no file was selected
+    return null;
+  }
 
 }
