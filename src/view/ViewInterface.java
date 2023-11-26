@@ -2,6 +2,8 @@ package view;
 
 import java.awt.event.ActionListener;
 
+import javax.swing.*;
+
 /**
  * This interface provides a blueprint for the view class. A view is responsible to show output to
  * the user.
@@ -50,4 +52,8 @@ public interface ViewInterface {
    * @return
    */
   String getTurtleCommand();
+
+  JLabel getJlabel();
+
+  void updateImageLabel(String imagePath);
 }

@@ -1,12 +1,13 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * This is the view class which handles what is displayed to the user via command line interface.
@@ -16,25 +17,25 @@ public class View extends JFrame implements ViewInterface {
   private final String[] commandList;
   private JPanel buttonPanel;
 
-  private JButton commandButton, quitButton;
+  private JButton commandButton, quitButton, applyButton, loadButton, saveButton;
 
   private JTextField input;
+  private JComboBox<String> comboBox;
 
-  private JLabel imageLabel;
-
+  protected JLabel imageLabel;
   /**
    * Constructs the view class and initialized the set of valid commands.
    */
   public View() {
 
     super();
-    this.setTitle("Image manipulation");
+    /*this.setTitle("Image manipulation");
     this.setSize(500, 500);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setLayout(new BorderLayout());
+    this.setLayout(new BorderLayout());*/
 
 
-    buttonPanel = new JPanel();
+    /*buttonPanel = new JPanel();
     buttonPanel.setLayout(new FlowLayout());
     this.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -49,48 +50,88 @@ public class View extends JFrame implements ViewInterface {
     quitButton.addActionListener((ActionEvent e) -> {
       System.exit(0);
     });
-    buttonPanel.add(quitButton);
-    JButton openButton = new JButton("Open Image");
-    openButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        String imagePath = openImage();
-        if (imagePath != null) {
-          System.out.println("Selected Image Path: " + imagePath);
-        }
-      }
-    });
-    add(openButton, BorderLayout.SOUTH);
+    buttonPanel.add(quitButton);*/
 
+    JFrame frame = new JFrame("");
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setSize(500, 500);
+
+    // Left panel with buttons
+    JPanel leftPanel = new JPanel();
+    leftPanel.setLayout(new GridLayout(3, 2));
+    // Create an array of items for the dropdown
+    String[] items = {"red-component", "green-component", "blue-component", "flip-vertical",
+            "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
+
+    // Create a JComboBox and add the items
+    comboBox = new JComboBox<>(items);
+
+    leftPanel.add(comboBox);
+    applyButton = new JButton("Apply");
+    loadButton = new JButton("Load");
+    saveButton = new JButton("Save");
+    leftPanel.add(applyButton);
+    leftPanel.add(loadButton);
+    leftPanel.add(saveButton);
+
+    // Right panel split into two sections (up and down)
+    JPanel rightPanel = new JPanel(new BorderLayout());
+
+    // Up section
+    JPanel upSection = new JPanel();
+    upSection.setBackground(Color.LIGHT_GRAY);
+    upSection.add(new JLabel("Up Section"));
+
+    // Down section
+    JPanel downSection = new JPanel();
+    downSection.setBackground(Color.CYAN);
+    downSection.add(new JLabel("Down Section"));
+
+    rightPanel.add(upSection, BorderLayout.NORTH);
+    rightPanel.add(downSection, BorderLayout.SOUTH);
+
+    // Main panel containing both left and right panels
+    JPanel mainPanel = new JPanel(new BorderLayout());
+    mainPanel.add(leftPanel, BorderLayout.WEST);
+    mainPanel.add(rightPanel, BorderLayout.CENTER);
+
+
+    imageLabel = new JLabel();
+    imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+    mainPanel.add(imageLabel, BorderLayout.CENTER);
+
+    frame.add(mainPanel);
+    frame.setVisible(true);
 
     commandList = new String[]{"load image-path image-name",
-      "brighten factor image-name dest-image-name",
-      "vertical-flip image-name dest-image-name",
-      "horizontal-flip image-name dest-image-name",
-      "rgb-split image-name dest-image-name-red dest-image-name-green dest-image-name-blue",
-      "rgb-combine dest-image-name red-image green-image blue-image",
-      "blur image-name dest-image-name",
-      "sharpen image-name dest-image-name",
-      "value-component image-name dest-image-name",
-      "intensity-component image-name dest-image-name",
-      "luma-component image-name dest-image-name",
-      "red-component image-name dest-image-name",
-      "green-component image-name dest-image-name",
-      "blue-component image-name dest-image-name",
-      "sepia image-name dest-image-name",
-      "histogram image-name dest-image-name",
-      "color-correct image-name dest-image-name",
-      "levels-adjust b m w image-name dest-image-name",
-      "compress percentage image-name dest-image-name",
-      "blur image-name dest-image split p",
-      "sharpen image-name dest-image split p",
-      "sepia image-name dest-image split p",
-      "luma-component image-name dest-image split p",
-      "run script-file",
-      "save image-path image-name"
+            "brighten factor image-name dest-image-name",
+            "vertical-flip image-name dest-image-name",
+            "horizontal-flip image-name dest-image-name",
+            "rgb-split image-name dest-image-name-red dest-image-name-green dest-image-name-blue",
+            "rgb-combine dest-image-name red-image green-image blue-image",
+            "blur image-name dest-image-name",
+            "sharpen image-name dest-image-name",
+            "value-component image-name dest-image-name",
+            "intensity-component image-name dest-image-name",
+            "luma-component image-name dest-image-name",
+            "red-component image-name dest-image-name",
+            "green-component image-name dest-image-name",
+            "blue-component image-name dest-image-name",
+            "sepia image-name dest-image-name",
+            "histogram image-name dest-image-name",
+            "color-correct image-name dest-image-name",
+            "levels-adjust b m w image-name dest-image-name",
+            "compress percentage image-name dest-image-name",
+            "blur image-name dest-image split p",
+            "sharpen image-name dest-image split p",
+            "sepia image-name dest-image split p",
+            "luma-component image-name dest-image split p",
+            "run script-file",
+            "save image-path image-name"
     };
-    setVisible(true);
-    this.pack();
+    /*setVisible(true);
+    this.pack();*/
   }
 
   @Override
@@ -132,32 +173,37 @@ public class View extends JFrame implements ViewInterface {
 
   @Override
   public void setCommandButtonListener(ActionListener actionEvent) {
-    commandButton.addActionListener(actionEvent);
+    comboBox.addActionListener(actionEvent);
+    applyButton.addActionListener(actionEvent);
+    loadButton.addActionListener(actionEvent);
+    saveButton.addActionListener(actionEvent);
   }
 
   @Override
   public String getTurtleCommand() {
-    String command = this.input.getText();
-    this.input.setText("");
-    return command;
-  }
-
-  private String openImage() {
-    JFileChooser fileChooser = new JFileChooser();
-
-    // Set file filter to allow only png, jpg, and ppm files
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "png", "jpg", "ppm");
-    fileChooser.setFileFilter(filter);
-
-    int result = fileChooser.showOpenDialog(this);
-
-    if (result == JFileChooser.APPROVE_OPTION) {
-      File selectedFile = fileChooser.getSelectedFile();
-      return selectedFile.getAbsolutePath();
-    }
-
-    // Return null if no file was selected
     return null;
   }
 
+  @Override
+  public JLabel getJlabel() {
+    return this.imageLabel;
+  }
+
+  @Override
+  public void updateImageLabel(String imagePath) {
+    try {
+      // Read the image using BufferedImage
+      BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
+
+      // Create an ImageIcon from BufferedImage
+      ImageIcon imageIcon = new ImageIcon(bufferedImage);
+
+      // Set the ImageIcon to the JLabel
+      imageLabel.setIcon(imageIcon);
+
+    } catch (IOException ex) {
+      ex.printStackTrace();
+      JOptionPane.showMessageDialog(null, "Error loading image", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+  }
 }

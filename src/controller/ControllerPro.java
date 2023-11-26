@@ -1,15 +1,24 @@
 package controller;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+// Import the AWT Image class with an alias
 
+//  java.awt.Image;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import model.Image;
 import model.ImageCreator;
@@ -24,6 +33,9 @@ public class ControllerPro extends Controller implements ActionListener {
 
   private Map<String, Image> images;
 
+  private JLabel imageLabel;
+
+
 
   /**
    * A constructor for ControllerPro class.
@@ -37,6 +49,7 @@ public class ControllerPro extends Controller implements ActionListener {
                        ImageCreator imageCreator) {
     super(view, in, images, imageCreator);
     this.images = images;
+
 
   }
 
@@ -253,8 +266,65 @@ public class ControllerPro extends Controller implements ActionListener {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    String command = view.getTurtleCommand();
-    String status;
-    System.out.println(command);
+    // Determine which button was clicked based on the ActionCommand
+    String command = e.getActionCommand();
+    switch (command) {
+      case "Apply":
+        System.out.println("Apply button clicked!");
+        // Apply logic
+        break;
+      case "Load":
+        System.out.println("Load button clicked!");
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Set file filter to allow only png, jpg, and ppm files
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "png", "jpg", "ppm");
+        fileChooser.setFileFilter(filter);
+
+        int result = fileChooser.showOpenDialog((Component) view);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+          File selectedFile = fileChooser.getSelectedFile();
+          String imagePath = selectedFile.getAbsolutePath();
+          System.out.println(imagePath);
+          displayImage(view.getJlabel(), imagePath);
+          view.updateImageLabel(imagePath);
+          // setImage(imagePath); // Optionally set the image in the JLabel
+        }
+
+
+        // Load logic
+        break;
+      case "Save":
+        System.out.println("Save button clicked!");
+        // save logic
+        break;
+      // Add more cases as needed for other buttons
+    }
+  }
+
+//  private void displayImage(String imagePath) {
+//    ImageIcon imageIcon = new ImageIcon(imagePath);
+//    System.out.println(imageLabel.getWidth());
+//    java.awt.Image image = imageIcon.getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), java.awt.Image.SCALE_SMOOTH);
+//    imageIcon = new ImageIcon(image);
+//    imageLabel.setIcon(imageIcon);
+//  }
+
+  private static void displayImage(JLabel imageLabel, String imagePath) {
+    try {
+      // Read the image using BufferedImage
+      BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
+
+      // Create an ImageIcon from BufferedImage
+      ImageIcon imageIcon = new ImageIcon(bufferedImage);
+
+      // Set the ImageIcon to the JLabel
+      imageLabel.setIcon(imageIcon);
+
+    } catch (IOException ex) {
+      ex.printStackTrace();
+      JOptionPane.showMessageDialog(null, "Error loading image", "Error", JOptionPane.ERROR_MESSAGE);
+    }
   }
 }
