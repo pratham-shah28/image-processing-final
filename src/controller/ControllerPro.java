@@ -30,6 +30,8 @@ public class ControllerPro extends Controller implements ActionListener {
 
   private Map<String, Image> images;
 
+  private Image img;
+
 
   /**
    * A constructor for ControllerPro class.
@@ -268,26 +270,38 @@ public class ControllerPro extends Controller implements ActionListener {
         // Execute code block based on the selected item
         switch (selectedOption) {
           case "red-component":
+            img = img.redComponent();
+            view.updateImageLabel(img, img.createHistogram());
             System.out.println("red-component");
             // Add your code here for Option 1
             break;
           case "green-component":
+            img = img.greenComponent();
+            view.updateImageLabel(img, img.createHistogram());
             System.out.println("green-component");
             // Add your code here for Option 2
             break;
           case "blue-component":
+            img = img.blueComponent();
+            view.updateImageLabel(img, img.createHistogram());
             System.out.println("blue-component");
             // Add your code here for Option 3
             break;
           case "flip-vertical":
+            img = img.flipVertical();
+            view.updateImageLabel(img, img.createHistogram());
             System.out.println("flip-vertical");
             // Add your code here for Option 3
             break;
           case "flip-horizontal":
+            img = img.flipHorizontal();
+            view.updateImageLabel(img, img.createHistogram());
             System.out.println("flip-horizontal");
             // Add your code here for Option 3
             break;
           case "blur":
+            img = img.blur();
+            view.updateImageLabel(img, img.createHistogram());
             System.out.println("Blur");
             // Add your code here for Option 3
             break;
@@ -297,13 +311,19 @@ public class ControllerPro extends Controller implements ActionListener {
             break;
           case "sepia":
             System.out.println("Sepia");
+            img = img.sepia();
+            view.updateImageLabel(img, img.createHistogram());
             // Add your code here for Option 3
             break;
           case "greyscale":
+            img = img.luma();
+            view.updateImageLabel(img, img.createHistogram());
             System.out.println("greyscale");
             // Add your code here for Option 3
             break;
           case "color-correct":
+            img = img.colorCorrect();
+            view.updateImageLabel(img, img.createHistogram());
             System.out.println("color-correct");
             // Add your code here for Option 3
             break;
@@ -332,7 +352,7 @@ public class ControllerPro extends Controller implements ActionListener {
           } catch (IOException ex) {
             throw new RuntimeException(ex);
           }
-          Image img = processLoadImage(image);
+          img = processLoadImage(image);
           view.updateImageLabel(img, img.createHistogram());
         }
 
