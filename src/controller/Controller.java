@@ -489,7 +489,7 @@ public class Controller implements ControllerInterface {
     }
   }
 
-  private Image processLoadImage(BufferedImage image) {
+  protected Image processLoadImage(BufferedImage image) {
     int width = image.getWidth();
     int height = image.getHeight();
     int[][] pixelMatrix = new int[height][width];

@@ -1,13 +1,21 @@
 package controller;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import model.Image;
 import model.ImageCreator;
@@ -307,6 +315,27 @@ public class ControllerPro extends Controller implements ActionListener {
         break;
       case "Load":
         System.out.println("Load button clicked!");
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Set file filter to allow only png, jpg, and ppm files
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "png", "jpg", "ppm");
+        fileChooser.setFileFilter(filter);
+
+        int result = fileChooser.showOpenDialog((Component) view);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+          File selectedFile = fileChooser.getSelectedFile();
+          String imagePath = selectedFile.getAbsolutePath();
+          BufferedImage image = null;
+          try {
+            image = ImageIO.read(selectedFile);
+          } catch (IOException ex) {
+            throw new RuntimeException(ex);
+          }
+          Image img = processLoadImage(image);
+          view.updateImageLabel(img, img.createHistogram());
+        }
+
         // Load logic
         break;
       case "Save":

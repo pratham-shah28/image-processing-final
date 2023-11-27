@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 
@@ -55,4 +56,5 @@ public interface ViewInterface {
   JComboBox<String> getComboBox();
   JTextField getNumberTextField();
   void showDialog(String s);
+  void updateImageLabel(model.Image image, model.Image histogram);
 }
