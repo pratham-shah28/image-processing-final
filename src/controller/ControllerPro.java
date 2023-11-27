@@ -32,6 +32,10 @@ public class ControllerPro extends Controller implements ActionListener {
 
   private Image img;
 
+  private int splitPerc;
+
+  boolean split;
+
 
   /**
    * A constructor for ControllerPro class.
@@ -45,6 +49,7 @@ public class ControllerPro extends Controller implements ActionListener {
                        ImageCreator imageCreator) {
     super(view, in, images, imageCreator);
     this.images = images;
+    split = false;
 
   }
 
@@ -263,7 +268,11 @@ public class ControllerPro extends Controller implements ActionListener {
   public void actionPerformed(ActionEvent e) {
     // Determine which button was clicked based on the ActionCommand
     String command = e.getActionCommand();
+    System.out.println(command);
+    System.out.println(view.getSplit().getText());
+    System.out.println(view.saveOption());
     switch (command) {
+
       case "Apply":
         String selectedOption = (String) view.getComboBox().getSelectedItem();
         //System.out.println(selectedOption);
@@ -358,11 +367,16 @@ public class ControllerPro extends Controller implements ActionListener {
 
         // Load logic
         break;
+
+      case "Split":
+        splitPerc = Integer.parseInt(view.getSplit().getText());
+        split = !split;
+
       case "Save":
         System.out.println("Save button clicked!");
         // save logic
         break;
-      case "Submit":
+      case "Compress":
         // save logic
         String userInput = view.getNumberTextField().getText();
 
@@ -373,6 +387,8 @@ public class ControllerPro extends Controller implements ActionListener {
           // Check if the entered number is within the valid range
           if (enteredNumber >= 1 && enteredNumber <= 100) {
             // Perform an action based on the entered number
+            img = img.compress(enteredNumber);
+            view.updateImageLabel(img, img.createHistogram());
             System.out.println(enteredNumber);
           } else {
             // Display an error message for an invalid range

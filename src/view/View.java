@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
@@ -16,8 +17,18 @@ public class View extends JFrame implements ViewInterface {
   private JLabel instructionLabel;
   protected JLabel histogramLabel, imageLabel;
 
-  private JTextField input,numberTextField;
+  private JTextField input,numberTextField, textSplit;
   private JComboBox<String> comboBox;
+
+  private JToggleButton toggleButton;
+
+  private JButton popupButton;
+
+  private JPopupMenu popupMenu;
+
+  private JFrame frame;
+
+  private JPanel mainPanel;
   /**
    * Constructs the view class and initialized the set of valid commands.
    */
@@ -47,13 +58,13 @@ public class View extends JFrame implements ViewInterface {
     });
     buttonPanel.add(quitButton);*/
 
-    JFrame frame = new JFrame("");
+    frame = new JFrame("");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(500, 500);
 
     // Left panel with buttons
     JPanel leftPanel = new JPanel();
-    leftPanel.setLayout(new GridLayout(3, 2));
+    leftPanel.setLayout(new GridLayout(3, 3));
     // Create an array of items for the dropdown
     String[] items = {"red-component", "green-component", "blue-component", "flip-vertical",
             "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
@@ -65,21 +76,25 @@ public class View extends JFrame implements ViewInterface {
 
     // JTextField for user input
     numberTextField = new JTextField(10);
-
+    textSplit = new JTextField(10);
     // JButton to trigger an action
-    submitButton = new JButton("Submit");
+    submitButton = new JButton("Compress");
 
 
     leftPanel.add(comboBox);
     applyButton = new JButton("Apply");
     loadButton = new JButton("Load");
     saveButton = new JButton("Save");
+    toggleButton = new JToggleButton("Split");
     leftPanel.add(applyButton);
     leftPanel.add(loadButton);
     leftPanel.add(saveButton);
     leftPanel.add(instructionLabel);
     leftPanel.add(numberTextField);
     leftPanel.add(submitButton);
+    leftPanel.add(toggleButton);
+    leftPanel.add(textSplit);
+    popupMenu = createPopupMenu();
 
     // Right panel split into two sections (up and down)
     //JPanel rightPanel = new JPanel(new BorderLayout());
@@ -98,7 +113,7 @@ public class View extends JFrame implements ViewInterface {
     //rightPanel.add(downSection, BorderLayout.SOUTH);
 
     // Main panel containing both left and right panels
-    JPanel mainPanel = new JPanel(new BorderLayout());
+    mainPanel = new JPanel(new BorderLayout());
     mainPanel.add(leftPanel, BorderLayout.WEST);
     imageLabel = new JLabel();
     imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -125,7 +140,6 @@ public class View extends JFrame implements ViewInterface {
     frame.add(mainPanel);
     frame.setVisible(true);
     frame.pack();
-
 
     commandList = new String[]{"load image-path image-name",
       "brighten factor image-name dest-image-name",
@@ -201,8 +215,17 @@ public class View extends JFrame implements ViewInterface {
     return numberTextField;
   }
 
+  public JTextField getSplit(){
+    return textSplit;
+  }
+
   public void showDialog(String s){
     JOptionPane.showMessageDialog(null, s);
+  }
+
+  public int saveOption() {
+    int result = JOptionPane.showConfirmDialog(frame, "Do you want to save this", "Save",JOptionPane.YES_NO_OPTION);
+    return result;
   }
 
   @Override
@@ -213,6 +236,17 @@ public class View extends JFrame implements ViewInterface {
     saveButton.addActionListener(actionEvent);
     numberTextField.addActionListener(actionEvent);
     submitButton.addActionListener(actionEvent);
+    toggleButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        boolean selected = toggleButton.isSelected();
+        if (selected) {
+          System.out.println("Split");
+        } else {
+          System.out.println("No Split");
+        }
+      }
+    });
   }
 
   @Override
@@ -262,7 +296,15 @@ public class View extends JFrame implements ViewInterface {
     histogramLabel.setIcon(imageIconHistogram);
     imageLabel.setIcon(imageIcon);
     // scrollPane.getViewport().setPreferredSize(new Dimension(300, 500));
+  }
 
+  private JPopupMenu createPopupMenu() {
+    JPopupMenu popupMenu = new JPopupMenu();
+    JMenuItem menuItem1 = new JMenuItem("Save");
+    JMenuItem menuItem2 = new JMenuItem("Discard");
+    popupMenu.add(menuItem1);
+    popupMenu.add(menuItem2);
+    return popupMenu;
   }
 
 }
