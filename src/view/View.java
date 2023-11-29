@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -15,9 +16,10 @@ import javax.swing.event.DocumentListener;
  */
 public class View extends JFrame implements ViewInterface {
   private final String[] commandList;
-  private JButton applyButton, loadButton, saveButton, compressButton, splitPercButton, popupButton;
+  private JButton applyButton, loadButton, saveButton, compressButton,
+          splitPercButton, popupButton, levelsAdjustButton;
   protected JLabel histogramLabel, imageLabel;
-  private JTextField compressInput, splitInput;
+  private JTextField compressInput, splitInput, bInput, mInput, wInput;
   private JComboBox<String> imageOperationList;
   private JToggleButton toggleButton;
   private JScrollPane scrollPane;
@@ -129,6 +131,8 @@ public class View extends JFrame implements ViewInterface {
     saveButton.addActionListener(actionEvent);
     compressInput.addActionListener(actionEvent);
     compressButton.addActionListener(actionEvent);
+    levelsAdjustButton.addActionListener(actionEvent);
+    splitPercButton.addActionListener(actionEvent);
     toggleButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -136,13 +140,14 @@ public class View extends JFrame implements ViewInterface {
         if (selected) {
           splitInput.setEditable(true);
           splitPercButton.setEnabled(true);
+          toggleButton.setText("Disable Split Mode");
         } else {
           splitInput.setEditable(false);
           splitPercButton.setEnabled(false);
+          toggleButton.setText("Enable Split Mode");
         }
       }
     });
-    splitPercButton.addActionListener(actionEvent);
   }
 
   @Override
@@ -219,7 +224,12 @@ public class View extends JFrame implements ViewInterface {
 
     // Upper part of the left pane
     JPanel upperLeftPanel = new JPanel(new GridLayout(0,2,5,10));
-    JPanel middlePanel = new JPanel();
+    JPanel levelsAdjustPanel = new JPanel(new GridLayout(0,3));
+    JPanel splitPanel = new JPanel();
+    Border leftUpperPanelBorder = BorderFactory.createTitledBorder("Operations");
+    Border leftSplitPanelBorder = BorderFactory.createTitledBorder("Split Mode");
+    Border leftBottomPanelBorder = BorderFactory.createTitledBorder("Histogram");
+
     // Create an array of items for the dropdown
     String[] items = {"red-component", "green-component", "blue-component", "flip-vertical",
             "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
@@ -230,11 +240,16 @@ public class View extends JFrame implements ViewInterface {
     compressInput = new JTextField(10);
     compressInput.setToolTipText("Enter Compression percentage");
     compressButton = new JButton("Compress");
-    splitInput = new JTextField(10);
-    splitInput.setEditable(false);
-    splitInput.setToolTipText("Enter Split Percentage");
-    splitPercButton = new JButton("Set split percentage");
-    splitPercButton.setEnabled(false);
+    bInput = new JTextField();
+    bInput.setToolTipText("Enter 'b' value");
+    mInput = new JTextField();
+    mInput.setToolTipText("Enter 'm' value");
+    wInput = new JTextField();
+    wInput.setToolTipText("Enter 'w' value");
+    levelsAdjustButton = new JButton("Adjust level");
+    levelsAdjustPanel.add(bInput);
+    levelsAdjustPanel.add(mInput);
+    levelsAdjustPanel.add(wInput);
 
     upperLeftPanel.add(loadButton);
     upperLeftPanel.add(saveButton);
@@ -242,11 +257,22 @@ public class View extends JFrame implements ViewInterface {
     upperLeftPanel.add(applyButton);
     upperLeftPanel.add(compressInput);
     upperLeftPanel.add(compressButton);
-    upperLeftPanel.add(splitInput);
-    upperLeftPanel.add(splitPercButton);
+    upperLeftPanel.add(levelsAdjustPanel);
+    upperLeftPanel.add(levelsAdjustButton);
+    upperLeftPanel.setBorder(leftUpperPanelBorder);
 
-    toggleButton = new JToggleButton("Split");
-    middlePanel.add(toggleButton, BorderLayout.NORTH);
+
+    splitInput = new JTextField(10);
+    splitInput.setEditable(false);
+    splitInput.setToolTipText("Enter Split Percentage");
+    splitPercButton = new JButton("Set split percentage");
+    splitPercButton.setEnabled(false);
+    toggleButton = new JToggleButton("Enable Split Mode");
+    toggleButton.setToolTipText("Click to toggle between preview and normal mode.");
+    splitPanel.add(splitInput);
+    splitPanel.add(splitPercButton);
+    splitPanel.add(toggleButton, BorderLayout.NORTH);
+    splitPanel.setBorder(leftSplitPanelBorder);
     popupMenu = createPopupMenu();
 
     // Bottom part of the left pane to display the image
@@ -254,10 +280,11 @@ public class View extends JFrame implements ViewInterface {
     histogramLabel = new JLabel();
     histogramLabel.setPreferredSize(new Dimension(256, 256));
     bottomLeftPanel.add(histogramLabel);
+    bottomLeftPanel.setBorder(leftBottomPanelBorder);
 
     // Add upper and bottom panels to the left pane
     leftPanel.add(upperLeftPanel, BorderLayout.NORTH);
-    leftPanel.add(middlePanel, BorderLayout.CENTER);
+    leftPanel.add(splitPanel, BorderLayout.CENTER);
     leftPanel.add(bottomLeftPanel, BorderLayout.SOUTH);
 
     // Right Pane

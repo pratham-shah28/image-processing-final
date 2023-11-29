@@ -270,11 +270,12 @@ public class ControllerPro extends Controller implements ActionListener {
   public void actionPerformed(ActionEvent e) {
     // Determine which button was clicked based on the ActionCommand
     split = view.getSplitMode();
+    System.out.println(split);
     String command = e.getActionCommand();
 //    System.out.println(command);
 //    System.out.println(view.getSplit().getText());
 //    System.out.println("SPLIT" + split);
-    System.out.println("COMMADN" + command);
+    System.out.println("COMMAND: " + command);
     // System.out.println(view.saveOption());
     switch (command) {
       case "Apply":
@@ -386,7 +387,7 @@ public class ControllerPro extends Controller implements ActionListener {
         // Load logic
         break;
 
-      case "Split":
+      case "Enable Split Mode":
         splitPerc = Integer.parseInt(view.getSplit().getText());
         split = !split;
 
