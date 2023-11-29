@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  * This is the view class which handles what is displayed to the user via command line interface.
@@ -13,7 +15,7 @@ import javax.swing.*;
  */
 public class View extends JFrame implements ViewInterface {
   private final String[] commandList;
-  private JButton applyButton, loadButton, saveButton,submitButton;
+  private JButton applyButton, loadButton, saveButton,submitButton, splitPercSubmit;
   private JLabel instructionLabel;
   protected JLabel histogramLabel, imageLabel;
 
@@ -77,15 +79,36 @@ public class View extends JFrame implements ViewInterface {
     // JTextField for user input
     numberTextField = new JTextField(10);
     textSplit = new JTextField(10);
+    textSplit.setEditable(false);
+//    textSplit.getDocument().addDocumentListener(new DocumentListener() {
+//      @Override
+//      public void insertUpdate(DocumentEvent e) {
+//        updateValue(textSplit.getText());
+//      }
+//
+//      @Override
+//      public void removeUpdate(DocumentEvent e) {
+//        updateValue(textSplit.getText());
+//      }
+//
+//      @Override
+//      public void changedUpdate(DocumentEvent e) {
+//        updateValue(textSplit.getText());
+//      }
+//    });
+
     // JButton to trigger an action
     submitButton = new JButton("Compress");
+
+    splitPercSubmit = new JButton("Set split percentage");
+    splitPercSubmit.setEnabled(false);
 
 
     leftPanel.add(comboBox);
     applyButton = new JButton("Apply");
     loadButton = new JButton("Load");
     saveButton = new JButton("Save");
-    toggleButton = new JToggleButton("Split");
+    toggleButton = new JToggleButton("Split Mode");
     leftPanel.add(applyButton);
     leftPanel.add(loadButton);
     leftPanel.add(saveButton);
@@ -94,8 +117,8 @@ public class View extends JFrame implements ViewInterface {
     leftPanel.add(submitButton);
     leftPanel.add(toggleButton);
     leftPanel.add(textSplit);
+    leftPanel.add(splitPercSubmit);
     popupMenu = createPopupMenu();
-
     // Right panel split into two sections (up and down)
     //JPanel rightPanel = new JPanel(new BorderLayout());
 
@@ -236,14 +259,19 @@ public class View extends JFrame implements ViewInterface {
     saveButton.addActionListener(actionEvent);
     numberTextField.addActionListener(actionEvent);
     submitButton.addActionListener(actionEvent);
+    splitPercSubmit.addActionListener(actionEvent);
     toggleButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         boolean selected = toggleButton.isSelected();
         if (selected) {
-          System.out.println("Split");
+          //System.out.println("Split mode");
+          textSplit.setEditable(true);
+          splitPercSubmit.setEnabled(true);
         } else {
-          System.out.println("No Split");
+          //System.out.println("No Split mode");
+          textSplit.setEditable(false);
+          splitPercSubmit.setEnabled(false);
         }
       }
     });
@@ -305,6 +333,16 @@ public class View extends JFrame implements ViewInterface {
     popupMenu.add(menuItem1);
     popupMenu.add(menuItem2);
     return popupMenu;
+  }
+
+  @Override
+  public boolean getSplitMode() {
+    return toggleButton.isSelected();
+  }
+
+  private static void updateValue(String value) {
+    System.out.println("Value changed: " + value);
+    // Do something with the updated value, for example, pass it to another method or class.
   }
 
 }

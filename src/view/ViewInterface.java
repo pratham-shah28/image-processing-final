@@ -60,4 +60,6 @@ public interface ViewInterface {
   void updateImageLabel(model.Image image, model.Image histogram);
 
   int saveOption();
+
+  boolean getSplitMode();
 }

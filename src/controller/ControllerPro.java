@@ -32,7 +32,9 @@ public class ControllerPro extends Controller implements ActionListener {
 
   private Image img;
 
-  private int splitPerc;
+  private Image imgFinal;
+
+  private Integer splitPerc;
 
   boolean split;
 
@@ -267,80 +269,100 @@ public class ControllerPro extends Controller implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     // Determine which button was clicked based on the ActionCommand
+    split = view.getSplitMode();
     String command = e.getActionCommand();
-    System.out.println(command);
-    System.out.println(view.getSplit().getText());
-    System.out.println(view.saveOption());
+//    System.out.println(command);
+//    System.out.println(view.getSplit().getText());
+//    System.out.println("SPLIT" + split);
+    System.out.println("COMMADN" + command);
+    // System.out.println(view.saveOption());
     switch (command) {
-
       case "Apply":
         String selectedOption = (String) view.getComboBox().getSelectedItem();
-        //System.out.println(selectedOption);
-        // Execute code block based on the selected item
-        switch (selectedOption) {
-          case "red-component":
-            img = img.redComponent();
-            view.updateImageLabel(img, img.createHistogram());
-            System.out.println("red-component");
-            // Add your code here for Option 1
-            break;
-          case "green-component":
-            img = img.greenComponent();
-            view.updateImageLabel(img, img.createHistogram());
-            System.out.println("green-component");
-            // Add your code here for Option 2
-            break;
-          case "blue-component":
-            img = img.blueComponent();
-            view.updateImageLabel(img, img.createHistogram());
-            System.out.println("blue-component");
-            // Add your code here for Option 3
-            break;
-          case "flip-vertical":
-            img = img.flipVertical();
-            view.updateImageLabel(img, img.createHistogram());
-            System.out.println("flip-vertical");
-            // Add your code here for Option 3
-            break;
-          case "flip-horizontal":
-            img = img.flipHorizontal();
-            view.updateImageLabel(img, img.createHistogram());
-            System.out.println("flip-horizontal");
-            // Add your code here for Option 3
-            break;
-          case "blur":
-            img = img.blur();
-            view.updateImageLabel(img, img.createHistogram());
-            System.out.println("Blur");
-            // Add your code here for Option 3
-            break;
-          case "sharpen":
-            System.out.println("Sharpen");
-            // Add your code here for Option 3
-            break;
-          case "sepia":
-            System.out.println("Sepia");
-            img = img.sepia();
-            view.updateImageLabel(img, img.createHistogram());
-            // Add your code here for Option 3
-            break;
-          case "greyscale":
-            img = img.luma();
-            view.updateImageLabel(img, img.createHistogram());
-            System.out.println("greyscale");
-            // Add your code here for Option 3
-            break;
-          case "color-correct":
-            img = img.colorCorrect();
-            view.updateImageLabel(img, img.createHistogram());
-            System.out.println("color-correct");
-            // Add your code here for Option 3
-            break;
-          default:
-            System.out.println("Invalid option");
-            break;
+        if ("red-component".equals(selectedOption)) {
+          images.put("newImage", img.redComponent());
+          img = img.redComponent();
+//          view.updateImageLabel(img, img.createHistogram());
+
+        } else if ("green-component".equals(selectedOption)) {
+          images.put("newImage", img.greenComponent());
+          img = img.greenComponent();
+//          view.updateImageLabel(img, img.createHistogram());
+
+
+        } else if ("blue-component".equals(selectedOption)) {
+          images.put("newImage", img.blueComponent());
+          img = img.blueComponent();
+
+
+        } else if ("flip-vertical".equals(selectedOption)) {
+          images.put("newImage", img.flipVertical());
+          img = img.flipVertical();
+
+
+        } else if ("flip-horizontal".equals(selectedOption)) {
+          images.put("newImage", img.flipHorizontal());
+          img = img.flipHorizontal();
+
+
+        } else if ("blur".equals(selectedOption)) {
+          images.put("newImage", img.blur());
+          img = img.blur();
+
+
+        } else if ("sharpen".equals(selectedOption)) {
+          images.put("newImage", img.sharpen());
+
+        } else if ("sepia".equals(selectedOption)) {
+          images.put("newImage", img.sepia());
+          img = img.sepia();
+
+          // Add your code here for Option 8
+        } else if ("greyscale".equals(selectedOption)) {
+          images.put("newImage", img.luma());
+          img = img.luma();
+
+          System.out.println("greyscale");
+
+        } else if ("color-correct".equals(selectedOption)) {
+          images.put("newImage", img.colorCorrect());
+          img = img.colorCorrect();
+
+          System.out.println("color-correct");
+
         }
-        // Apply logic
+        if (split) {
+          System.out.println(view.getSplit().getText());
+          if (!(view.getSplit().getText().equals(""))) {
+            try {
+              splitPerc = Integer.parseInt(view.getSplit().getText());
+            } catch (NumberFormatException ex) {
+              view.showDialog("Please enter a valid integer.");
+            }
+          }
+          else {
+            splitPerc = 50;
+          }
+          System.out.println(splitPerc);
+
+          if (splitPerc >= 1 && splitPerc <= 100) {
+//          if (splitPerc == null) {
+//            splitPerc = 50;
+//          }
+//          imgFinal = images.get("newImage").applySplit(images.get("newImage"),splitPerc);
+            view.updateImageLabel(images.get("newImage").applySplit(images.get("originalImage"), splitPerc), images.get("newImage").applySplit(images.get("newImage"), splitPerc).createHistogram());
+            if (view.saveOption() == 0) {
+              images.put("originalImage", images.get("newImage"));
+            } else {
+              images.put("newImage", images.get("originalImage"));
+            }
+          }
+          else {
+            view.showDialog("Please enter a number between 1 and 100.");
+            break;
+          }
+          view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
+        }
         break;
       case "Load":
         System.out.println("Load button clicked!");
@@ -362,15 +384,47 @@ public class ControllerPro extends Controller implements ActionListener {
             throw new RuntimeException(ex);
           }
           img = processLoadImage(image);
+          images.put("originalImage", img);
+          images.put("newImage", img);
           view.updateImageLabel(img, img.createHistogram());
         }
 
         // Load logic
         break;
 
-      case "Split":
+      case "Split Mode":
         splitPerc = Integer.parseInt(view.getSplit().getText());
         split = !split;
+
+      case "Set split percentage":
+        if (!(view.getSplit().getText().equals(""))) {
+          try {
+            splitPerc = Integer.parseInt(view.getSplit().getText());
+          } catch (NumberFormatException ex) {
+            view.showDialog("Please enter a valid integer.");
+          }
+        }
+        else {
+          splitPerc = 50;
+        }
+
+        if (splitPerc >= 1 && splitPerc <= 100) {
+//          if (splitPerc == null) {
+//            splitPerc = 50;
+//          }
+//          imgFinal = images.get("newImage").applySplit(images.get("newImage"),splitPerc);
+          view.updateImageLabel(images.get("newImage").applySplit(images.get("originalImage"), splitPerc), images.get("newImage").applySplit(images.get("newImage"), splitPerc).createHistogram());
+          if (view.saveOption() == 0) {
+            images.put("originalImage", images.get("newImage"));
+          } else {
+            images.put("newImage", images.get("originalImage"));
+          }
+        }
+        else {
+          view.showDialog("Please enter a number between 1 and 100.");
+          break;
+        }
+        view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
 
       case "Save":
         System.out.println("Save button clicked!");
