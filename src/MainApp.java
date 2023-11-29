@@ -27,6 +27,7 @@ public class MainApp {
    * @param args command line arguments as strings.
    */
   public static void main(String[] args) {
+    System.out.println("lo");
     if (args.length == 0) {
       System.out.println(3);
       InputStream in = System.in;
