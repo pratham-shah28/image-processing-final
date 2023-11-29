@@ -7,8 +7,6 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 /**
  * This is the view class which handles what is displayed to the user via command line interface.
@@ -29,10 +27,8 @@ public class View extends JFrame implements ViewInterface {
    * Constructs the view class and initialized the set of valid commands.
    */
   public View() {
-
     super();
     buildGUI();
-
 
     commandList = new String[]{"load image-path image-name",
             "brighten factor image-name dest-image-name",
@@ -60,8 +56,6 @@ public class View extends JFrame implements ViewInterface {
             "run script-file",
             "save image-path image-name"
     };
-    /*setVisible(true);
-    this.pack();*/
   }
 
   @Override
@@ -119,8 +113,8 @@ public class View extends JFrame implements ViewInterface {
   }
 
   public int saveOption() {
-    int result = JOptionPane.showConfirmDialog(this, "Do you want to save this", "Save", JOptionPane.YES_NO_OPTION);
-    return result;
+    return JOptionPane.showConfirmDialog(this, "Do you want to save this",
+            "Save", JOptionPane.YES_NO_OPTION);
   }
 
   @Override
