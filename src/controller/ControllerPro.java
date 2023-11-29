@@ -332,7 +332,6 @@ public class ControllerPro extends Controller implements ActionListener {
 
         }
         if (split) {
-          System.out.println(view.getSplit().getText());
           if (!(view.getSplit().getText().equals(""))) {
             try {
               splitPerc = Integer.parseInt(view.getSplit().getText());
@@ -343,32 +342,28 @@ public class ControllerPro extends Controller implements ActionListener {
           else {
             splitPerc = 50;
           }
-          System.out.println(splitPerc);
-
           if (splitPerc >= 1 && splitPerc <= 100) {
-//          if (splitPerc == null) {
-//            splitPerc = 50;
-//          }
-//          imgFinal = images.get("newImage").applySplit(images.get("newImage"),splitPerc);
-            view.updateImageLabel(images.get("newImage").applySplit(images.get("originalImage"), splitPerc), images.get("newImage").applySplit(images.get("newImage"), splitPerc).createHistogram());
+            view.updateImageLabel(images.get("newImage").applySplit(images.get("originalImage"), splitPerc),
+                    images.get("newImage").applySplit(images.get("newImage"), splitPerc).createHistogram());
             if (view.saveOption() == 0) {
-              images.put("originalImage", images.get("newImage"));
+              images.put("newImage", img);
+              images.put("originalImage", img);
             } else {
-              images.put("newImage", images.get("originalImage"));
+              images.put("newImage",images.get("newImage").applySplit(images.get("originalImage"), splitPerc) );
             }
           }
           else {
             view.showDialog("Please enter a number between 1 and 100.");
             break;
           }
-          view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
+
         }
+        view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
         break;
       case "Load":
         System.out.println("Load button clicked!");
         JFileChooser fileChooser = new JFileChooser();
 
-        // Set file filter to allow only png, jpg, and ppm files
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "png", "jpg", "ppm");
         fileChooser.setFileFilter(filter);
 
@@ -376,7 +371,6 @@ public class ControllerPro extends Controller implements ActionListener {
 
         if (result == JFileChooser.APPROVE_OPTION) {
           File selectedFile = fileChooser.getSelectedFile();
-          String imagePath = selectedFile.getAbsolutePath();
           BufferedImage image = null;
           try {
             image = ImageIO.read(selectedFile);
@@ -392,7 +386,7 @@ public class ControllerPro extends Controller implements ActionListener {
         // Load logic
         break;
 
-      case "Split Mode":
+      case "Split":
         splitPerc = Integer.parseInt(view.getSplit().getText());
         split = !split;
 
@@ -413,11 +407,14 @@ public class ControllerPro extends Controller implements ActionListener {
 //            splitPerc = 50;
 //          }
 //          imgFinal = images.get("newImage").applySplit(images.get("newImage"),splitPerc);
-          view.updateImageLabel(images.get("newImage").applySplit(images.get("originalImage"), splitPerc), images.get("newImage").applySplit(images.get("newImage"), splitPerc).createHistogram());
+          System.out.println("here");
+          //view.updateImageLabel(img, img.createHistogram());
+          view.updateImageLabel(img.applySplit(images.get("originalImage"), splitPerc), images.get("newImage").applySplit(images.get("newImage"), splitPerc).createHistogram());
           if (view.saveOption() == 0) {
             images.put("originalImage", images.get("newImage"));
           } else {
-            images.put("newImage", images.get("originalImage"));
+//            images.put("newImage", images.get("originalImage"));
+            images.put("newImage",images.get("newImage").applySplit(images.get("originalImage"), splitPerc) );
           }
         }
         else {
@@ -432,7 +429,7 @@ public class ControllerPro extends Controller implements ActionListener {
         break;
       case "Compress":
         // save logic
-        String userInput = view.getNumberTextField().getText();
+        String userInput = view.getCompressInput().getText();
 
         try {
           // Parse the input as an integer

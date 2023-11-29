@@ -15,180 +15,48 @@ import javax.swing.event.DocumentListener;
  */
 public class View extends JFrame implements ViewInterface {
   private final String[] commandList;
-  private JButton applyButton, loadButton, saveButton,submitButton, splitPercSubmit;
-  private JLabel instructionLabel;
+  private JButton applyButton, loadButton, saveButton, compressButton, splitPercButton, popupButton;
   protected JLabel histogramLabel, imageLabel;
-
-  private JTextField input,numberTextField, textSplit;
-  private JComboBox<String> comboBox;
-
+  private JTextField compressInput, splitInput;
+  private JComboBox<String> imageOperationList;
   private JToggleButton toggleButton;
-
-  private JButton popupButton;
-
+  private JScrollPane scrollPane;
   private JPopupMenu popupMenu;
 
-  private JFrame frame;
-
-  private JPanel mainPanel;
   /**
    * Constructs the view class and initialized the set of valid commands.
    */
   public View() {
 
     super();
-    /*this.setTitle("Image manipulation");
-    this.setSize(500, 500);
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setLayout(new BorderLayout());*/
+    buildGUI();
 
-
-    /*buttonPanel = new JPanel();
-    buttonPanel.setLayout(new FlowLayout());
-    this.add(buttonPanel, BorderLayout.SOUTH);
-
-    //input textfield
-    input = new JTextField(15);
-    buttonPanel.add(input);
-
-    commandButton = new JButton("Execute");
-    buttonPanel.add(commandButton);
-
-    quitButton = new JButton("Quit");
-    quitButton.addActionListener((ActionEvent e) -> {
-      System.exit(0);
-    });
-    buttonPanel.add(quitButton);*/
-
-    frame = new JFrame("");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(500, 500);
-
-    // Left panel with buttons
-    JPanel leftPanel = new JPanel();
-    leftPanel.setLayout(new GridLayout(3, 3));
-    // Create an array of items for the dropdown
-    String[] items = {"red-component", "green-component", "blue-component", "flip-vertical",
-            "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
-
-    // Create a JComboBox and add the items
-    comboBox = new JComboBox<>(items);
-    // JLabel for instructions
-    instructionLabel = new JLabel("Enter compression percentage:");
-
-    // JTextField for user input
-    numberTextField = new JTextField(10);
-    textSplit = new JTextField(10);
-    textSplit.setEditable(false);
-//    textSplit.getDocument().addDocumentListener(new DocumentListener() {
-//      @Override
-//      public void insertUpdate(DocumentEvent e) {
-//        updateValue(textSplit.getText());
-//      }
-//
-//      @Override
-//      public void removeUpdate(DocumentEvent e) {
-//        updateValue(textSplit.getText());
-//      }
-//
-//      @Override
-//      public void changedUpdate(DocumentEvent e) {
-//        updateValue(textSplit.getText());
-//      }
-//    });
-
-    // JButton to trigger an action
-    submitButton = new JButton("Compress");
-
-    splitPercSubmit = new JButton("Set split percentage");
-    splitPercSubmit.setEnabled(false);
-
-
-    leftPanel.add(comboBox);
-    applyButton = new JButton("Apply");
-    loadButton = new JButton("Load");
-    saveButton = new JButton("Save");
-    toggleButton = new JToggleButton("Split Mode");
-    leftPanel.add(applyButton);
-    leftPanel.add(loadButton);
-    leftPanel.add(saveButton);
-    leftPanel.add(instructionLabel);
-    leftPanel.add(numberTextField);
-    leftPanel.add(submitButton);
-    leftPanel.add(toggleButton);
-    leftPanel.add(textSplit);
-    leftPanel.add(splitPercSubmit);
-    popupMenu = createPopupMenu();
-    // Right panel split into two sections (up and down)
-    //JPanel rightPanel = new JPanel(new BorderLayout());
-
-    // Up section
-    //JPanel upSection = new JPanel();
-    //upSection.setBackground(Color.LIGHT_GRAY);
-    //upSection.add(new JLabel("Up Section"));
-
-    // Down section
-    //JPanel downSection = new JPanel();
-    //downSection.setBackground(Color.CYAN);
-    //downSection.add(new JLabel("Down Section"));
-
-    //rightPanel.add(upSection, BorderLayout.NORTH);
-    //rightPanel.add(downSection, BorderLayout.SOUTH);
-
-    // Main panel containing both left and right panels
-    mainPanel = new JPanel(new BorderLayout());
-    mainPanel.add(leftPanel, BorderLayout.WEST);
-    imageLabel = new JLabel();
-    imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    //imageLabel.setVerticalAlignment(SwingConstants.CENTER);
-    // imageLabel.setPreferredSize(new Dimension(1000, 2000));
-    JScrollPane scrollPane = new JScrollPane(imageLabel);
-//    scrollPane.setPreferredSize(new Dimension(1000, 2000));
-    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-//    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-
-    histogramLabel = new JLabel();
-    histogramLabel.setPreferredSize(new Dimension(256, 256));
-//    histogramLabel.setHorizontalAlignment(SwingConstants.SOUTH);
-//    histogramLabel.setVerticalAlignment(SwingConstants.SOUTH);
-    // histogramLabel.setHorizontalAlignment(SwingConstants.WEST);
-    // histogramLabel.setVerticalAlignment(SwingConstants.SOUTH);
-    //mainPanel.add(imageLabel, BorderLayout.CENTER);
-
-    // mainPanel.add(histogramLabel, BorderLayout.SOUTH);
-    leftPanel.add(histogramLabel, BorderLayout.SOUTH);
-    mainPanel.add(scrollPane, BorderLayout.CENTER);
-    frame.add(mainPanel);
-    frame.setVisible(true);
-    frame.pack();
 
     commandList = new String[]{"load image-path image-name",
-      "brighten factor image-name dest-image-name",
-      "vertical-flip image-name dest-image-name",
-      "horizontal-flip image-name dest-image-name",
-      "rgb-split image-name dest-image-name-red dest-image-name-green dest-image-name-blue",
-      "rgb-combine dest-image-name red-image green-image blue-image",
-      "blur image-name dest-image-name",
-      "sharpen image-name dest-image-name",
-      "value-component image-name dest-image-name",
-      "intensity-component image-name dest-image-name",
-      "luma-component image-name dest-image-name",
-      "red-component image-name dest-image-name",
-      "green-component image-name dest-image-name",
-      "blue-component image-name dest-image-name",
-      "sepia image-name dest-image-name",
-      "histogram image-name dest-image-name",
-      "color-correct image-name dest-image-name",
-      "levels-adjust b m w image-name dest-image-name",
-      "compress percentage image-name dest-image-name",
-      "blur image-name dest-image split p",
-      "sharpen image-name dest-image split p",
-      "sepia image-name dest-image split p",
-      "luma-component image-name dest-image split p",
-      "run script-file",
-      "save image-path image-name"
+            "brighten factor image-name dest-image-name",
+            "vertical-flip image-name dest-image-name",
+            "horizontal-flip image-name dest-image-name",
+            "rgb-split image-name dest-image-name-red dest-image-name-green dest-image-name-blue",
+            "rgb-combine dest-image-name red-image green-image blue-image",
+            "blur image-name dest-image-name",
+            "sharpen image-name dest-image-name",
+            "value-component image-name dest-image-name",
+            "intensity-component image-name dest-image-name",
+            "luma-component image-name dest-image-name",
+            "red-component image-name dest-image-name",
+            "green-component image-name dest-image-name",
+            "blue-component image-name dest-image-name",
+            "sepia image-name dest-image-name",
+            "histogram image-name dest-image-name",
+            "color-correct image-name dest-image-name",
+            "levels-adjust b m w image-name dest-image-name",
+            "compress percentage image-name dest-image-name",
+            "blur image-name dest-image split p",
+            "sharpen image-name dest-image split p",
+            "sepia image-name dest-image split p",
+            "luma-component image-name dest-image split p",
+            "run script-file",
+            "save image-path image-name"
     };
     /*setVisible(true);
     this.pack();*/
@@ -230,51 +98,51 @@ public class View extends JFrame implements ViewInterface {
     }
     System.out.println("-------------------------------------------------------------------------");
   }
+
   public JComboBox<String> getComboBox() {
-    return comboBox;
+    return imageOperationList;
   }
 
-  public JTextField getNumberTextField(){
-    return numberTextField;
+  @Override
+  public JTextField getCompressInput() {
+    return compressInput;
   }
 
-  public JTextField getSplit(){
-    return textSplit;
+  public JTextField getSplit() {
+    return splitInput;
   }
 
-  public void showDialog(String s){
+  public void showDialog(String s) {
     JOptionPane.showMessageDialog(null, s);
   }
 
   public int saveOption() {
-    int result = JOptionPane.showConfirmDialog(frame, "Do you want to save this", "Save",JOptionPane.YES_NO_OPTION);
+    int result = JOptionPane.showConfirmDialog(this, "Do you want to save this", "Save", JOptionPane.YES_NO_OPTION);
     return result;
   }
 
   @Override
   public void setCommandButtonListener(ActionListener actionEvent) {
-    comboBox.addActionListener(actionEvent);
+    imageOperationList.addActionListener(actionEvent);
     applyButton.addActionListener(actionEvent);
     loadButton.addActionListener(actionEvent);
     saveButton.addActionListener(actionEvent);
-    numberTextField.addActionListener(actionEvent);
-    submitButton.addActionListener(actionEvent);
-    splitPercSubmit.addActionListener(actionEvent);
+    compressInput.addActionListener(actionEvent);
+    compressButton.addActionListener(actionEvent);
     toggleButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         boolean selected = toggleButton.isSelected();
         if (selected) {
-          //System.out.println("Split mode");
-          textSplit.setEditable(true);
-          splitPercSubmit.setEnabled(true);
+          splitInput.setEditable(true);
+          splitPercButton.setEnabled(true);
         } else {
-          //System.out.println("No Split mode");
-          textSplit.setEditable(false);
-          splitPercSubmit.setEnabled(false);
+          splitInput.setEditable(false);
+          splitPercButton.setEnabled(false);
         }
       }
     });
+    splitPercButton.addActionListener(actionEvent);
   }
 
   @Override
@@ -343,6 +211,75 @@ public class View extends JFrame implements ViewInterface {
   private static void updateValue(String value) {
     System.out.println("Value changed: " + value);
     // Do something with the updated value, for example, pass it to another method or class.
+  }
+
+
+  private void buildGUI() {
+    JPanel leftPanel = new JPanel(new BorderLayout());
+
+    // Upper part of the left pane
+    JPanel upperLeftPanel = new JPanel(new GridLayout(0,2,5,10));
+    JPanel middlePanel = new JPanel();
+    // Create an array of items for the dropdown
+    String[] items = {"red-component", "green-component", "blue-component", "flip-vertical",
+            "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
+    imageOperationList = new JComboBox<>(items);
+    applyButton = new JButton("Apply");
+    loadButton = new JButton("Load");
+    saveButton = new JButton("Save");
+    compressInput = new JTextField(10);
+    compressInput.setToolTipText("Enter Compression percentage");
+    compressButton = new JButton("Compress");
+    splitInput = new JTextField(10);
+    splitInput.setEditable(false);
+    splitInput.setToolTipText("Enter Split Percentage");
+    splitPercButton = new JButton("Set split percentage");
+    splitPercButton.setEnabled(false);
+
+    upperLeftPanel.add(loadButton);
+    upperLeftPanel.add(saveButton);
+    upperLeftPanel.add(imageOperationList);
+    upperLeftPanel.add(applyButton);
+    upperLeftPanel.add(compressInput);
+    upperLeftPanel.add(compressButton);
+    upperLeftPanel.add(splitInput);
+    upperLeftPanel.add(splitPercButton);
+
+    toggleButton = new JToggleButton("Split");
+    middlePanel.add(toggleButton, BorderLayout.NORTH);
+    popupMenu = createPopupMenu();
+
+    // Bottom part of the left pane to display the image
+    JPanel bottomLeftPanel = new JPanel();
+    histogramLabel = new JLabel();
+    histogramLabel.setPreferredSize(new Dimension(256, 256));
+    bottomLeftPanel.add(histogramLabel);
+
+    // Add upper and bottom panels to the left pane
+    leftPanel.add(upperLeftPanel, BorderLayout.NORTH);
+    leftPanel.add(middlePanel, BorderLayout.CENTER);
+    leftPanel.add(bottomLeftPanel, BorderLayout.SOUTH);
+
+    // Right Pane
+    JPanel rightPanel = new JPanel(new BorderLayout());
+    imageLabel = new JLabel();
+    imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    scrollPane = new JScrollPane(imageLabel);
+    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    rightPanel.add(scrollPane, BorderLayout.CENTER);
+
+    // Set up the JSplitPane
+    JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
+    splitPane.setDividerLocation(300); // Set the initial divider location
+
+    // Set up the main frame
+    this.setTitle("Graphical Image Manipulation Application");
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.getContentPane().add(splitPane);
+    this.setSize(800, 600);
+    this.setLocationRelativeTo(null);
+    this.setVisible(true);
   }
 
 }

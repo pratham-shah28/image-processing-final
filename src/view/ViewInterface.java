@@ -54,7 +54,7 @@ public interface ViewInterface {
    * @return
    */
   JComboBox<String> getComboBox();
-  JTextField getNumberTextField();
+  JTextField getCompressInput();
   JTextField getSplit();
   void showDialog(String s);
   void updateImageLabel(model.Image image, model.Image histogram);
