@@ -28,11 +28,13 @@ public class MainApp {
    */
   public static void main(String[] args) {
     if (args.length == 0) {
+      System.out.println(3);
       InputStream in = System.in;
       ViewGUIInterface view = new ViewGUI();
       ImageCreator imageCreator = new ImageCreatorImpl();
       ActionListener controller = new ControllerProGUI(view, in, new HashMap<>(), imageCreator);
     } else {
+      System.out.println(1);
       if (args[0].equals("-file")) {
         String input = String.format("run" + " " + "\"%s\"" + "\nexit", args[1]);
         InputStream in = new ByteArrayInputStream(input.getBytes());
@@ -42,6 +44,7 @@ public class MainApp {
                 new ControllerPro(view, in, new HashMap<>(), imageCreator);
       }
       else if (args[0].equals("-text")) {
+        System.out.println(2);
         InputStream in = System.in;
         ViewInterface view = new View();
         ImageCreator imageCreator = new ImageCreatorImpl();
