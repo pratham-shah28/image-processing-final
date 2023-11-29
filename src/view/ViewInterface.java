@@ -61,5 +61,11 @@ public interface ViewInterface {
 
   int saveOption();
 
-  boolean getSplitMode();
+  String getSplitMode();
+
+  JTextField bInput();
+  JTextField mInput();
+  JTextField wInput();
+
+  void toggleSet();
 }

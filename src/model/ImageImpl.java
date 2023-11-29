@@ -389,27 +389,35 @@ public class ImageImpl implements Image {
 
   @Override
   public Image applySplit(Image originalImage, double perc) {
+    int[][] newRedPixelMatrix = new int[this.width][this.height];
+    int[][] newGreenPixelMatrix = new int[this.width][this.height];
+    int[][] newBluePixelMatrix = new int[this.width][this.height];
     int heightSplit = (int) Math.round(this.getHeight() * perc / 100);
     for (int x = 0; x < this.width; x++) {
-      for (int y = heightSplit; y < this.height; y++) {
+      for (int y = 0; y < this.height; y++) {
         if (y == heightSplit) {
           if (x % 2 == 0) {
-            this.redChannel[x][y] = 255;
-            this.greenChannel[x][y] = 0;
-            this.blueChannel[x][y] = 0;
+            newRedPixelMatrix[x][y] = 255;
+            newGreenPixelMatrix[x][y] = 0;
+            newBluePixelMatrix[x][y] = 0;
           } else {
-            this.redChannel[x][y] = this.getRedPixelMatrixElement(x, y);
-            this.greenChannel[x][y] = this.getGreenPixelMatrixElement(x, y);
-            this.blueChannel[x][y] = this.getBluePixelMatrixElement(x, y);
+            newRedPixelMatrix[x][y] = this.getRedPixelMatrixElement(x, y);
+            newGreenPixelMatrix[x][y] = this.getGreenPixelMatrixElement(x, y);
+            newBluePixelMatrix[x][y] = this.getBluePixelMatrixElement(x, y);
           }
-        } else {
-          this.redChannel[x][y] = originalImage.getRedPixelMatrixElement(x, y);
-          this.greenChannel[x][y] = originalImage.getGreenPixelMatrixElement(x, y);
-          this.blueChannel[x][y] = originalImage.getBluePixelMatrixElement(x, y);
+        } else if (y > heightSplit) {
+          newRedPixelMatrix[x][y] = originalImage.getRedPixelMatrixElement(x, y);
+          newGreenPixelMatrix[x][y] = originalImage.getGreenPixelMatrixElement(x, y);
+          newBluePixelMatrix[x][y] = originalImage.getBluePixelMatrixElement(x, y);
+        }
+        else {
+          newRedPixelMatrix[x][y] = this.getRedPixelMatrixElement(x, y);
+          newGreenPixelMatrix[x][y] = this.getGreenPixelMatrixElement(x, y);
+          newBluePixelMatrix[x][y] = this.getBluePixelMatrixElement(x, y);
         }
       }
     }
-    return new ImageImpl(this.redChannel, this.greenChannel, this.blueChannel);
+    return new ImageImpl(newRedPixelMatrix, newGreenPixelMatrix, newBluePixelMatrix);
   }
 
   private double[][] haar(int[][] sequence) {

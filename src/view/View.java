@@ -15,7 +15,7 @@ import javax.swing.border.Border;
 public class View extends JFrame implements ViewInterface {
   private final String[] commandList;
   private JButton applyButton, loadButton, saveButton, compressButton,
-          splitPercButton, popupButton, levelsAdjustButton;
+          splitPercButton, popupButton, levelsAdjustButton, applyTransformation;
   protected JLabel histogramLabel, imageLabel;
   private JTextField compressInput, splitInput, bInput, mInput, wInput;
   private JComboBox<String> imageOperationList;
@@ -104,6 +104,21 @@ public class View extends JFrame implements ViewInterface {
     return compressInput;
   }
 
+  @Override
+  public JTextField bInput() {
+    return bInput;
+  }
+
+  @Override
+  public JTextField mInput() {
+    return mInput;
+  }
+
+  @Override
+  public JTextField wInput() {
+    return wInput;
+  }
+
   public JTextField getSplit() {
     return splitInput;
   }
@@ -127,21 +142,8 @@ public class View extends JFrame implements ViewInterface {
     compressButton.addActionListener(actionEvent);
     levelsAdjustButton.addActionListener(actionEvent);
     splitPercButton.addActionListener(actionEvent);
-    toggleButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        boolean selected = toggleButton.isSelected();
-        if (selected) {
-          splitInput.setEditable(true);
-          splitPercButton.setEnabled(true);
-          toggleButton.setText("Disable Split Mode");
-        } else {
-          splitInput.setEditable(false);
-          splitPercButton.setEnabled(false);
-          toggleButton.setText("Enable Split Mode");
-        }
-      }
-    });
+    applyTransformation.addActionListener(actionEvent);
+    toggleButton.addActionListener(actionEvent);
   }
 
   @Override
@@ -203,15 +205,14 @@ public class View extends JFrame implements ViewInterface {
   }
 
   @Override
-  public boolean getSplitMode() {
-    return toggleButton.isSelected();
+  public String getSplitMode() {
+    if (toggleButton.isSelected()) {
+      return "Split mode enabled";
+    }
+    else {
+      return "Split mode disabled";
+    }
   }
-
-  private static void updateValue(String value) {
-    System.out.println("Value changed: " + value);
-    // Do something with the updated value, for example, pass it to another method or class.
-  }
-
 
   private void buildGUI() {
     JPanel leftPanel = new JPanel(new BorderLayout());
@@ -263,9 +264,12 @@ public class View extends JFrame implements ViewInterface {
     splitPercButton.setEnabled(false);
     toggleButton = new JToggleButton("Enable Split Mode");
     toggleButton.setToolTipText("Click to toggle between preview and normal mode.");
+    applyTransformation = new JButton("Save transformation");
+    applyTransformation.setEnabled(false);
+    splitPanel.add(toggleButton, BorderLayout.NORTH);
     splitPanel.add(splitInput);
     splitPanel.add(splitPercButton);
-    splitPanel.add(toggleButton, BorderLayout.NORTH);
+    splitPanel.add(applyTransformation, BorderLayout.NORTH);
     splitPanel.setBorder(leftSplitPanelBorder);
     popupMenu = createPopupMenu();
 
@@ -301,6 +305,22 @@ public class View extends JFrame implements ViewInterface {
     this.setSize(800, 600);
     this.setLocationRelativeTo(null);
     this.setVisible(true);
+  }
+
+  @Override
+  public void toggleSet() {
+    boolean selected  = toggleButton.isSelected();
+    if (selected) {
+      splitInput.setEditable(true);
+      splitPercButton.setEnabled(true);
+      applyTransformation.setEnabled(true);
+      toggleButton.setText("Disable Split Mode");
+    } else {
+      splitInput.setEditable(false);
+      splitPercButton.setEnabled(false);
+      toggleButton.setText("Enable Split Mode");
+      applyTransformation.setEnabled(false);
+    }
   }
 
 }

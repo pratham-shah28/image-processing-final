@@ -269,64 +269,102 @@ public class ControllerPro extends Controller implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     // Determine which button was clicked based on the ActionCommand
-    split = view.getSplitMode();
-    System.out.println(split);
+//    split = view.getSplitMode();
+//    System.out.println(split);
     String command = e.getActionCommand();
 //    System.out.println(command);
 //    System.out.println(view.getSplit().getText());
 //    System.out.println("SPLIT" + split);
+    System.out.println("split: " + split);
     System.out.println("COMMAND: " + command);
+    if (command.equals("Enable Split Mode")) {
+      split = !split;
+      view.toggleSet();
+      if (images.containsKey("newImage")) {
+        System.out.println("hereeee");
+        images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), 50));
+        view.updateImageLabel(images.get("splitImage"), images.get("splitImage").createHistogram());
+      }
+      return;
+    }
+
+    if (command.equals("Disable Split Mode")) {
+      split = !split;
+      view.toggleSet();
+      if (images.containsKey("originalImage")) {
+        view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
+      }
+        return;
+    }
     // System.out.println(view.saveOption());
+//    if (split.equals("Split mode disabled")) {
+//      System.out.println("ahiya");
+//      if (images.containsKey("originalImage") && images.containsKey("newImage") && images.containsKey("splitImage")) {
+//        System.out.println("ahiya2");
+//        if (view.saveOption() == 0) {
+////          images.put("newImage", img);
+//          images.put("originalImage", images.get("newImage"));
+//          view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
+//        } else {
+//          view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
+//        }
+//        return;
+//      }
+//    }
+    if (!(command.equals("Load")) && !(images.containsKey("originalImage"))) {
+      view.showDialog("Please load an image first");
+      return;
+    }
     switch (command) {
       case "Apply":
         String selectedOption = (String) view.getComboBox().getSelectedItem();
         if ("red-component".equals(selectedOption)) {
-          images.put("newImage", img.redComponent());
+          images.put("newImage", images.get("originalImage").redComponent());
           img = img.redComponent();
 //          view.updateImageLabel(img, img.createHistogram());
 
         } else if ("green-component".equals(selectedOption)) {
-          images.put("newImage", img.greenComponent());
+          images.put("newImage", images.get("originalImage").greenComponent());
           img = img.greenComponent();
 //          view.updateImageLabel(img, img.createHistogram());
 
 
         } else if ("blue-component".equals(selectedOption)) {
-          images.put("newImage", img.blueComponent());
+          images.put("newImage", images.get("originalImage").blueComponent());
           img = img.blueComponent();
 
 
         } else if ("flip-vertical".equals(selectedOption)) {
-          images.put("newImage", img.flipVertical());
+          images.put("newImage", images.get("originalImage").flipVertical());
           img = img.flipVertical();
 
 
         } else if ("flip-horizontal".equals(selectedOption)) {
-          images.put("newImage", img.flipHorizontal());
+          images.put("newImage", images.get("originalImage").flipHorizontal());
           img = img.flipHorizontal();
 
 
         } else if ("blur".equals(selectedOption)) {
-          images.put("newImage", img.blur());
+          images.put("newImage", images.get("originalImage").blur());
           img = img.blur();
 
 
         } else if ("sharpen".equals(selectedOption)) {
-          images.put("newImage", img.sharpen());
+          images.put("newImage", images.get("originalImage").sharpen());
 
         } else if ("sepia".equals(selectedOption)) {
-          images.put("newImage", img.sepia());
+          images.put("newImage", images.get("originalImage").sepia());
           img = img.sepia();
 
           // Add your code here for Option 8
         } else if ("greyscale".equals(selectedOption)) {
-          images.put("newImage", img.luma());
+          images.put("newImage", images.get("originalImage").luma());
           img = img.luma();
 
           System.out.println("greyscale");
 
         } else if ("color-correct".equals(selectedOption)) {
-          images.put("newImage", img.colorCorrect());
+          images.put("newImage", images.get("originalImage").colorCorrect());
           img = img.colorCorrect();
 
           System.out.println("color-correct");
@@ -344,14 +382,9 @@ public class ControllerPro extends Controller implements ActionListener {
             splitPerc = 50;
           }
           if (splitPerc >= 1 && splitPerc <= 100) {
-            view.updateImageLabel(images.get("newImage").applySplit(images.get("originalImage"), splitPerc),
-                    images.get("newImage").applySplit(images.get("newImage"), splitPerc).createHistogram());
-            if (view.saveOption() == 0) {
-              images.put("newImage", img);
-              images.put("originalImage", img);
-            } else {
-              images.put("newImage",images.get("newImage").applySplit(images.get("originalImage"), splitPerc) );
-            }
+            images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), splitPerc));
+            view.updateImageLabel(images.get("splitImage"), images.get("splitImage").createHistogram());
+            break;
           }
           else {
             view.showDialog("Please enter a number between 1 and 100.");
@@ -387,10 +420,33 @@ public class ControllerPro extends Controller implements ActionListener {
         // Load logic
         break;
 
-      case "Enable Split Mode":
-        splitPerc = Integer.parseInt(view.getSplit().getText());
-        split = !split;
+//      case "Enable Split Mode":
+//        splitPerc = Integer.parseInt(view.getSplit().getText());
+//        split = !split;
+      case "Adjust level":
+        try {
+          int b = Integer.parseInt(view.bInput().getText());
+          int m = Integer.parseInt(view.mInput().getText());
+          int w = Integer.parseInt(view.wInput().getText());
 
+          if (b < 0 || m < 0 || w < 0 || b > 255 || m > 255 || w > 255) {
+            view.showDialog("b, m, w values should be in the range 0 - 255");
+            break;
+          }
+          if (!(b < m && b < w && m < w)) {
+            view.showDialog("b, m, w values should be in ascending order");
+            break;
+          }
+          images.put("newImage", images.get("originalImage").adjustLevels(b,m,w));
+          view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
+        }
+        catch (Exception adlevel) {
+          view.showDialog("Please enter valid b, m, w values");
+          break;
+      }
+
+
+        break;
       case "Set split percentage":
         if (!(view.getSplit().getText().equals(""))) {
           try {
@@ -404,29 +460,27 @@ public class ControllerPro extends Controller implements ActionListener {
         }
 
         if (splitPerc >= 1 && splitPerc <= 100) {
-//          if (splitPerc == null) {
-//            splitPerc = 50;
-//          }
-//          imgFinal = images.get("newImage").applySplit(images.get("newImage"),splitPerc);
-          System.out.println("here");
-          //view.updateImageLabel(img, img.createHistogram());
-          view.updateImageLabel(img.applySplit(images.get("originalImage"), splitPerc), images.get("newImage").applySplit(images.get("newImage"), splitPerc).createHistogram());
-          if (view.saveOption() == 0) {
-            images.put("originalImage", images.get("newImage"));
-          } else {
-//            images.put("newImage", images.get("originalImage"));
-            images.put("newImage",images.get("newImage").applySplit(images.get("originalImage"), splitPerc) );
-          }
+          images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), splitPerc));
+          view.updateImageLabel(images.get("splitImage"), images.get("splitImage").createHistogram());
+          break;
         }
         else {
           view.showDialog("Please enter a number between 1 and 100.");
           break;
         }
-        view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
 
       case "Save":
         System.out.println("Save button clicked!");
         // save logic
+        break;
+
+      case "Save transformation":
+//        if (!(images.containsKey("originalImage"))) {
+//          view.showDialog("Please load an Image first");
+//        }
+        images.put("originalImage",images.get("newImage"));
+        view.updateImageLabel(images.get("originalImage"),
+                images.get("originalImage").createHistogram());
         break;
       case "Compress":
         // save logic
@@ -440,7 +494,8 @@ public class ControllerPro extends Controller implements ActionListener {
           if (enteredNumber >= 1 && enteredNumber <= 100) {
             // Perform an action based on the entered number
             img = img.compress(enteredNumber);
-            view.updateImageLabel(img, img.createHistogram());
+            images.put("newImage", images.get("originalImage").compress(enteredNumber));
+            view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
             System.out.println(enteredNumber);
           } else {
             // Display an error message for an invalid range
