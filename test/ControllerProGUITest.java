@@ -1,10 +1,10 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import controller.Features;
 import model.Image;
 import view.ViewGUIInterface;
 
@@ -118,46 +118,17 @@ public class ControllerProGUITest {
     }
 
     @Override
-    public void setCommandButtonListener(ActionListener actionEvent) {
-      imageOperationList.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          log.append("imageOperationList");
-        }
-      });
-      applyButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          log.append("applyButton");
-        }
-      });
-      loadButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          log.append("loadButton");
-        }
-      });
-      saveButton.addActionListener(actionEvent);
-      compressInput.addActionListener(actionEvent);
-      compressButton.addActionListener(actionEvent);
-      levelsAdjustButton.addActionListener(actionEvent);
-      splitPercButton.addActionListener(actionEvent);
-      applyTransformation.addActionListener(actionEvent);
-      toggleButton.addActionListener(actionEvent);
-    }
-
-    @Override
-    public JComboBox<String> getComboBox() {
+    public String getComboBoxSelectedItem() {
       return null;
     }
 
     @Override
-    public JTextField getCompressInput() {
-      return null;
+    public int getCompressInput() {
+      return 0;
     }
 
     @Override
-    public JTextField getSplit() {
+    public String getSplit() {
       return null;
     }
 
@@ -172,17 +143,17 @@ public class ControllerProGUITest {
     }
 
     @Override
-    public JTextField bInput() {
+    public String bInput() {
       return null;
     }
 
     @Override
-    public JTextField mInput() {
+    public String mInput() {
       return null;
     }
 
     @Override
-    public JTextField wInput() {
+    public String wInput() {
       return null;
     }
 
@@ -194,6 +165,26 @@ public class ControllerProGUITest {
     @Override
     public int saveOption() {
       return 0;
+    }
+
+    @Override
+    public void addFeatures(Features features) {
+
+    }
+
+    @Override
+    public File loadSelectedImage() {
+      return null;
+    }
+
+    @Override
+    public File selectedDirectory() {
+      return null;
+    }
+
+    @Override
+    public String getImageName() {
+      return null;
     }
   }
 }

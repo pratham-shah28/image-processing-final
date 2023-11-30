@@ -1,10 +1,8 @@
 package view;
 
-import java.awt.event.ActionListener;
+import java.io.File;
 
-
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
+import controller.Features;
 
 /**
  * This interface provides a blueprint for the view class. A view is responsible to show output to
@@ -13,35 +11,25 @@ import javax.swing.JTextField;
 public interface ViewGUIInterface {
 
   /**
-   * Provide the view with an action listener for
-   * the button that should cause the program to
-   * process a command. This is so that when the button
-   * is pressed, control goes to the action listener
-   *
-   * @param actionEvent the event that occurred.
-   */
-  void setCommandButtonListener(ActionListener actionEvent);
-
-  /**
    * Returns the comboBox which is the drop menu for operations.
    *
    * @return Returns the dropdown menu for operations.
    */
-  JComboBox<String> getComboBox();
+  String getComboBoxSelectedItem();
 
   /**
    * Returns the compression factor given by the user.
    *
    * @return Value in the JTextField for compression.
    */
-  JTextField getCompressInput();
+  int getCompressInput();
 
   /**
    * Returns the split percentage for the preview.
    *
    * @return Value in the JTextField for split.
    */
-  JTextField getSplit();
+  String getSplit();
 
   /**
    * Method to show a message using a dialog box.
@@ -63,21 +51,21 @@ public interface ViewGUIInterface {
    *
    * @return b value given in the JTextField.
    */
-  JTextField bInput();
+  String bInput();
 
   /**
    * Method to get the m value for level-adjust method.
    *
    * @return m value given in the JTextField.
    */
-  JTextField mInput();
+  String mInput();
 
   /**
    * Method to get the w value for level-adjust method.
    *
    * @return w value given in the JTextField.
    */
-  JTextField wInput();
+  String wInput();
 
   /**
    * Method to update the Split panel in the GUI. If split is toggled off then user can't edit its
@@ -93,4 +81,9 @@ public interface ViewGUIInterface {
    * @return Integer to see if user wants to save or not.
    */
   int saveOption();
+
+  void addFeatures(Features features);
+  File loadSelectedImage();
+  File selectedDirectory();
+  String getImageName();
 }

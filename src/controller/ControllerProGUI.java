@@ -2,8 +2,6 @@ package controller;
 
 import java.awt.*;
 import java.io.FileWriter;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,7 +18,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import model.Image;
 import model.ImageCreator;
 import view.ViewGUIInterface;
-import view.ViewInterface;
 
 
 /**
@@ -28,7 +25,7 @@ import view.ViewInterface;
  * compression, histogram, color correction, level adjustment.
  * It retains support for all operations performed by original Controller.
  */
-public class ControllerProGUI implements ActionListener {
+public class ControllerProGUI implements Features {
 
   protected ViewGUIInterface view;
 
@@ -39,8 +36,6 @@ public class ControllerProGUI implements ActionListener {
   private HashSet<String> supportedFormats;
 
   private ImageCreator imageCreator;
-
-  private Image imgFinal;
 
   private Integer splitPerc;
 
@@ -59,230 +54,198 @@ public class ControllerProGUI implements ActionListener {
    */
   public ControllerProGUI(ViewGUIInterface view, InputStream in, HashMap<String, Image> images,
                           ImageCreator imageCreator) {
-//    super(view, in, images, imageCreator);
     this.view = view;
     this.images = images;
     split = false;
-    view.setCommandButtonListener(this);
     this.imageCreator = imageCreator;
     supportedFormats = new HashSet<>();
     supportedFormats.add("jpg");
     supportedFormats.add("png");
     supportedFormats.add("ppm");
+  }
 
+  public void setView(){
+    //provide view with all the callbacks
+    view.addFeatures(this);
   }
 
   @Override
-  public void actionPerformed(ActionEvent e) {
-    String command = e.getActionCommand();
-    if (command.equals("Enable Split Mode")) {
-      split = !split;
-      view.toggleSet(split);
-      if (images.containsKey("newImage")) {
-        images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), 50));
-        view.updateImageLabel(images.get("splitImage"), images.get("splitImage").createHistogram());
-      }
-      return;
-    }
-
-    if (command.equals("Disable Split Mode")) {
-      split = !split;
-      view.toggleSet(split);
-      if (images.containsKey("originalImage")) {
-        view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
-      }
-      return;
-    }
-    if (!(command.equals("Load")) && !(images.containsKey("originalImage"))) {
-      view.showDialog("Please load an image first");
-      return;
-    }
-    switch (command) {
-      case "Apply":
-        String selectedOption = (String) view.getComboBox().getSelectedItem();
-        if ("red-component".equals(selectedOption)) {
-          images.put("newImage", images.get("originalImage").redComponent());
-          img = img.redComponent();
-//          view.updateImageLabel(img, img.createHistogram());
-
-        } else if ("green-component".equals(selectedOption)) {
-          images.put("newImage", images.get("originalImage").greenComponent());
-          img = img.greenComponent();
-//          view.updateImageLabel(img, img.createHistogram());
-
-
-        } else if ("blue-component".equals(selectedOption)) {
-          images.put("newImage", images.get("originalImage").blueComponent());
-          img = img.blueComponent();
-
-
-        } else if ("flip-vertical".equals(selectedOption)) {
-          images.put("newImage", images.get("originalImage").flipVertical());
-          img = img.flipVertical();
-
-
-        } else if ("flip-horizontal".equals(selectedOption)) {
-          images.put("newImage", images.get("originalImage").flipHorizontal());
-          img = img.flipHorizontal();
-
-
-        } else if ("blur".equals(selectedOption)) {
-          images.put("newImage", images.get("originalImage").blur());
-          img = img.blur();
-
-
-        } else if ("sharpen".equals(selectedOption)) {
-          images.put("newImage", images.get("originalImage").sharpen());
-
-        } else if ("sepia".equals(selectedOption)) {
-          images.put("newImage", images.get("originalImage").sepia());
-          img = img.sepia();
-
-          // Add your code here for Option 8
-        } else if ("greyscale".equals(selectedOption)) {
-          images.put("newImage", images.get("originalImage").luma());
-          img = img.luma();
-
-          System.out.println("greyscale");
-
-        } else if ("color-correct".equals(selectedOption)) {
-          images.put("newImage", images.get("originalImage").colorCorrect());
-          img = img.colorCorrect();
-
-          System.out.println("color-correct");
-
-        }
-        if (handleSplit()) break;
-        view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
-        break;
-      case "Load":
-        if (images.containsKey("originalImage") && !isSaved) {
-          if (view.saveOption() == 0) {
-            saveImage();
-            isSaved = true;
-            break;
-          }
-        }
-        JFileChooser fileChooser = new JFileChooser();
-
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "png", "jpg", "ppm");
-        fileChooser.setFileFilter(filter);
-
-        int result = fileChooser.showOpenDialog((Component) view);
-
-        if (result == JFileChooser.APPROVE_OPTION) {
-          File selectedFile = fileChooser.getSelectedFile();
-          BufferedImage image = null;
-          try {
-            image = ImageIO.read(selectedFile);
-          } catch (IOException ex) {
-            throw new RuntimeException(ex);
-          }
-          img = processLoadImage(image);
-          images.put("originalImage", img);
-          images.put("newImage", img);
-          view.updateImageLabel(img, img.createHistogram());
-          isSaved = false;
-        }
-
-        // Load logic
-        break;
-
-//      case "Enable Split Mode":
-//        splitPerc = Integer.parseInt(view.getSplit().getText());
-//        split = !split;
-      case "Adjust level":
-        try {
-          int b = Integer.parseInt(view.bInput().getText());
-          int m = Integer.parseInt(view.mInput().getText());
-          int w = Integer.parseInt(view.wInput().getText());
-
-          if (b < 0 || m < 0 || w < 0 || b > 255 || m > 255 || w > 255) {
-            view.showDialog("b, m, w values should be in the range 0 - 255");
-            break;
-          }
-          if (!(b < m && b < w && m < w)) {
-            view.showDialog("b, m, w values should be in ascending order");
-            break;
-          }
-          images.put("newImage", images.get("originalImage").adjustLevels(b, m, w));
-          if (handleSplit()) break;
-          view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
-          break;
-        } catch (Exception adlevel) {
-          view.showDialog("Please enter valid b, m, w values");
-          break;
-        }
-
-      case "Set split percentage":
-        if (!(view.getSplit().getText().equals(""))) {
-          try {
-            splitPerc = Integer.parseInt(view.getSplit().getText());
-          } catch (NumberFormatException ex) {
-            view.showDialog("Please enter a valid integer.");
-          }
-        } else {
-          splitPerc = 50;
-        }
-
-        if (splitPerc >= 1 && splitPerc <= 100) {
-          images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), splitPerc));
-          view.updateImageLabel(images.get("splitImage"), images.get("splitImage").createHistogram());
-          break;
-        } else {
-          view.showDialog("Please enter a number between 1 and 100.");
-          break;
-        }
-
-      case "Save":
+  public void loadImage() {
+    if (images.containsKey("originalImage") && !isSaved) {
+      if (view.saveOption() == 0) {
         saveImage();
         isSaved = true;
-        break;
-
-      case "Save transformation":
-//        if (!(images.containsKey("originalImage"))) {
-//          view.showDialog("Please load an Image first");
-//        }
-        images.put("originalImage", images.get("newImage"));
-        view.updateImageLabel(images.get("originalImage"),
-                images.get("originalImage").createHistogram());
-        split = !split;
-        view.toggleSet(split);
-        break;
-      case "Compress":
-        // save logic
-        String userInput = view.getCompressInput().getText();
-
-        try {
-          // Parse the input as an integer
-          int enteredNumber = Integer.parseInt(userInput);
-
-          // Check if the entered number is within the valid range
-          if (enteredNumber >= 1 && enteredNumber <= 100) {
-            // Perform an action based on the entered number
-            img = img.compress(enteredNumber);
-            images.put("newImage", images.get("originalImage").compress(enteredNumber));
-            if (handleSplit()) break;
-            view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
-            break;
-          } else {
-            // Display an error message for an invalid range
-            view.showDialog("Please enter a number between 1 and 100.");
-          }
-        } catch (NumberFormatException ex) {
-          // Display an error message for non-integer input
-          view.showDialog("Please enter a valid integer.");
-        }
-        break;
-      // Add more cases as needed for other buttons
+      }
+    }
+    File selectedFile = view.loadSelectedImage();
+    if (selectedFile != null) {
+      BufferedImage image = null;
+      try {
+        image = ImageIO.read(selectedFile);
+      } catch (IOException ex) {
+        throw new RuntimeException(ex);
+      }
+      img = processLoadImage(image);
+      images.put("originalImage", img);
+      images.put("newImage", img);
+      view.updateImageLabel(img, img.createHistogram());
+      isSaved = false;
     }
   }
 
+  @Override
+  public void saveImage() {
+    if (!checkImageExists()) {
+      return;
+    }
+    File selectedDirectory = view.selectedDirectory();
+    if (selectedDirectory != null) {
+      String imageName = view.getImageName();
+      convertToBufferedImage(imageName, selectedDirectory);
+    }
+  }
+
+  @Override
+  public void apply() {
+    if (!checkImageExists()) {
+      return;
+    }
+    String selectedOption = view.getComboBoxSelectedItem();
+    if ("red-component".equals(selectedOption)) {
+      images.put("newImage", images.get("originalImage").redComponent());
+    } else if ("green-component".equals(selectedOption)) {
+      images.put("newImage", images.get("originalImage").greenComponent());
+    } else if ("blue-component".equals(selectedOption)) {
+      images.put("newImage", images.get("originalImage").blueComponent());
+    } else if ("flip-vertical".equals(selectedOption)) {
+      images.put("newImage", images.get("originalImage").flipVertical());
+    } else if ("flip-horizontal".equals(selectedOption)) {
+      images.put("newImage", images.get("originalImage").flipHorizontal());
+    } else if ("blur".equals(selectedOption)) {
+      images.put("newImage", images.get("originalImage").blur());
+    } else if ("sharpen".equals(selectedOption)) {
+      images.put("newImage", images.get("originalImage").sharpen());
+    } else if ("sepia".equals(selectedOption)) {
+      images.put("newImage", images.get("originalImage").sepia());
+    } else if ("greyscale".equals(selectedOption)) {
+      images.put("newImage", images.get("originalImage").luma());
+    } else if ("color-correct".equals(selectedOption)) {
+      images.put("newImage", images.get("originalImage").colorCorrect());
+    }
+    if (handleSplit()) return;
+    view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
+  }
+
+  @Override
+  public void adjustLevel() {
+    if (!checkImageExists()) {
+      return;
+    }
+    try {
+      int b = Integer.parseInt(view.bInput());
+      int m = Integer.parseInt(view.mInput());
+      int w = Integer.parseInt(view.wInput());
+      if (b < 0 || m < 0 || w < 0 || b > 255 || m > 255 || w > 255) {
+        view.showDialog("b, m, w values should be in the range 0 - 255");
+        return;
+      }
+      if (!(b < m && b < w && m < w)) {
+        view.showDialog("b, m, w values should be in ascending order");
+        return;
+      }
+      images.put("newImage", images.get("originalImage").adjustLevels(b, m, w));
+      if (handleSplit()) return;
+      view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
+    } catch (Exception adlevel) {
+      view.showDialog("Please enter valid b, m, w values");
+    }
+  }
+
+  @Override
+  public void setSplitPercentage() {
+    if (!checkImageExists()) {
+      return;
+    }
+    if (!(view.getSplit().equals(""))) {
+      try {
+        splitPerc = Integer.parseInt(view.getSplit());
+      } catch (NumberFormatException ex) {
+        view.showDialog("Please enter a valid integer.");
+      }
+    } else {
+      splitPerc = 50;
+    }
+
+    if (splitPerc >= 1 && splitPerc <= 100) {
+      images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), splitPerc));
+      view.updateImageLabel(images.get("splitImage"), images.get("splitImage").createHistogram());
+    } else {
+      view.showDialog("Please enter a number between 1 and 100.");
+    }
+  }
+
+  @Override
+  public void saveTransformation() {
+    if (!checkImageExists()) {
+      return;
+    }
+    images.put("originalImage", images.get("newImage"));
+    view.updateImageLabel(images.get("originalImage"),
+            images.get("originalImage").createHistogram());
+    split = !split;
+    view.toggleSet(split);
+  }
+
+  @Override
+  public void applyCompress() {
+    if (!checkImageExists()) {
+      return;
+    }
+    int userInput = view.getCompressInput();
+    if (userInput >= 1 && userInput <= 100) {
+        // Perform an action based on the entered number
+        img = img.compress(userInput);
+        images.put("newImage", images.get("originalImage").compress(userInput));
+        if (handleSplit()) return;
+        view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
+      } else {
+        // Display an error message for an invalid range
+        view.showDialog("Please enter a number between 1 and 100.");
+      }
+  }
+
+  @Override
+  public void splitMode(boolean isEnabled) {
+    if (!checkImageExists()) {
+      return;
+    }
+    split = !split;
+    view.toggleSet(split);
+    if (isEnabled) {
+      if (images.containsKey("newImage")) {
+        images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), 50));
+        view.updateImageLabel(images.get("splitImage"), images.get("splitImage").createHistogram());
+      } else {
+        if (images.containsKey("originalImage")) {
+          view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
+        }
+      }
+    }
+  }
+
+  private boolean checkImageExists() {
+    if (!(images.containsKey("originalImage"))) {
+      view.showDialog("Please load an image first");
+      return false;
+    } else {
+      return true;
+    }
+  }
   private boolean handleSplit() {
     if (split) {
-      if (!(view.getSplit().getText().equals(""))) {
+      if (!(view.getSplit().equals(""))) {
         try {
-          splitPerc = Integer.parseInt(view.getSplit().getText());
+          splitPerc = Integer.parseInt(view.getSplit());
         } catch (NumberFormatException ex) {
           view.showDialog("Please enter a valid integer.");
         }
@@ -323,25 +286,7 @@ public class ControllerProGUI implements ActionListener {
     return imageCreator.createModelImpl(redPixelMatrix, greenPixelMatrix, bluePixelMatrix);
   }
 
-  private void saveImage() {
-    // Create a file chooser
-    JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Pick a Directory to Save Image");
-    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-    // Show the file chooser dialog
-    int userSelection = fileChooser.showSaveDialog((Component) view);
-
-    if (userSelection == JFileChooser.APPROVE_OPTION) {
-      // Get the selected directory
-      File selectedDirectory = fileChooser.getSelectedFile();
-
-      // Ask the user for the image name
-      String imageName = JOptionPane.showInputDialog("Enter image name with extension");
-      convertToBufferedImage(imageName, selectedDirectory);
-
-    }
-  }
 
   private void convertToBufferedImage(String imageName, File selectedDirectory) {
     BufferedImage imageSave = null;

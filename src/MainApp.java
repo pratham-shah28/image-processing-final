@@ -8,11 +8,9 @@ import view.ViewGUI;
 import view.ViewGUIInterface;
 import view.ViewInterface;
 
-import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Scanner;
 
 /**
  * This is the main class that client uses to run the application.
@@ -30,7 +28,8 @@ public class MainApp {
       InputStream in = System.in;
       ViewGUIInterface view = new ViewGUI();
       ImageCreator imageCreator = new ImageCreatorImpl();
-      ActionListener controller = new ControllerProGUI(view, in, new HashMap<>(), imageCreator);
+      ControllerProGUI controller = new ControllerProGUI(view, in, new HashMap<>(), imageCreator);
+      controller.setView();
     } else {
       if (args[0].equals("-file")) {
         String input = String.format("run" + " " + "\"%s\"" + "\nexit", args[1]);

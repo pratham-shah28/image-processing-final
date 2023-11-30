@@ -1,25 +1,14 @@
 package view;
 
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.Dimension;
+import java.io.File;
 
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JScrollPane;
-import javax.swing.JToggleButton;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.BorderFactory;
-import javax.swing.SwingConstants;
-import javax.swing.JSplitPane;
+import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import controller.Features;
 
 /**
  * This is the view class which handles what is displayed to the user via command line interface.
@@ -42,53 +31,47 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
     buildGUI();
   }
 
-
-  public JComboBox<String> getComboBox() {
-    return imageOperationList;
+  @Override
+  public String getComboBoxSelectedItem() {
+    return (String) imageOperationList.getSelectedItem();
   }
 
   @Override
-  public JTextField getCompressInput() {
-    return compressInput;
+  public int getCompressInput() {
+    int result;
+    try{
+      result = Integer.parseInt(compressInput.getText());
+      return result;
+    } catch (NumberFormatException ex) {
+      // Display an error message for non-integer input
+      showDialog("Please enter a valid integer.");
+      return -1;
+    }
   }
 
   @Override
-  public JTextField bInput() {
-    return bInput;
+  public String bInput() {
+    return bInput.getText();
   }
 
   @Override
-  public JTextField mInput() {
-    return mInput;
+  public String mInput() {
+    return mInput.getText();
   }
 
   @Override
-  public JTextField wInput() {
-    return wInput;
+  public String wInput() {
+    return wInput.getText();
   }
 
   @Override
-  public JTextField getSplit() {
-    return splitInput;
+  public String getSplit() {
+    return splitInput.getText();
   }
 
   @Override
   public void showDialog(String s) {
     JOptionPane.showMessageDialog(null, s);
-  }
-
-  @Override
-  public void setCommandButtonListener(ActionListener actionEvent) {
-    imageOperationList.addActionListener(actionEvent);
-    applyButton.addActionListener(actionEvent);
-    loadButton.addActionListener(actionEvent);
-    saveButton.addActionListener(actionEvent);
-    compressInput.addActionListener(actionEvent);
-    compressButton.addActionListener(actionEvent);
-    levelsAdjustButton.addActionListener(actionEvent);
-    splitPercButton.addActionListener(actionEvent);
-    applyTransformation.addActionListener(actionEvent);
-    toggleButton.addActionListener(actionEvent);
   }
 
   @Override
@@ -254,4 +237,52 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
             "Save", JOptionPane.YES_NO_OPTION);
   }
 
+  @Override
+  public void addFeatures(Features features) {
+    applyButton.addActionListener(evt -> features.apply());
+    loadButton.addActionListener(evt -> features.loadImage());
+    saveButton.addActionListener(evt -> features.saveImage());
+    compressButton.addActionListener(evt -> features.applyCompress());
+    levelsAdjustButton.addActionListener(evt -> features.adjustLevel());
+    splitPercButton.addActionListener(evt -> features.setSplitPercentage());
+    applyTransformation.addActionListener(evt -> features.saveTransformation());
+    toggleButton.addActionListener(evt -> features.splitMode(toggleButton.isSelected()));
+  }
+
+  @Override
+  public File loadSelectedImage() {
+    File selectedFile = null;
+    JFileChooser fileChooser = new JFileChooser();
+
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "png", "jpg", "ppm");
+    fileChooser.setFileFilter(filter);
+
+    int result = fileChooser.showOpenDialog(this);
+
+    if (result == JFileChooser.APPROVE_OPTION) {
+      selectedFile = fileChooser.getSelectedFile();
+    }
+    return selectedFile;
+  }
+
+  @Override
+  public File selectedDirectory() {
+    File selectedDir = null;
+    // Create a file chooser
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Pick a Directory to Save Image");
+    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    // Show the file chooser dialog
+    int userSelection = fileChooser.showSaveDialog(this);
+    if (userSelection == JFileChooser.APPROVE_OPTION) {
+      // Get the selected directory
+      selectedDir = fileChooser.getSelectedFile();
+    }
+    return selectedDir;
+  }
+
+  @Override
+  public String getImageName() {
+    return JOptionPane.showInputDialog("Enter image name with extension");
+  }
 }
