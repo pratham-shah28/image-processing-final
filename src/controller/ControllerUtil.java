@@ -24,7 +24,7 @@ public class ControllerUtil implements ControllerUtilInterface {
   private HashSet<String> supportedFormats;
 
   /**
-   * Constructs ControllerUtil class and initializes all the supported image formats.
+   * Constructs the ControllerUtil class and initializes all the supported image formats.
    */
   public ControllerUtil() {
     supportedFormats = new HashSet<>();
@@ -32,9 +32,10 @@ public class ControllerUtil implements ControllerUtilInterface {
     supportedFormats.add("png");
     supportedFormats.add("ppm");
   }
+
   @Override
   public String saveImage(String path, Image img) {
-    String status = "Save Unsuccessful";
+    String status = "";
     try {
       int lastDotIndex = path.lastIndexOf('.');
       String format = path.substring(lastDotIndex + 1);
@@ -60,6 +61,7 @@ public class ControllerUtil implements ControllerUtilInterface {
               }
               writer.write("\n");
             }
+            status = "Image Saved Successfully!";
           } catch (IOException e) {
             status = "Invalid path.";
           }
@@ -98,9 +100,9 @@ public class ControllerUtil implements ControllerUtilInterface {
   }
 
   @Override
-  public String loadImage(String path, String name, Map<String, Image> images, ImageCreator creator){
-    String status = "Load Unsuccessful";
-    if (name != null && path != null){
+  public String loadImage(String path, String name, Map<String, Image> images, ImageCreator creator) {
+    String status = "Load Failed";
+    if (name != null && path != null) {
       try {
         int lastDotIndex = path.lastIndexOf('.');
         String format = path.substring(lastDotIndex + 1);
@@ -117,7 +119,7 @@ public class ControllerUtil implements ControllerUtilInterface {
   }
 
   private String processLoadImage(String path, String imageName, Map<String, Image> images, ImageCreator creator) throws IOException {
-    String status = "Load Failed.";
+    String status = "";
     try {
       File imageFile = new File(path);
       BufferedImage image = ImageIO.read(imageFile);
@@ -146,7 +148,7 @@ public class ControllerUtil implements ControllerUtilInterface {
   }
 
   private String loadImagePPM(String path, String name, Map<String, Image> images, ImageCreator creator) {
-    String status = "Load Failed";
+    String status = "";
     Scanner sc;
     try {
       sc = new Scanner(new FileInputStream(path));
@@ -192,7 +194,7 @@ public class ControllerUtil implements ControllerUtilInterface {
                     newGreenPixelMatrix,
                     newBluePixelMatrix);
     images.put(name, imageProcessor);
-    status = "Load: Success";
+    status = "Load Successful.";
     return status;
   }
 }

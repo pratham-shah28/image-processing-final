@@ -83,7 +83,10 @@ public interface ViewGUIInterface {
   int saveOption();
 
   void addFeatures(Features features);
+
   File loadSelectedImage();
+
   File selectedDirectory();
+
   String getImageName();
 }

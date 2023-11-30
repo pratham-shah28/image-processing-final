@@ -3,7 +3,6 @@ import org.junit.Test;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Dimension;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -41,6 +40,7 @@ public class ControllerProGUITest {
 
     /**
      * Constructs Mock View GUI.
+     *
      * @param log log used to test functionality.
      */
     public MockViewGUI(StringBuilder log) {
@@ -246,10 +246,11 @@ public class ControllerProGUITest {
 
     /**
      * Constructs Mock Model.
-     * @param log log to be used to test the functionality.
-     * @param red the red pixel array matrix.
+     *
+     * @param log   log to be used to test the functionality.
+     * @param red   the red pixel array matrix.
      * @param green the green pixel array matrix.
-     * @param blue the blue pixel array matrix.
+     * @param blue  the blue pixel array matrix.
      */
     public MockModel(StringBuilder log, int[][] red, int[][] green, int[][] blue) {
       this.log = log;
@@ -396,11 +397,13 @@ public class ControllerProGUITest {
 
     /**
      * Constructs Mock Image creator.
+     *
      * @param mockLog the mock log used to test the functionality.
      */
     public MockImageCreator(StringBuilder mockLog) {
       this.mockLog = mockLog;
     }
+
     @Override
     public Image createModelImpl(int[][] redPixelMatrix,
                                  int[][] greenPixelMatrix,
@@ -420,6 +423,7 @@ public class ControllerProGUITest {
     String expected = "\nloadSelectedImage\n";
     assertEquals(expected, mockLog.toString());
   }
+
   @Test
   public void loadSecond() throws IOException {
     StringBuilder mockLog = new StringBuilder();
@@ -857,7 +861,7 @@ public class ControllerProGUITest {
     MockModel image = new MockModel(mockLog, red, green, blue);
     Features controller = new ControllerProGUI(view, images, imageCreator);
     images.put("originalImage", image);
-    images.put("newImage",image);
+    images.put("newImage", image);
     controller.saveTransformation();
     String expected = "\ncreateHistogram" +
             "\nupdateImageLabel" +
@@ -893,7 +897,7 @@ public class ControllerProGUITest {
     MockModel image = new MockModel(mockLog, red, green, blue);
     Features controller = new ControllerProGUI(view, images, imageCreator);
     images.put("originalImage", image);
-    images.put("newImage",image);
+    images.put("newImage", image);
     controller.setSplitPercentage();
     String expected = "\ngetSplit" +
             "\ngetSplit" +
@@ -916,8 +920,8 @@ public class ControllerProGUITest {
     Features controller = new ControllerProGUI(view, images, imageCreator);
     view.setSplitValue("60");
     images.put("originalImage", image);
-    images.put("newImage",image);
-    images.put("splitImage",image);
+    images.put("newImage", image);
+    images.put("splitImage", image);
     controller.setSplitPercentage();
     String expected = "\ngetSplit" +
             "\ngetSplit" +
@@ -939,8 +943,8 @@ public class ControllerProGUITest {
     MockModel image = new MockModel(mockLog, red, green, blue);
     Features controller = new ControllerProGUI(view, images, imageCreator);
     images.put("originalImage", image);
-    images.put("newImage",image);
-    images.put("splitImage",image);
+    images.put("newImage", image);
+    images.put("splitImage", image);
     controller.adjustLevel();
     String expected = "\nnull" +
             "\nPlease enter valid b, m, w values";
@@ -960,8 +964,8 @@ public class ControllerProGUITest {
     Features controller = new ControllerProGUI(view, images, imageCreator);
     view.setBMW("-1", "256", "333");
     images.put("originalImage", image);
-    images.put("newImage",image);
-    images.put("splitImage",image);
+    images.put("newImage", image);
+    images.put("splitImage", image);
     controller.adjustLevel();
     String expected = "\n-1" +
             "\n256" +
@@ -983,8 +987,8 @@ public class ControllerProGUITest {
     Features controller = new ControllerProGUI(view, images, imageCreator);
     view.setBMW("100", "50", "25");
     images.put("originalImage", image);
-    images.put("newImage",image);
-    images.put("splitImage",image);
+    images.put("newImage", image);
+    images.put("splitImage", image);
     controller.adjustLevel();
     String expected = "\n100" +
             "\n50" +
@@ -1006,8 +1010,8 @@ public class ControllerProGUITest {
     Features controller = new ControllerProGUI(view, images, imageCreator);
     view.setBMW("25", "50", "100");
     images.put("originalImage", image);
-    images.put("newImage",image);
-    images.put("splitImage",image);
+    images.put("newImage", image);
+    images.put("splitImage", image);
     controller.adjustLevel();
     String expected = "\n25" +
             "\n50" +

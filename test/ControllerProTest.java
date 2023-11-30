@@ -37,6 +37,7 @@ public class ControllerProTest {
       this.green = green;
       this.blue = blue;
     }
+
     @Override
     public Image sepia() {
       return null;

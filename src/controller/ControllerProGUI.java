@@ -9,7 +9,6 @@ import model.Image;
 import model.ImageCreator;
 import view.ViewGUIInterface;
 
-
 /**
  * This class is an extended version of original Controller for additional functionalities such as
  * compression, histogram, color correction, level adjustment.
@@ -18,17 +17,10 @@ import view.ViewGUIInterface;
 public class ControllerProGUI implements Features {
 
   protected ViewGUIInterface view;
-
   private Map<String, Image> images;
-
-  private Image img;
-
   private ImageCreator imageCreator;
-
   private Integer splitPerc;
-
   private boolean split;
-
   private boolean isSaved;
   private ControllerUtil controllerUtil;
 
@@ -49,6 +41,9 @@ public class ControllerProGUI implements Features {
     this.controllerUtil = new ControllerUtil();
   }
 
+  /**
+   * This method sets the view and adds all the features.
+   */
   public void setView() {
     //provide view with all the callbacks
     view.addFeatures(this);
