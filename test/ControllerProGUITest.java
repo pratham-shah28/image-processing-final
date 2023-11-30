@@ -844,7 +844,7 @@ public class ControllerProGUITest {
     int blue[][] = null;
     MockModel image = new MockModel(mockLog, red, green, blue);
     Features controller = new ControllerProGUI(view, images, imageCreator);
-    controller.saveTransformation();
+    controller.confirmTransformation();
     String expected = "\nPlease load an image first";
     assertEquals(expected, mockLog.toString());
   }
@@ -862,7 +862,7 @@ public class ControllerProGUITest {
     Features controller = new ControllerProGUI(view, images, imageCreator);
     images.put("originalImage", image);
     images.put("newImage", image);
-    controller.saveTransformation();
+    controller.confirmTransformation();
     String expected = "\ncreateHistogram" +
             "\nupdateImageLabel" +
             "\ntrue";
@@ -880,7 +880,7 @@ public class ControllerProGUITest {
     int blue[][] = null;
     MockModel image = new MockModel(mockLog, red, green, blue);
     Features controller = new ControllerProGUI(view, images, imageCreator);
-    controller.saveTransformation();
+    controller.confirmTransformation();
     String expected = "\nPlease load an image first";
     assertEquals(expected, mockLog.toString());
   }
