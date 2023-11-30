@@ -61,7 +61,6 @@ public class ControllerProGUI implements ActionListener {
     this.imageCreator = imageCreator;
   }
 
-
   @Override
   public void actionPerformed(ActionEvent e) {
     String command = e.getActionCommand();
@@ -83,21 +82,6 @@ public class ControllerProGUI implements ActionListener {
       }
         return;
     }
-    // System.out.println(view.saveOption());
-//    if (split.equals("Split mode disabled")) {
-//      System.out.println("ahiya");
-//      if (images.containsKey("originalImage") && images.containsKey("newImage") && images.containsKey("splitImage")) {
-//        System.out.println("ahiya2");
-//        if (view.saveOption() == 0) {
-////          images.put("newImage", img);
-//          images.put("originalImage", images.get("newImage"));
-//          view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
-//        } else {
-//          view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
-//        }
-//        return;
-//      }
-//    }
     if (!(command.equals("Load")) && !(images.containsKey("originalImage"))) {
       view.showDialog("Please load an image first");
       return;

@@ -1,5 +1,4 @@
 import controller.ControllerInterface;
-//import controller.ControllerPro;
 import controller.ControllerPro;
 import controller.ControllerProGUI;
 import model.ImageCreator;
@@ -27,15 +26,12 @@ public class MainApp {
    * @param args command line arguments as strings.
    */
   public static void main(String[] args) {
-    System.out.println("lo");
     if (args.length == 0) {
-      System.out.println(3);
       InputStream in = System.in;
       ViewGUIInterface view = new ViewGUI();
       ImageCreator imageCreator = new ImageCreatorImpl();
       ActionListener controller = new ControllerProGUI(view, in, new HashMap<>(), imageCreator);
     } else {
-      System.out.println(1);
       if (args[0].equals("-file")) {
         String input = String.format("run" + " " + "\"%s\"" + "\nexit", args[1]);
         InputStream in = new ByteArrayInputStream(input.getBytes());
@@ -43,16 +39,13 @@ public class MainApp {
         ImageCreator imageCreator = new ImageCreatorImpl();
         ControllerPro controllerPro =
                 new ControllerPro(view, in, new HashMap<>(), imageCreator);
-      }
-      else if (args[0].equals("-text")) {
-        System.out.println(2);
+      } else if (args[0].equals("-text")) {
         InputStream in = System.in;
         ViewInterface view = new View();
         ImageCreator imageCreator = new ImageCreatorImpl();
         ControllerInterface controller = new ControllerPro(view, in, new HashMap<>(), imageCreator);
         controller.execute();
-      }
-      else {
+      } else {
         System.out.println("Please use proper syntax.");
       }
     }
