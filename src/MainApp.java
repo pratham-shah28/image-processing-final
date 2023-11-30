@@ -25,10 +25,9 @@ public class MainApp {
    */
   public static void main(String[] args) {
     if (args.length == 0) {
-      InputStream in = System.in;
       ViewGUIInterface view = new ViewGUI();
       ImageCreator imageCreator = new ImageCreatorImpl();
-      ControllerProGUI controller = new ControllerProGUI(view, in, new HashMap<>(), imageCreator);
+      ControllerProGUI controller = new ControllerProGUI(view, new HashMap<>(), imageCreator);
       controller.setView();
     } else {
       if (args[0].equals("-file")) {

@@ -52,6 +52,16 @@ public class ViewTest {
       "green-component image-name dest-image-name",
       "blue-component image-name dest-image-name",
       "sepia image-name dest-image-name",
+      "histogram image-name dest-image-name",
+      "color-correct image-name dest-image-name",
+      "levels-adjust b m w image-name dest-image-name",
+      "compress percentage image-name dest-image-name",
+      "blur image-name dest-image split p",
+      "sharpen image-name dest-image split p",
+      "sepia image-name dest-image split p",
+      "luma-component image-name dest-image split p",
+      "intensity-component image-name dest-image split p",
+      "value-component image-name dest-image split p",
       "run script-file",
       "save image-path image-name"
     };
@@ -60,7 +70,6 @@ public class ViewTest {
       expected.append(System.getProperty("line.separator"));
     }
     expected.append("-------------------------------------------------------------------------");
-    expected.append(System.getProperty("line.separator"));
     expected.append(System.getProperty("line.separator"));
     view.showCommandList();
     assertEquals(expected.toString(), out.toString());

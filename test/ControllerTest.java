@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * This is a JUnit test class to test the controller.
+ * This is a JUnit test class to test the basic controller.
  */
 public class ControllerTest {
   private class MockModel implements Image {
@@ -271,14 +271,12 @@ public class ControllerTest {
       lastLine = lines[lines.length - 2];
     }
     StringBuilder str = new StringBuilder();
-    str.append("Save: Success");
+    str.append("Image Saved Successfully!");
     assertEquals(str.toString(), lastLine);
-
   }
 
   @Test
   public void testLoad() throws IOException {
-
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "load " + "\"" + path + "\"" + " mumbai";
@@ -293,7 +291,6 @@ public class ControllerTest {
 
   @Test
   public void operationBeforeLoad() {
-
     ViewInterface view = new View();
     String input = "red-component mumbai mumbai-red";
     InputStream in = new ByteArrayInputStream(input.getBytes());
@@ -303,9 +300,7 @@ public class ControllerTest {
     ControllerInterface controller = new Controller(view, in, images, imageCreator);
     controller.execute();
     String outputString = out.toString();
-
     String[] lines = outputString.split(System.lineSeparator());
-
     String lastLine = "";
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];
@@ -313,12 +308,10 @@ public class ControllerTest {
     StringBuilder str = new StringBuilder();
     str.append("The image you are trying to operate on does not exists.");
     assertEquals(str.toString(), lastLine);
-
   }
 
   @Test
   public void fileDoesNotExist() throws IOException {
-
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai5.jpg";
     String input = "load " + "\"" + path + "\"" + " mumbai";
@@ -328,11 +321,8 @@ public class ControllerTest {
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
     ControllerInterface controller = new Controller(view, in, images, imageCreator);
     controller.execute();
-
     String outputString = out.toString();
-
     String[] lines = outputString.split(System.lineSeparator());
-
     String lastLine = "";
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];
@@ -340,7 +330,6 @@ public class ControllerTest {
     StringBuilder str = new StringBuilder();
     str.append("Load: Failed: javax.imageio.IIOException: Can't read input file!");
     assertEquals(str.toString(), lastLine);
-
   }
 
   @Test
@@ -356,19 +345,15 @@ public class ControllerTest {
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new Controller(view, in, images, imageCreator);
     controller.execute();
-
     String outputString = out.toString();
-
     String[] lines = outputString.split(System.lineSeparator());
-
     String lastLine = "";
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];
     }
     StringBuilder str = new StringBuilder();
-    str.append("Invalid format.");
+    str.append("Invalid Image format.");
     assertEquals(str.toString(), lastLine);
-
   }
 
   @Test
@@ -385,21 +370,18 @@ public class ControllerTest {
     ControllerInterface controller = new Controller(view, in, images, imageCreator);
     controller.execute();
     String outputString = out.toString();
-
     String[] lines = outputString.split(System.lineSeparator());
-
     String lastLine = "";
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];
     }
     StringBuilder str = new StringBuilder();
-    str.append("Invalid destination.");
+    str.append("Invalid destination folder.");
     assertEquals(str.toString(), lastLine);
   }
 
   @Test
   public void testRunInvalidFormat() throws IOException {
-
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\Mumbai.jpg";
     String input = "run " + "\"" + path + "\"";
@@ -409,11 +391,8 @@ public class ControllerTest {
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
     ControllerInterface controller = new Controller(view, in, images, imageCreator);
     controller.execute();
-
     String outputString = out.toString();
-
     String[] lines = outputString.split(System.lineSeparator());
-
     String lastLine = "";
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];
@@ -421,12 +400,10 @@ public class ControllerTest {
     StringBuilder str = new StringBuilder();
     str.append("Run: Failed: java.lang.IllegalArgumentException: Please input text file only.");
     assertEquals(str.toString(), lastLine);
-
   }
 
   @Test
   public void testRun() throws IOException {
-
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\commands.txt";
     String input = "run " + "\"" + path + "\"";
@@ -436,11 +413,8 @@ public class ControllerTest {
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
     ControllerInterface controller = new Controller(view, in, images, imageCreator);
     controller.execute();
-
     String outputString = out.toString();
-
     String[] lines = outputString.split(System.lineSeparator());
-
     String lastLine = "";
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];
@@ -552,19 +526,15 @@ public class ControllerTest {
     ImageCreator imageCreator = new ImageCreatorImpl();
     ControllerInterface controller = new Controller(view, in, images, imageCreator);
     controller.execute();
-
     String outputString = out.toString();
-
     String[] lines = outputString.split(System.lineSeparator());
-
     String lastLine = "";
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];
     }
     StringBuilder str = new StringBuilder();
-    str.append("Save: Success");
+    str.append("Image Saved Successfully!");
     assertEquals(str.toString(), lastLine);
-
   }
 
   @Test
@@ -595,15 +565,13 @@ public class ControllerTest {
     controller.execute();
 
     String outputString = out.toString();
-
     String[] lines = outputString.split(System.lineSeparator());
-
     String lastLine = "";
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];
     }
     StringBuilder str = new StringBuilder();
-    str.append("Save: Success");
+    str.append("Image Saved Successfully!");
     assertEquals(str.toString(), lastLine);
 
   }
@@ -636,22 +604,18 @@ public class ControllerTest {
     controller.execute();
 
     String outputString = out.toString();
-
     String[] lines = outputString.split(System.lineSeparator());
-
     String lastLine = "";
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];
     }
     StringBuilder str = new StringBuilder();
-    str.append("Save: Success");
+    str.append("Image Saved Successfully!");
     assertEquals(str.toString(), lastLine);
-
   }
 
   @Test
   public void testLoadPPM() throws IOException {
-
     ViewInterface view = new View();
     String path = new File(".").getCanonicalPath() + "\\test\\P3.ppm";
     String input = "load " + "\"" + path + "\"" + " mumbai";
@@ -679,15 +643,13 @@ public class ControllerTest {
     controller.execute();
 
     String outputString = out.toString();
-
     String[] lines = outputString.split(System.lineSeparator());
-
     String lastLine = "";
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];
     }
     StringBuilder str = new StringBuilder();
-    str.append("Save: Success");
+    str.append("Image Saved Successfully!");
     assertEquals(str.toString(), lastLine);
   }
 
@@ -702,9 +664,7 @@ public class ControllerTest {
     ControllerInterface controller = new Controller(view, in, images, imageCreator);
     controller.execute();
     String outputString = out.toString();
-
     String[] lines = outputString.split(System.lineSeparator());
-
     String lastLine = "";
     if (lines.length > 0) {
       lastLine = lines[lines.length - 2];

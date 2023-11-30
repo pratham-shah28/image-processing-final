@@ -3,6 +3,7 @@ package view;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -240,8 +241,20 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
   @Override
   public void addFeatures(Features features) {
     applyButton.addActionListener(evt -> features.apply());
-    loadButton.addActionListener(evt -> features.loadImage());
-    saveButton.addActionListener(evt -> features.saveImage());
+    loadButton.addActionListener(evt -> {
+      try {
+        features.loadImage();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    });
+    saveButton.addActionListener(evt -> {
+      try {
+        features.saveImage();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    });
     compressButton.addActionListener(evt -> features.applyCompress());
     levelsAdjustButton.addActionListener(evt -> features.adjustLevel());
     splitPercButton.addActionListener(evt -> features.setSplitPercentage());

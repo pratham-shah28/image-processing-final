@@ -1,6 +1,5 @@
 package controller;
 
-
 /**
  * This is an interface for the controller class. Controller is responsible managing IO operations
  * and delegating work between model and view.

@@ -1,25 +1,15 @@
 package controller;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.imageio.ImageIO;
 
 import model.ImageCreator;
 import view.ViewInterface;
@@ -35,10 +25,8 @@ import model.Image;
 public class Controller implements ControllerInterface {
   protected ViewInterface view;
   private Map<String, Image> images;
-  private HashSet<String> supportedFormats;
   protected InputStream in;
   private ImageCreator imageCreator;
-
   protected String path;
   protected String imageName;
   protected String outputName;
@@ -49,7 +37,7 @@ public class Controller implements ControllerInterface {
   protected int b;
   protected int m;
   protected int w;
-
+  private ControllerUtil controllerUtil;
   protected List<String> commandParts;
 
   /**
@@ -67,10 +55,7 @@ public class Controller implements ControllerInterface {
     this.view = view;
     this.in = in;
     this.images = images;
-    supportedFormats = new HashSet<>();
-    supportedFormats.add("jpg");
-    supportedFormats.add("png");
-    supportedFormats.add("ppm");
+    this.controllerUtil = new ControllerUtil();
     this.imageCreator = imageCreator;
     path = null;
     imageName = null;
@@ -106,6 +91,12 @@ public class Controller implements ControllerInterface {
     }
   }
 
+  /**
+   * This method split a command into respective components and return a list of the same.
+   *
+   * @param input command to be split into components.
+   * @return a list containing command components.
+   */
   protected List<String> getCommandComponents(String input) {
     List<String> commandParts = new ArrayList<>();
     try {
@@ -126,21 +117,21 @@ public class Controller implements ControllerInterface {
     return commandParts;
   }
 
+  /**
+   * This method runs the given commands and calls the respective model method
+   * to apply transformation on the image.
+   *
+   * @param currCommand the current command to be run.
+   */
   protected void runCommand(String currCommand) {
-    // System.out.println("ahiya ao" + currCommand);
+    String status = "";
     switch (currCommand) {
       case "load":
         try {
-          int lastDotIndex = path.lastIndexOf('.');
-          String format = path.substring(lastDotIndex + 1);
-          if (format.equals("ppm")) {
-            loadImagePPM(path, imageName);
-
-          } else {
-            this.loadImage(path, imageName);
-          }
+          status = controllerUtil.loadImage(path, imageName, images, imageCreator);
+          view.showOutput(status);
         } catch (Exception e) {
-          view.showOutput("Load: Failed: " + e);
+          view.showOutput(status);
         } finally {
           view.enterCommandPrompt();
         }
@@ -156,7 +147,6 @@ public class Controller implements ControllerInterface {
           view.enterCommandPrompt();
         }
         break;
-
       case "vertical-flip":
         try {
           images.put(outputName, images.get(imageName).flipVertical());
@@ -207,7 +197,6 @@ public class Controller implements ControllerInterface {
         break;
       case "blur":
         try {
-
           images.put(outputName, images.get(imageName).blur());
           view.showOutput("Blur: Success");
         } catch (Exception e) {
@@ -252,10 +241,8 @@ public class Controller implements ControllerInterface {
         break;
       case "luma-component":
         try {
-
           images.put(outputName, images.get(imageName).luma());
           view.showOutput("Luma Component: Success");
-
         } catch (Exception e) {
           view.showOutput("Luma Component: Failed: " + e);
           view.imageDoesNotExists();
@@ -298,10 +285,8 @@ public class Controller implements ControllerInterface {
         break;
       case "sepia":
         try {
-
           images.put(outputName, images.get(imageName).sepia());
           view.showOutput("Sepia: Success");
-
         } catch (Exception e) {
           view.showOutput("Sepia: Failed: " + e);
           view.imageDoesNotExists();
@@ -309,7 +294,6 @@ public class Controller implements ControllerInterface {
           view.enterCommandPrompt();
         }
         break;
-
       case "run":
         try {
           int lastDotIndex = path.lastIndexOf('.');
@@ -333,9 +317,10 @@ public class Controller implements ControllerInterface {
         break;
       case "save":
         try {
-          saveImage(path, imageName);
+          status = controllerUtil.saveImage(path, images.get(imageName));
+          view.showOutput(status);
         } catch (Exception e) {
-          view.showOutput("Save: Failed: " + e);
+          view.showOutput(status);
           view.imageDoesNotExists();
         } finally {
           view.enterCommandPrompt();
@@ -346,6 +331,13 @@ public class Controller implements ControllerInterface {
     }
   }
 
+  /**
+   * This method parses the command and its components.
+   * It identifies and stores the components based on the command syntax.
+   *
+   * @param currCommand  the current command to be parsed.
+   * @param commandParts list containing command parts.
+   */
   protected void parseCommand(String currCommand, List<String> commandParts) {
     if (currCommand.equals("run")) {
       try {
@@ -409,152 +401,5 @@ public class Controller implements ControllerInterface {
     } else {
       view.showOutput("Invalid Command. Press 'help' to list the supported commands.");
     }
-  }
-
-  private void saveImage(String path, String imageName) {
-    try {
-      int lastDotIndex = path.lastIndexOf('.');
-      String format = path.substring(lastDotIndex + 1);
-      if (supportedFormats.contains(format)) {
-        Image i = images.get(imageName);
-        if (i == null) {
-          view.imageDoesNotExists();
-          return;
-        }
-
-        if (format.equals("ppm")) {
-          try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            int width = i.getWidth();
-            int height = i.getHeight();
-
-            writer.write("P3\n");
-            writer.write(height + " " + width + "\n");
-            writer.write(255 + "\n");
-
-            for (int x = 0; x < width; x++) {
-              for (int y = 0; y < height; y++) {
-                int red = i.getRedPixelMatrixElement(x, y);
-                int green = i.getGreenPixelMatrixElement(x, y);
-                int blue = i.getBluePixelMatrixElement(x, y);
-                writer.write(red + " " + green + " " + blue + " ");
-              }
-              writer.write("\n");
-            }
-          } catch (IOException e) {
-            view.showOutput("Invalid path.");
-          }
-        }
-        int width = i.getWidth();
-        int height = i.getHeight();
-        int[][] pixelMatrix = new int[width][height];
-        for (int x = 0; x < width; x++) {
-          for (int y = 0; y < height; y++) {
-            pixelMatrix[x][y] = (i.getRedPixelMatrixElement(x, y) << 16)
-                    | (i.getGreenPixelMatrixElement(x, y) << 8)
-                    | i.getBluePixelMatrixElement(x, y);
-          }
-        }
-        BufferedImage imageSave = new BufferedImage(pixelMatrix[0].length, pixelMatrix.length, 5);
-        for (int x = 0; x < pixelMatrix.length; x++) {
-          for (int y = 0; y < pixelMatrix[0].length; y++) {
-            imageSave.setRGB(y, x, pixelMatrix[x][y]);
-          }
-        }
-
-        try {
-          File outputImageFileRed = new File(path);
-          ImageIO.write(imageSave, format, outputImageFileRed);
-          view.showOutput("Save: Success");
-        } catch (Exception e) {
-          view.showOutput("Invalid destination.");
-        }
-
-      } else {
-        view.showOutput("Invalid format.");
-      }
-    } catch (Exception e) {
-      view.showCommandList();
-    }
-  }
-
-  private void loadImage(String path, String name) throws IOException {
-    if (name != null) {
-      File imageFile = new File(path);
-      BufferedImage image = ImageIO.read(imageFile);
-      Image img = processLoadImage(image);
-      images.put(name, img);
-      view.showOutput("Load: Success");
-    } else {
-      view.showOutput("Please provide a name for your image.");
-    }
-  }
-
-  protected Image processLoadImage(BufferedImage image) {
-    int width = image.getWidth();
-    int height = image.getHeight();
-    int[][] pixelMatrix = new int[height][width];
-    int[][] redPixelMatrix = new int[height][width];
-    int[][] greenPixelMatrix = new int[height][width];
-    int[][] bluePixelMatrix = new int[height][width];
-
-    for (int x = 0; x < height; x++) {
-      for (int y = 0; y < width; y++) {
-        pixelMatrix[x][y] = image.getRGB(y, x);
-        redPixelMatrix[x][y] = (pixelMatrix[x][y] & 0xff0000) >> 16;
-        greenPixelMatrix[x][y] = (pixelMatrix[x][y] & 0xff00) >> 8;
-        bluePixelMatrix[x][y] = pixelMatrix[x][y] & 0xff;
-      }
-    }
-
-    return imageCreator.createModelImpl(redPixelMatrix, greenPixelMatrix, bluePixelMatrix);
-  }
-
-  private void loadImagePPM(String path, String name) {
-    Scanner sc;
-    try {
-      sc = new Scanner(new FileInputStream(path));
-    } catch (FileNotFoundException e) {
-      view.showOutput("File " + path + " not found!");
-      return;
-    }
-    StringBuilder builder = new StringBuilder();
-    while (sc.hasNextLine()) {
-      String s = sc.nextLine();
-      if (s.charAt(0) != '#') {
-        builder.append(s + System.lineSeparator());
-      }
-    }
-    sc = new Scanner(builder.toString());
-    String token;
-
-    token = sc.next();
-    if (!token.equals("P3")) {
-      view.showOutput("Invalid PPM file: plain RAW file should begin with P3");
-      return;
-    }
-    int width = sc.nextInt();
-    int height = sc.nextInt();
-    int maxValue = sc.nextInt();
-    view.showOutput("Maximum value of a color in this file (usually 255): " + maxValue);
-    int[][] newRedPixelMatrix = new int[height][width];
-    int[][] newGreenPixelMatrix = new int[height][width];
-    int[][] newBluePixelMatrix = new int[height][width];
-
-    for (int i = 0; i < height; i++) {
-      for (int j = 0; j < width; j++) {
-        int r = sc.nextInt();
-        int g = sc.nextInt();
-        int b = sc.nextInt();
-        newRedPixelMatrix[i][j] = r;
-        newGreenPixelMatrix[i][j] = g;
-        newBluePixelMatrix[i][j] = b;
-      }
-    }
-    Image imageProcessor =
-            imageCreator.createModelImpl(newRedPixelMatrix,
-                    newGreenPixelMatrix,
-                    newBluePixelMatrix);
-    images.put(name, imageProcessor);
-    view.showOutput("Load: Success");
   }
 }

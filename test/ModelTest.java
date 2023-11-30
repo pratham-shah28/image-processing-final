@@ -848,9 +848,9 @@ public class ModelTest {
 
     for (int x = 0; x < red.length; x++) {
       for (int y = 0; y < red[0].length; y++) {
-        assertEquals(redExpected[x][y], actualImage.getRedPixelMatrixElement(x, y));
-        assertEquals(greenExpected[x][y], actualImage.getGreenPixelMatrixElement(x, y));
-        assertEquals(blueExpected[x][y], actualImage.getBluePixelMatrixElement(x, y));
+        assertEquals(redExpected[x][y], actualImageNew.getRedPixelMatrixElement(x, y));
+        assertEquals(greenExpected[x][y], actualImageNew.getGreenPixelMatrixElement(x, y));
+        assertEquals(blueExpected[x][y], actualImageNew.getBluePixelMatrixElement(x, y));
       }
     }
   }

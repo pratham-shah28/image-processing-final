@@ -1,19 +1,9 @@
 package controller;
 
-import java.awt.*;
-import java.io.FileWriter;
-import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import model.Image;
 import model.ImageCreator;
@@ -33,44 +23,40 @@ public class ControllerProGUI implements Features {
 
   private Image img;
 
-  private HashSet<String> supportedFormats;
-
   private ImageCreator imageCreator;
 
   private Integer splitPerc;
 
-  boolean split;
+  private boolean split;
 
-  boolean isSaved;
+  private boolean isSaved;
+  private ControllerUtil controllerUtil;
 
 
   /**
    * A constructor for ControllerPro class.
    *
    * @param view         View object.
-   * @param in           InputStream object.
    * @param images       Hashmap of images.
    * @param imageCreator Factory for creating Image object.
    */
-  public ControllerProGUI(ViewGUIInterface view, InputStream in, HashMap<String, Image> images,
+  public ControllerProGUI(ViewGUIInterface view, HashMap<String, Image> images,
                           ImageCreator imageCreator) {
     this.view = view;
     this.images = images;
     split = false;
     this.imageCreator = imageCreator;
-    supportedFormats = new HashSet<>();
-    supportedFormats.add("jpg");
-    supportedFormats.add("png");
-    supportedFormats.add("ppm");
+    this.controllerUtil = new ControllerUtil();
   }
 
-  public void setView(){
+  public void setView() {
     //provide view with all the callbacks
     view.addFeatures(this);
   }
 
   @Override
-  public void loadImage() {
+  public void loadImage() throws IOException {
+    String status = "";
     if (images.containsKey("originalImage") && !isSaved) {
       if (view.saveOption() == 0) {
         saveImage();
@@ -79,30 +65,28 @@ public class ControllerProGUI implements Features {
     }
     File selectedFile = view.loadSelectedImage();
     if (selectedFile != null) {
-      BufferedImage image = null;
-      try {
-        image = ImageIO.read(selectedFile);
-      } catch (IOException ex) {
-        throw new RuntimeException(ex);
-      }
-      img = processLoadImage(image);
-      images.put("originalImage", img);
-      images.put("newImage", img);
-      view.updateImageLabel(img, img.createHistogram());
+      status = controllerUtil.loadImage(selectedFile.getCanonicalPath(), "originalImage", images, imageCreator);
+    }
+    if (status.equals("Load Successful.")) {
+      images.put("newImage", images.get("originalImage"));
+      view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
       isSaved = false;
     }
+    view.showDialog(status);
   }
 
   @Override
-  public void saveImage() {
+  public void saveImage() throws IOException {
+    String status = "Save failed.";
     if (!checkImageExists()) {
       return;
     }
     File selectedDirectory = view.selectedDirectory();
     if (selectedDirectory != null) {
       String imageName = view.getImageName();
-      convertToBufferedImage(imageName, selectedDirectory);
+      status = controllerUtil.saveImage(selectedDirectory.getCanonicalPath() + imageName, images.get("originalImage"));
     }
+    view.showDialog(status);
   }
 
   @Override
@@ -203,15 +187,14 @@ public class ControllerProGUI implements Features {
     }
     int userInput = view.getCompressInput();
     if (userInput >= 1 && userInput <= 100) {
-        // Perform an action based on the entered number
-        img = img.compress(userInput);
-        images.put("newImage", images.get("originalImage").compress(userInput));
-        if (handleSplit()) return;
-        view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
-      } else {
-        // Display an error message for an invalid range
-        view.showDialog("Please enter a number between 1 and 100.");
-      }
+      // Perform an action based on the entered number
+      images.put("newImage", images.get("originalImage").compress(userInput));
+      if (handleSplit()) return;
+      view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
+    } else {
+      // Display an error message for an invalid range
+      view.showDialog("Please enter a number between 1 and 100.");
+    }
   }
 
   @Override
@@ -241,6 +224,7 @@ public class ControllerProGUI implements Features {
       return true;
     }
   }
+
   private boolean handleSplit() {
     if (split) {
       if (!(view.getSplit().equals(""))) {
@@ -267,89 +251,4 @@ public class ControllerProGUI implements Features {
     return false;
   }
 
-  protected Image processLoadImage(BufferedImage image) {
-    int width = image.getWidth();
-    int height = image.getHeight();
-    int[][] pixelMatrix = new int[height][width];
-    int[][] redPixelMatrix = new int[height][width];
-    int[][] greenPixelMatrix = new int[height][width];
-    int[][] bluePixelMatrix = new int[height][width];
-
-    for (int x = 0; x < height; x++) {
-      for (int y = 0; y < width; y++) {
-        pixelMatrix[x][y] = image.getRGB(y, x);
-        redPixelMatrix[x][y] = (pixelMatrix[x][y] & 0xff0000) >> 16;
-        greenPixelMatrix[x][y] = (pixelMatrix[x][y] & 0xff00) >> 8;
-        bluePixelMatrix[x][y] = pixelMatrix[x][y] & 0xff;
-      }
-    }
-    return imageCreator.createModelImpl(redPixelMatrix, greenPixelMatrix, bluePixelMatrix);
-  }
-
-
-
-  private void convertToBufferedImage(String imageName, File selectedDirectory) {
-    BufferedImage imageSave = null;
-    try {
-      int lastDotIndex = imageName.lastIndexOf('.');
-      String format = imageName.substring(lastDotIndex + 1);
-      if (supportedFormats.contains(format)) {
-        Image i = images.get("originalImage");
-        if (i == null) {
-          return;
-        }
-
-        if (format.equals("ppm")) {
-          try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedDirectory.getCanonicalPath() + imageName))) {
-            int width = i.getWidth();
-            int height = i.getHeight();
-
-            writer.write("P3\n");
-            writer.write(height + " " + width + "\n");
-            writer.write(255 + "\n");
-
-            for (int x = 0; x < width; x++) {
-              for (int y = 0; y < height; y++) {
-                int red = i.getRedPixelMatrixElement(x, y);
-                int green = i.getGreenPixelMatrixElement(x, y);
-                int blue = i.getBluePixelMatrixElement(x, y);
-                writer.write(red + " " + green + " " + blue + " ");
-              }
-              writer.write("\n");
-            }
-          } catch (IOException e) {
-            view.showDialog("Invalid path.");
-          }
-        } else {
-          int width = i.getWidth();
-          int height = i.getHeight();
-          int[][] pixelMatrix = new int[width][height];
-          for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-              pixelMatrix[x][y] = (i.getRedPixelMatrixElement(x, y) << 16)
-                      | (i.getGreenPixelMatrixElement(x, y) << 8)
-                      | i.getBluePixelMatrixElement(x, y);
-            }
-          }
-          imageSave = new BufferedImage(pixelMatrix[0].length, pixelMatrix.length, 5);
-          for (int x = 0; x < pixelMatrix.length; x++) {
-            for (int y = 0; y < pixelMatrix[0].length; y++) {
-              imageSave.setRGB(y, x, pixelMatrix[x][y]);
-            }
-          }
-        }
-        try {
-          File outputFile = new File(selectedDirectory, imageName);
-          ImageIO.write(imageSave, format, outputFile);
-          view.showDialog("Image Saved Successfully!");
-        } catch (Exception e) {
-          view.showDialog("Invalid destination folder.");
-        }
-      } else {
-        view.showDialog("Invalid Image format.");
-      }
-    } catch (Exception e) {
-      view.showDialog("Cannot Save the image.");
-    }
-  }
 }
