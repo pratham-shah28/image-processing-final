@@ -11,35 +11,35 @@ import controller.Features;
 public interface ViewGUIInterface {
 
   /**
-   * Returns the comboBox which is the drop menu for operations.
+   * This method gets the selected item from the comboBox containing list of operations.
    *
-   * @return Returns the dropdown menu for operations.
+   * @return selected operation in string format.
    */
   String getComboBoxSelectedItem();
 
   /**
-   * Returns the compression factor given by the user.
+   * This method gets the compression factor given by the user.
    *
    * @return Value in the JTextField for compression.
    */
   int getCompressInput();
 
   /**
-   * Returns the split percentage for the preview.
+   * This method gets the split percentage for the preview.
    *
    * @return Value in the JTextField for split.
    */
   String getSplit();
 
   /**
-   * Method to show a message using a dialog box.
+   * This method shows a message using a dialog box.
    *
    * @param s String which is to be displayed in the dialog box.
    */
   void showDialog(String s);
 
   /**
-   * Method used to display an image in the GUI.
+   * This method updates the image that is being displayed in the GUI.
    *
    * @param image     Image object which is to be displayed in the GUI.
    * @param histogram Histogram for the given image.
@@ -47,21 +47,21 @@ public interface ViewGUIInterface {
   void updateImageLabel(model.Image image, model.Image histogram);
 
   /**
-   * Method to get the b value for level-adjust method.
+   * This method gets the b value for level-adjust method.
    *
    * @return b value given in the JTextField.
    */
   String bInput();
 
   /**
-   * Method to get the m value for level-adjust method.
+   * This method gets the m value for level-adjust method.
    *
    * @return m value given in the JTextField.
    */
   String mInput();
 
   /**
-   * Method to get the w value for level-adjust method.
+   * This method gets the w value for level-adjust method.
    *
    * @return w value given in the JTextField.
    */
@@ -76,17 +76,37 @@ public interface ViewGUIInterface {
   void toggleSet(boolean split);
 
   /**
-   * Method to show the save dialog box.
+   * This method displays a dialog box asking the user to save the currently visible image.
    *
    * @return Integer to see if user wants to save or not.
    */
   int saveOption();
 
+  /**
+   * This method calls the callback functions based on the button clicked.
+   *
+   * @param features all the features supported by GUI.
+   */
   void addFeatures(Features features);
 
+  /**
+   * This method gets the selected image from the JFileChooser.
+   *
+   * @return the selected image file.
+   */
   File loadSelectedImage();
 
+  /**
+   * This method gets the selected directory from the JFileChooser.
+   *
+   * @return the selected directory.
+   */
   File selectedDirectory();
 
+  /**
+   * This method gets the name of the image from the user using JOptionPane input dialog.
+   *
+   * @return image name with which the image will be saved.
+   */
   String getImageName();
 }

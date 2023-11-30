@@ -164,7 +164,7 @@ public class ControllerProGUI implements Features {
   }
 
   @Override
-  public void saveTransformation() {
+  public void confirmTransformation() {
     if (!checkImageExists()) {
       return;
     }
@@ -208,6 +208,9 @@ public class ControllerProGUI implements Features {
           view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
         }
       }
+    } else {
+      images.put("newImage", images.get("originalImage"));
+      view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
     }
   }
 

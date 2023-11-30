@@ -44,7 +44,7 @@ public interface Features {
    * This method is associated with a button which when clicked
    * will confirm the transformation showed in split mode.
    */
-  void saveTransformation();
+  void confirmTransformation();
 
   /**
    * This method is associated with a button which when clicked

@@ -119,7 +119,6 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
 
     histogramLabel.setIcon(imageIconHistogram);
     imageLabel.setIcon(imageIcon);
-    // scrollPane.getViewport().setPreferredSize(new Dimension(300, 500));
   }
 
   private void buildGUI() {
@@ -171,7 +170,7 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
     splitPercButton.setEnabled(false);
     toggleButton = new JToggleButton("Enable Split Mode");
     toggleButton.setToolTipText("Click to toggle between preview and normal mode.");
-    applyTransformation = new JButton("Save transformation");
+    applyTransformation = new JButton("Confirm transformation");
     applyTransformation.setEnabled(false);
     splitPanel.add(toggleButton, BorderLayout.NORTH);
     splitPanel.add(splitInput);
@@ -249,7 +248,7 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
     compressButton.addActionListener(evt -> features.applyCompress());
     levelsAdjustButton.addActionListener(evt -> features.adjustLevel());
     splitPercButton.addActionListener(evt -> features.setSplitPercentage());
-    applyTransformation.addActionListener(evt -> features.saveTransformation());
+    applyTransformation.addActionListener(evt -> features.confirmTransformation());
     toggleButton.addActionListener(evt -> features.splitMode(toggleButton.isSelected()));
   }
 
