@@ -190,5 +190,10 @@ public class ControllerProGUITest {
     public void toggleSet(boolean split) {
 
     }
+
+    @Override
+    public int saveOption() {
+      return 0;
+    }
   }
 }

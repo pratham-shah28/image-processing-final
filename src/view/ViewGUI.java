@@ -248,4 +248,10 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
     }
   }
 
+  @Override
+  public int saveOption() {
+    return JOptionPane.showConfirmDialog(this, "Do you want to save this",
+            "Save", JOptionPane.YES_NO_OPTION);
+  }
+
 }
