@@ -84,7 +84,7 @@ public class ControllerProGUITest {
 
       // Create an array of items for the dropdown
       String[] items = {"red-component", "green-component", "blue-component", "flip-vertical",
-            "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
+        "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
       imageOperationList = new JComboBox<>(items);
       applyButton = new JButton("Apply");
       loadButton = new JButton("Load");
