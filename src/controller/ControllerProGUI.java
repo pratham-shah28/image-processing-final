@@ -183,7 +183,6 @@ public class ControllerProGUI implements Features {
       return;
     }
     int userInput = view.getCompressInput();
-    System.out.println(userInput);
     if (userInput >= 0 && userInput <= 100) {
       // Perform an action based on the entered number
       images.put("newImage", images.get("originalImage").compress(userInput));
