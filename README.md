@@ -123,6 +123,13 @@ MainApp:
 5. Rest of the code base (view etc) remains the same.
 
 ## Changes from the previous version (assignment5 -> assignment6)
+1. We introduced a new version of the view 'ViewGUI' was created for the GUI based application. An interface 'ViewGUIInterface' for the same was added.
+2. The model was untouched and remains the same as the previous version.
+3. We introduced a new controller 'ControllerProGUI' for the GUI version of the application. This controller implements the Features interface which contains all the features supported by the application. These functions act as callback functions which are called from the view when an event occurrs (eg: Button click).
+4. As an optimization, we pulled out the existing load and save methods out of our controllers and implemented them in a new class 'ControllerUtil'. This class implements the 'ControllerUtilInterface'. Now following the principles of composition, all the controllers use the object of this class to load or save an image. This ensures all the utility functions are in one place and there is no code duplication/redundancy.
+5. Application can now run in three ways. A user has the option to provide a script file while running the application using command line option. If a valid file is provided, the program will run the script and exit. If the program is run without any command line options, then it will allow interactive entry to the application in GUI mode. To run the text-based version of the application, user can give '-text' as command line arguement.
+6. The whole application is backward compatible and works as intented for all the 3 mode.
+
 
 ## Running the application
 1. Using CMD
@@ -160,7 +167,7 @@ java -jar assignment5.jar
 ```
 
 ## Running the script file
-Run the MainApp file, then enter the following command\
+Run the MainApp in text-based interface, then enter the following command:
 ```bash
 run "C:\Users\PrathamS\IdeaProjects\final assignment4\commands.txt"
 ```
