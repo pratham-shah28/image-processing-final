@@ -7,7 +7,20 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JToggleButton;
+import javax.swing.JScrollPane;
+import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.BorderFactory;
+import javax.swing.SwingConstants;
+import javax.swing.JFileChooser;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -36,7 +49,6 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
   private JTextField wInput;
   private JComboBox<String> imageOperationList;
   private JToggleButton toggleButton;
-  private JScrollPane scrollPane;
 
   /**
    * Constructs the view GUI class and build the GUI to be displayed to the user..
@@ -147,7 +159,7 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
 
     // An array of items for the dropdown
     String[] items = {"red-component", "green-component", "blue-component", "flip-vertical",
-          "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
+        "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
     imageOperationList = new JComboBox<>(items);
     applyButton = new JButton("Apply");
     loadButton = new JButton("Load");
@@ -205,7 +217,7 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
     JPanel rightPanel = new JPanel(new BorderLayout());
     imageLabel = new JLabel();
     imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    scrollPane = new JScrollPane(imageLabel);
+    JScrollPane scrollPane = new JScrollPane(imageLabel);
     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
     rightPanel.add(scrollPane, BorderLayout.CENTER);
