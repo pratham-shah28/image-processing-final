@@ -1,0 +1,37 @@
+#How to use GUI version of Image Manipulation and Enhancement Application
+
+Conditions:
+1. Image should be loaded before trying to apply any operations on it.
+2. Operations can only be applied on the currently visible image.
+3. Refer the Readme.md to check how to run the application in the GUI mode.
+
+USAGE: 
+
+1. Press the 'Load' button to load an image. The supported formats are PNG, JPG, and PPM. An image can be selected using an interactive file chooser which will allow you to browse through local file system folders. 
+
+2. Select any operation you want to apply from the drop-down list and press the 'Apply' button. 
+
+3. To compress an image, enter the compression factor (range 0 - 100) in the text field besides the 'Compress' button and then press the button. If the entered input in the textfield is incorrect or empty, a dialog box will popup with error message.
+
+4. For level adjustment, press the 'Adjust level' button after giving appropriate b, m, and w values in the text field beside it. All the textfields and button have tooltips. If the entered input in the textfield is incorrect or empty, a dialog box will popup with error message. 
+
+5. After each operation, old image will be overridden by the new image obtained after applying the current operation and the new image will be displayed on the screen.
+
+4. 'Enable Split Mode' is a toggle button that will enable split mode for any operation.
+Using this feature user can preview an operation before committing to it. Users can set the portion of the image they want to preview by setting a split percentage in the text field provided in the split view pane. The default is 50%. After toggling split mode, the user can apply any operation on the loaded image uisng the dropdown available at the top. After each operation, the user has the option to commit to the operation by pressing the 'Confirm transformation' button which will apply the operation to the whole image and exit out of split mode.
+If another operation is applied before committing to the previous operation, then the newer operation will be applied to the original image and the previous operation will be lost. Therefore, during the split mode, if the user wishes to continue with the previous operation then the 'Confirm Transformation' button should be pressed. During previewing, the user has the option to change the preview percentage by entering the appropriate percentage and pressing 'Set split percentage'.
+
+5. The user can save the current image by pressing the 'Save' button which opens a dialog box where the user can go to the location of their choice
+and save the image in either PNG, JPG, or PPM format.
+
+6. On the bottom left corner, users can view the histogram of the image that is currently on their screens.
+
+7. Users can modify the size of the image display pane and also use scroll bars if the image is too large.
+
+8. If a user tries to apply any operation before loading an image, then a dialog box will show up prompting the user to load an image.
+
+9. If a user tries to load another image before saving the current image locally, a dialog box will open up asking if the user wants to save the current image or not.
+
+10. If the user gives a value in any of the text fields that is outside the scope of the requirement, the user will be prompted to enter the value again.
+
+
