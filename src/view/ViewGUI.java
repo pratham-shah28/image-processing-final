@@ -214,10 +214,12 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
       splitPercButton.setEnabled(true);
       applyTransformation.setEnabled(true);
       toggleButton.setText("Disable Split Mode");
+      toggleButton.setSelected(true);
     } else {
       splitInput.setEditable(false);
       splitPercButton.setEnabled(false);
       toggleButton.setText("Enable Split Mode");
+      toggleButton.setSelected(false);
       applyTransformation.setEnabled(false);
     }
   }

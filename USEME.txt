@@ -1,114 +1,37 @@
-#List of Supported Commands
+#How to use GUI version of Image Manipulation and Enhancement
 
 Conditions:
 1. Image should be loaded before trying to apply any operations on it.
 
+USAGE: 
 
-Commands:
-1. Load an image.
-syntax: "load image-path image-name"
-example: load "D:\NEU Khoury Classwork\Fall 2023\CS5010\Assignments\image.png" img
+1. Press the 'Load' button to load an image. The supported formats are PNG, JPG, and PPM.
 
-2. Brighten an image.
-syntax: "brighten factor image-name dest-image-name"
-example: brighten 10 img img-brightened
+2. Select any operation you want to apply from the drop-down list and press the 'Apply' button
 
-3. Flip an image vertically.
-syntax: "vertical-flip image-name dest-image-name"
-example: vertical-flip img img-vflip
+3. For compression press the 'Compress' after adding the compression factor (range 1 - 100) in the text field for compression.
 
-4. Flip an image horizontally.
-syntax: "horizontal-flip image-name dest-image-name"
-example: horizontal-flip img img-hflip
+4. For level adjustment, press the 'Adjust level' button after giving appropriate b, m, and w values in the text field.
 
-5. Split an image into red, green and blue channel images.
-syntax: "rgb-split image-name dest-image-name-red dest-image-name-green dest-image-name-blue"
-example: rgb-split img img-red img-green img-blue
+5. After each operation, your image will be overridden by the new image obtained after applying the current operation.
 
-6. Combine three images representing red, green, blue channel into one image.
-syntax: "rgb-combine dest-image-name red-image green-image blue-image"
-example: rgb-combine img-combined img-red img-green img-blue
+4. 'Enable Split Mode' is a toggle button that will enable split mode for any operation.
+Using this feature user can preview an operation before committing to it. Users can set the portion of the image they want to preview
+by setting a percentage in the text field provided in the split view plane. The default is 50%. After toggling split mode, 
+the user can load and apply any operation on the loaded image. After each operation, the user can commit to the operation by pressing the 'Save transformation' button which will apply the operation to the whole image. 
+If another operation is applied before committing to the previous operation, then the newer operation will be applied to the original image and the previous operation will be lost. Therefore, during the split mode, if the user wishes to continue with the previous operation then the 'Save Transformation' button should be pressed. During previewing, the user has to option to change the preview percentage by entering the appropriate percentage and pressing 'Set split percentage'.
 
-7. Blur an image.
-syntax: "blur image-name dest-image-name"
-example: blur img img-blurred
+5. The user can save the current image by pressing the 'Save' button which opens a dialog box where the user can go to the location of their choice
+and save the image in either PNG, JPG, or PPM format.
 
-8. Sharpen an image.
-syntax: "sharpen image-name dest-image-name"
-example: sharpen img img-sharpened
+6. On the bottom left corner, users can view the histogram of the image that is currently on their screens.
 
-9. Visualize the value component of the image.
-syntax: "value-component image-name dest-image-name"
-example: value-component img img-value
+7. Users can modify the size of the image display pane and also use scroll bars if the image is large enough.
 
-10. Visualize the intensity component of the image.
-syntax: "intensity-component image-name dest-image-name"
-example: intensity-component img img-intensity
+8. If a user tries to apply any operation before loading an image, then a dialog box will show up prompting the user to load an image.
 
-11. Visualize the luma component of the image.
-syntax: "luma-component image-name dest-image-name"
-example: luma-component img img-luma
+9. If a user tries to load another image before saving the current image locally, a dialog box will open up asking if the user wants to save the current image or not.
 
-12. Visualize the red channel of an image.
-syntax: "red-component image-name dest-image-name"
-example: red-component img img-red
+10. If the user gives a value in any of the text fields that is outside the scope of the requirement, the user will be prompted to enter the value again. 
 
-13. Visualize the green channel of an image.
-syntax: "green-component image-name dest-image-name"
-example: green-component img img-green
 
-14. Visualize the blue channel of an image.
-syntax: "blue-component image-name dest-image-name"
-example: blue-component img img-blue
-
-15. Apply sepia tone to the image.
-syntax: "sepia image-name dest-image-name"
-example: sepia img img-sepia
-
-16. Genreate histogram for an image.
-syntax: "histogram image-name dest-image-name"
-example: histogram img img-h
-
-17. Color correct an image by calculating the histogram for each component and aligning the histogram peaks of individual channels.
-syntax: "color-correct image-name dest-image-name"
-example: color-correct img img-cc
-
-18. Level Adjust an image by specifying the black, mid and white values (b,m,w). These values should be ascending in that order, and should be within 0 and 255 for this command to work correctly.
-syntax: "levels-adjust b m w image-name dest-image-name"
-example: levels-adjust 10 150 240 img img-la
-
-19. Compress an image by specifying compression factor as percentage.
-syntax: "compress percentage image-name dest-image-name"
-example: compress 50 img img-compressed
-
-20. Preview blur by using the following command. This command returns an split image. Here, p is the percentage width for the split.
-syntax: "blur image-name dest-image split p"
-example: blur img img-blur-s split 50
-
-21. Preview sharpen by using the following command. This command returns an split image. Here, p is the percentage width for the split.
-syntax: "sharpen image-name dest-image split p"
-example: sharpen img img-sharp-split 30
-
-22. Preview sepia by using the following command. This command returns an split image. Here, p is the percentage width for the split.
-syntax: "sepia image-name dest-image split p"
-example: sepia img img-sepia-split split 20
-
-23. Preview luma-component by using the following command. This command returns an split image. Here, p is the percentage width for the split.
-syntax: "luma-component image-name dest-image split p"
-example: luma-component img img-luma-split split 10
-
-24. Preview intensity-component by using the following command. This command returns an split image. Here, p is the percentage width for the split.
-syntax: "intensity-component image-name dest-image split p"
-example: intensity-component img img-intensity-split split 60
-
-25. Preview value-component by using the following command. This command returns an split image. Here, p is the percentage width for the split.
-syntax: "value-component image-name dest-image split p"
-example: value-component img img-value-split split 65
-
-26. Run a script file (text file) containing list of image operation commands.
-syntax: "run script-file"
-example: run "D:\NEU Khoury Classwork\Fall 2023\CS5010\Assignments\commands.txt"
-
-27. Save an image to the local machine.
-syntax: "save image-path image-name"
-example: save "D:\NEU Khoury Classwork\Fall 2023\CS5010\Assignments\new_image.png" img

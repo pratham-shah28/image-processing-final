@@ -31,20 +31,20 @@ public class MainApp {
       controller.setView();
     } else {
       if (args[0].equals("-file")) {
+        System.out.println(args[1]);
         String input = String.format("run" + " " + "\"%s\"" + "\nexit", args[1]);
         InputStream in = new ByteArrayInputStream(input.getBytes());
         ViewInterface view = new View();
         ImageCreator imageCreator = new ImageCreatorImpl();
         ControllerPro controllerPro =
                 new ControllerPro(view, in, new HashMap<>(), imageCreator);
+        controllerPro.execute();
       } else if (args[0].equals("-text")) {
         InputStream in = System.in;
         ViewInterface view = new View();
         ImageCreator imageCreator = new ImageCreatorImpl();
         ControllerInterface controller = new ControllerPro(view, in, new HashMap<>(), imageCreator);
         controller.execute();
-      } else {
-        System.out.println("Please use proper syntax.");
       }
     }
   }

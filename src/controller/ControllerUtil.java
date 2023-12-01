@@ -35,7 +35,7 @@ public class ControllerUtil implements ControllerUtilInterface {
 
   @Override
   public String saveImage(String path, Image img) {
-    String status = "";
+    String status = "Save aborted";
     try {
       int lastDotIndex = path.lastIndexOf('.');
       String format = path.substring(lastDotIndex + 1);
@@ -101,7 +101,7 @@ public class ControllerUtil implements ControllerUtilInterface {
 
   @Override
   public String loadImage(String path, String name, Map<String, Image> images, ImageCreator creator) {
-    String status = "Load Failed";
+    String status = "Load aborted";
     if (name != null && path != null) {
       try {
         int lastDotIndex = path.lastIndexOf('.');
