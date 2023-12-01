@@ -7,7 +7,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JToggleButton;
+import javax.swing.JScrollPane;
+import javax.swing.JPanel;
+import javax.swing.BorderFactory;
+import javax.swing.JSplitPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import controller.ControllerProGUI;
@@ -23,10 +33,22 @@ import static org.junit.Assert.assertEquals;
  */
 public class ControllerProGUITest {
   private class MockViewGUI extends JFrame implements ViewGUIInterface {
-    private JButton applyButton, loadButton, saveButton, compressButton,
-            splitPercButton, popupButton, levelsAdjustButton, applyTransformation;
-    protected JLabel histogramLabel, imageLabel;
-    private JTextField compressInput, splitInput, bInput, mInput, wInput;
+    private JButton applyButton;
+
+    private JButton loadButton;
+
+    private JButton saveButton;
+    private JButton compressButton;
+    private JButton splitPercButton;
+    private JButton levelsAdjustButton;
+    private JButton applyTransformation;
+    private JLabel histogramLabel;
+    private JLabel imageLabel;
+    private JTextField compressInput;
+    private JTextField splitInput;
+    private JTextField bInput;
+    private JTextField mInput;
+    private JTextField wInput;
     private JComboBox<String> imageOperationList;
     private JToggleButton toggleButton;
     private JScrollPane scrollPane;
@@ -62,7 +84,7 @@ public class ControllerProGUITest {
 
       // Create an array of items for the dropdown
       String[] items = {"red-component", "green-component", "blue-component", "flip-vertical",
-              "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
+            "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
       imageOperationList = new JComboBox<>(items);
       applyButton = new JButton("Apply");
       loadButton = new JButton("Load");
@@ -201,7 +223,7 @@ public class ControllerProGUITest {
 
     @Override
     public void addFeatures(Features features) {
-
+      assert true;
     }
 
     @Override
@@ -483,9 +505,12 @@ public class ControllerProGUITest {
     MockViewGUI view = new MockViewGUI(mockLog);
     HashMap<String, Image> images = new HashMap<>();
     MockImageCreator imageCreator = new MockImageCreator(mockLog);
-    int red[][] = null;
-    int green[][] = null;
-    int blue[][] = null;
+    int red[][];
+    int green[][];
+    int blue[][];
+    red = null;
+    green = null;
+    blue = null;
     MockModel image = new MockModel(mockLog, red, green, blue);
     Features controller = new ControllerProGUI(view, images, imageCreator);
     images.put("originalImage", image);

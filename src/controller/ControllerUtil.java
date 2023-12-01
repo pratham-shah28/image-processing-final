@@ -100,7 +100,8 @@ public class ControllerUtil implements ControllerUtilInterface {
   }
 
   @Override
-  public String loadImage(String path, String name, Map<String, Image> images, ImageCreator creator) {
+  public String loadImage(String path, String name, Map<String, Image> images,
+                          ImageCreator creator) {
     String status = "Load aborted";
     if (name != null && path != null) {
       try {
@@ -118,7 +119,8 @@ public class ControllerUtil implements ControllerUtilInterface {
     return status;
   }
 
-  private String processLoadImage(String path, String imageName, Map<String, Image> images, ImageCreator creator) throws IOException {
+  private String processLoadImage(String path, String imageName, Map<String, Image> images,
+                                  ImageCreator creator) throws IOException {
     String status = "";
     try {
       File imageFile = new File(path);
@@ -147,7 +149,8 @@ public class ControllerUtil implements ControllerUtilInterface {
     return status;
   }
 
-  private String loadImagePPM(String path, String name, Map<String, Image> images, ImageCreator creator) {
+  private String loadImagePPM(String path, String name, Map<String, Image> images,
+                              ImageCreator creator) {
     String status = "";
     Scanner sc;
     try {

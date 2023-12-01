@@ -1,6 +1,8 @@
 package view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -16,10 +18,22 @@ import controller.Features;
  * This class implements the viewInterface.
  */
 public class ViewGUI extends JFrame implements ViewGUIInterface {
-  private JButton applyButton, loadButton, saveButton, compressButton,
-          splitPercButton, levelsAdjustButton, applyTransformation;
-  protected JLabel histogramLabel, imageLabel;
-  private JTextField compressInput, splitInput, bInput, mInput, wInput;
+  private JButton applyButton;
+
+  private JButton loadButton;
+
+  private JButton saveButton;
+  private JButton compressButton;
+  private JButton splitPercButton;
+  private JButton levelsAdjustButton;
+  private JButton applyTransformation;
+  private JLabel histogramLabel;
+  private JLabel imageLabel;
+  private JTextField compressInput;
+  private JTextField splitInput;
+  private JTextField bInput;
+  private JTextField mInput;
+  private JTextField wInput;
   private JComboBox<String> imageOperationList;
   private JToggleButton toggleButton;
   private JScrollPane scrollPane;
@@ -133,7 +147,7 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
 
     // An array of items for the dropdown
     String[] items = {"red-component", "green-component", "blue-component", "flip-vertical",
-            "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
+          "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
     imageOperationList = new JComboBox<>(items);
     applyButton = new JButton("Apply");
     loadButton = new JButton("Load");
@@ -259,7 +273,8 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
     File selectedFile = null;
     JFileChooser fileChooser = new JFileChooser();
 
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files", "png", "jpg", "ppm");
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Image Files",
+            "png", "jpg", "ppm");
     fileChooser.setFileFilter(filter);
 
     int result = fileChooser.showOpenDialog(this);

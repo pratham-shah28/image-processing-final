@@ -61,11 +61,13 @@ public class ControllerProGUI implements Features {
     }
     File selectedFile = view.loadSelectedImage();
     if (selectedFile != null) {
-      status = controllerUtil.loadImage(selectedFile.getCanonicalPath(), "originalImage", images, imageCreator);
+      status = controllerUtil.loadImage(selectedFile.getCanonicalPath(), "originalImage",
+              images, imageCreator);
     }
     if (status.equals("Load Successful.")) {
       images.put("newImage", images.get("originalImage"));
-      view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
+      view.updateImageLabel(images.get("originalImage"),
+              images.get("originalImage").createHistogram());
       isSaved = false;
     }
     view.showDialog(status);
@@ -80,7 +82,8 @@ public class ControllerProGUI implements Features {
     File selectedDirectory = view.selectedDirectory();
     if (selectedDirectory != null) {
       String imageName = view.getImageName();
-      status = controllerUtil.saveImage(selectedDirectory.getCanonicalPath() + imageName, images.get("originalImage"));
+      status = controllerUtil.saveImage(selectedDirectory.getCanonicalPath()
+              + imageName, images.get("originalImage"));
     }
     view.showDialog(status);
   }
@@ -113,7 +116,8 @@ public class ControllerProGUI implements Features {
       images.put("newImage", images.get("originalImage").colorCorrect());
     }
     if (handleSplit()) {
-      return;};
+      return;
+    }
     view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
   }
 
@@ -135,7 +139,9 @@ public class ControllerProGUI implements Features {
         return;
       }
       images.put("newImage", images.get("originalImage").adjustLevels(b, m, w));
-      if (handleSplit()) return;
+      if (handleSplit()) {
+        return;
+      }
       view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
     } catch (Exception adlevel) {
       view.showDialog("Please enter valid b, m, w values");
@@ -158,7 +164,8 @@ public class ControllerProGUI implements Features {
     }
 
     if (splitPerc >= 1 && splitPerc <= 100) {
-      images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), splitPerc));
+      images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"),
+              splitPerc));
       view.updateImageLabel(images.get("splitImage"), images.get("splitImage").createHistogram());
     } else {
       view.showDialog("Please enter a number between 1 and 100.");
@@ -186,7 +193,9 @@ public class ControllerProGUI implements Features {
     if (userInput >= 0 && userInput <= 100) {
       // Perform an action based on the entered number
       images.put("newImage", images.get("originalImage").compress(userInput));
-      if (handleSplit()) return;
+      if (handleSplit()) {
+        return;
+      }
       view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
     } else {
       // Display an error message for an invalid range
@@ -203,16 +212,19 @@ public class ControllerProGUI implements Features {
     view.toggleSet(split);
     if (isEnabled) {
       if (images.containsKey("newImage")) {
-        images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), splitPerc));
+        images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"),
+                splitPerc));
         view.updateImageLabel(images.get("splitImage"), images.get("splitImage").createHistogram());
       } else {
         if (images.containsKey("originalImage")) {
-          view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
+          view.updateImageLabel(images.get("originalImage"),
+                  images.get("originalImage").createHistogram());
         }
       }
     } else {
       images.put("newImage", images.get("originalImage"));
-      view.updateImageLabel(images.get("originalImage"), images.get("originalImage").createHistogram());
+      view.updateImageLabel(images.get("originalImage"),
+              images.get("originalImage").createHistogram());
     }
   }
 
@@ -237,7 +249,8 @@ public class ControllerProGUI implements Features {
         splitPerc = 50;
       }
       if (splitPerc >= 1 && splitPerc <= 100) {
-        images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), splitPerc));
+        images.put("splitImage",
+                images.get("newImage").applySplit(images.get("originalImage"), splitPerc));
         view.updateImageLabel(images.get("splitImage"), images.get("splitImage").createHistogram());
         return true;
       } else {
