@@ -46,6 +46,7 @@ public class ControllerProGUITest {
     public MockViewGUI(StringBuilder log) {
       this.splitPerc = "50";
       this.log = log;
+      this.compressionValue = -1;
     }
 
     private void buildGUI() {
@@ -149,6 +150,7 @@ public class ControllerProGUITest {
 
     @Override
     public int getCompressInput() {
+      System.out.println(compressionValue);
       return compressionValue;
     }
 
@@ -808,7 +810,7 @@ public class ControllerProGUITest {
     Features controller = new ControllerProGUI(view, images, imageCreator);
     images.put("originalImage", image);
     controller.applyCompress();
-    String expected = "\nPlease enter a number between 1 and 100.";
+    String expected = "\nPlease enter a number between 0 and 100.";
     assertEquals(expected, mockLog.toString());
   }
 
@@ -830,6 +832,25 @@ public class ControllerProGUITest {
     String expected = "\n60.0" +
             "\ncreateHistogram" +
             "\nupdateImageLabel";
+    assertEquals(expected, mockLog.toString());
+  }
+
+  @Test
+  public void compressImageDoesExistsInvalid() {
+    StringBuilder mockLog = new StringBuilder();
+    MockViewGUI view = new MockViewGUI(mockLog);
+    view.setCompressValue(101);
+    HashMap<String, Image> images = new HashMap<>();
+    MockImageCreator imageCreator = new MockImageCreator(mockLog);
+    int red[][] = null;
+    int green[][] = null;
+    int blue[][] = null;
+    MockModel image = new MockModel(mockLog, red, green, blue);
+    Features controller = new ControllerProGUI(view, images, imageCreator);
+    images.put("originalImage", image);
+    images.put("newImage", image);
+    controller.applyCompress();
+    String expected = "\nPlease enter a number between 0 and 100.";
     assertEquals(expected, mockLog.toString());
   }
 

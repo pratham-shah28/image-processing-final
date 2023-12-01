@@ -39,6 +39,7 @@ public class ControllerProGUI implements Features {
     split = false;
     this.imageCreator = imageCreator;
     this.controllerUtil = new ControllerUtil();
+    splitPerc = 50;
   }
 
   /**
@@ -111,7 +112,8 @@ public class ControllerProGUI implements Features {
     } else if ("color-correct".equals(selectedOption)) {
       images.put("newImage", images.get("originalImage").colorCorrect());
     }
-    if (handleSplit()) return;
+    if (handleSplit()) {
+      return;};
     view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
   }
 
@@ -181,14 +183,15 @@ public class ControllerProGUI implements Features {
       return;
     }
     int userInput = view.getCompressInput();
-    if (userInput >= 1 && userInput <= 100) {
+    System.out.println(userInput);
+    if (userInput >= 0 && userInput <= 100) {
       // Perform an action based on the entered number
       images.put("newImage", images.get("originalImage").compress(userInput));
       if (handleSplit()) return;
       view.updateImageLabel(images.get("newImage"), images.get("newImage").createHistogram());
     } else {
       // Display an error message for an invalid range
-      view.showDialog("Please enter a number between 1 and 100.");
+      view.showDialog("Please enter a number between 0 and 100.");
     }
   }
 
@@ -201,7 +204,7 @@ public class ControllerProGUI implements Features {
     view.toggleSet(split);
     if (isEnabled) {
       if (images.containsKey("newImage")) {
-        images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), 50));
+        images.put("splitImage", images.get("newImage").applySplit(images.get("originalImage"), splitPerc));
         view.updateImageLabel(images.get("splitImage"), images.get("splitImage").createHistogram());
       } else {
         if (images.containsKey("originalImage")) {
@@ -242,7 +245,6 @@ public class ControllerProGUI implements Features {
         view.showDialog("Please enter a number between 1 and 100.");
         return true;
       }
-
     } else {
       images.put("originalImage", images.get("newImage"));
     }
