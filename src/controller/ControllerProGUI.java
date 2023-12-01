@@ -45,7 +45,6 @@ public class ControllerProGUI implements Features {
    * This method sets the view and adds all the features.
    */
   public void setView() {
-    //provide view with all the callbacks
     view.addFeatures(this);
   }
 

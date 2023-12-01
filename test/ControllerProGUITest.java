@@ -74,7 +74,6 @@ public class ControllerProGUITest {
     private void buildGUI() {
       JPanel leftPanel = new JPanel(new BorderLayout());
 
-      // Upper part of the left pane
       JPanel upperLeftPanel = new JPanel(new GridLayout(0, 2, 5, 10));
       JPanel levelsAdjustPanel = new JPanel(new GridLayout(0, 3));
       JPanel splitPanel = new JPanel();
@@ -82,7 +81,6 @@ public class ControllerProGUITest {
       Border leftSplitPanelBorder = BorderFactory.createTitledBorder("Split Mode");
       Border leftBottomPanelBorder = BorderFactory.createTitledBorder("Histogram");
 
-      // Create an array of items for the dropdown
       String[] items = {"red-component", "green-component", "blue-component", "flip-vertical",
         "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
       imageOperationList = new JComboBox<>(items);
@@ -130,19 +128,16 @@ public class ControllerProGUITest {
       splitPanel.setBorder(leftSplitPanelBorder);
 
 
-      // Bottom part of the left pane to display the image
       JPanel bottomLeftPanel = new JPanel();
       histogramLabel = new JLabel();
       histogramLabel.setPreferredSize(new Dimension(256, 256));
       bottomLeftPanel.add(histogramLabel);
       bottomLeftPanel.setBorder(leftBottomPanelBorder);
 
-      // Add upper and bottom panels to the left pane
       leftPanel.add(upperLeftPanel, BorderLayout.NORTH);
       leftPanel.add(splitPanel, BorderLayout.CENTER);
       leftPanel.add(bottomLeftPanel, BorderLayout.SOUTH);
 
-      // Right Pane
       JPanel rightPanel = new JPanel(new BorderLayout());
       imageLabel = new JLabel();
       imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -151,11 +146,9 @@ public class ControllerProGUITest {
       scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
       rightPanel.add(scrollPane, BorderLayout.CENTER);
 
-      // Set up the JSplitPane
       JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
       splitPane.setDividerLocation(300); // Set the initial divider location
 
-      // Set up the main frame
       this.setTitle("Graphical Image Manipulation Application");
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.getContentPane().add(splitPane);

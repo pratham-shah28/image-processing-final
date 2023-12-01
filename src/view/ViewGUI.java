@@ -103,7 +103,6 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
 
   @Override
   public void updateImageLabel(model.Image image, model.Image histogram) {
-    // Read the image using BufferedImage
     int width = image.getWidth();
     int height = image.getHeight();
     int[][] pixelMatrix = new int[width][height];
@@ -157,7 +156,6 @@ public class ViewGUI extends JFrame implements ViewGUIInterface {
     Border leftSplitPanelBorder = BorderFactory.createTitledBorder("Split Mode");
     Border leftBottomPanelBorder = BorderFactory.createTitledBorder("Histogram");
 
-    // An array of items for the dropdown
     String[] items = {"red-component", "green-component", "blue-component", "flip-vertical",
         "flip-horizontal", "blur", "sharpen", "sepia", "greyscale", "color-correct"};
     imageOperationList = new JComboBox<>(items);
