@@ -10,9 +10,8 @@ import model.ImageCreator;
 import view.ViewGUIInterface;
 
 /**
- * This class is an extended version of original Controller for additional functionalities such as
- * compression, histogram, color correction, level adjustment.
- * It retains support for all operations performed by original Controller.
+ * This class is the controller for GUI version of Image Manipulation and Enhancement Application.
+ * It implements Features interface representing the feautres provided by the GUI.
  */
 public class ControllerProGUI implements Features {
 

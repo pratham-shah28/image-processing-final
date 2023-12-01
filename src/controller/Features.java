@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
  * This is an interface for all the features provided by the
- * GUI version of the Image Manipulation application.
+ * GUI version of the Image Manipulation and Enhancement application.
  */
 public interface Features {
   /**
