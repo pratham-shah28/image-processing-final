@@ -46,6 +46,9 @@ public class MainApp {
         ControllerInterface controller = new ControllerPro(view, in, new HashMap<>(), imageCreator);
         controller.execute();
       }
+      else {
+        System.out.println("Please enter proper syntax.");
+      }
     }
   }
 }
